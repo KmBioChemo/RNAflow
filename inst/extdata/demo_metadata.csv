@@ -1,0 +1,13 @@
+sample,condition,batch
+Ctrl_1,Control,A
+Ctrl_2,Control,B
+Ctrl_3,Control,A
+Ctrl_4,Control,B
+Ctrl_5,Control,A
+Ctrl_6,Control,B
+Trt_1,Treatment,A
+Trt_2,Treatment,B
+Trt_3,Treatment,A
+Trt_4,Treatment,B
+Trt_5,Treatment,A
+Trt_6,Treatment,B

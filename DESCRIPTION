@@ -1,0 +1,67 @@
+Package: RNAflow
+Title: An Interactive Shiny Platform for End-to-End RNA-seq Analysis
+Version: 0.1.2
+Authors@R: person("Karim", "Matmat", role = c("aut", "cre"),
+                  email = "karim.matmat@example.com",
+                  comment = c(ORCID = "0000-0000-0000-0000"))
+Description: RNAflow is a modular Shiny application packaged as an R package
+    for end-to-end bulk RNA-seq analysis. It takes raw count matrices and
+    sample metadata as input and provides differential expression analysis
+    (DESeq2), visualization (volcano, heatmap, PCA), functional enrichment
+    (GSEA, ORA against MSigDB / GO / KEGG / Reactome), co-expression network
+    analysis (WGCNA) and reproducible HTML report generation. Supports human,
+    mouse and rat organisms with publication-ready figure exports.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Depends:
+    R (>= 4.2.0)
+Imports:
+    shiny (>= 1.8.0),
+    bslib,
+    golem,
+    config,
+    htmltools,
+    DT,
+    shinycssloaders,
+    shinyjs,
+    ggplot2,
+    ggrepel,
+    plotly,
+    pheatmap,
+    ComplexHeatmap,
+    RColorBrewer,
+    scales,
+    dplyr,
+    tibble,
+    tidyr,
+    readxl,
+    readr,
+    rlang,
+    purrr,
+    DESeq2,
+    SummarizedExperiment,
+    S4Vectors,
+    matrixStats
+Suggests:
+    testthat (>= 3.0.0),
+    shinytest2,
+    fgsea,
+    clusterProfiler,
+    msigdbr,
+    ReactomePA,
+    org.Hs.eg.db,
+    org.Mm.eg.db,
+    org.Rn.eg.db,
+    WGCNA,
+    quarto,
+    knitr,
+    rmarkdown,
+    pkgdown,
+    covr
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+URL: https://github.com/kmatmat/RNAflow
+BugReports: https://github.com/kmatmat/RNAflow/issues

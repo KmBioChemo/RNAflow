@@ -1,0 +1,100 @@
+---
+title: "Getting started with RNAflow"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with RNAflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+## Overview
+
+RNAflow is an end-to-end bulk RNA-seq analysis platform. This vignette walks through the typical workflow using a small simulated dataset.
+
+## Launching the app
+
+```{r eval = FALSE}
+library(RNAflow)
+run_app()
+```
+
+The app opens in your browser. The Data tab is the entry point — upload a counts matrix and sample metadata, then run DESeq2.
+
+## Programmatic workflow
+
+You can also use RNAflow's functions in a script.
+
+### Step 1 — Read and validate inputs
+
+```{r eval = FALSE}
+counts <- read_counts("path/to/counts.csv")
+meta   <- read_metadata("path/to/metadata.csv",
+                       counts_samples = colnames(counts))
+```
+
+`read_counts()` and `read_metadata()` both run strict validation. You get a clear error message if anything is wrong (negative values, duplicate gene IDs, missing rownames, sample mismatch, etc.).
+
+### Step 2 — Differential expression
+
+```{r eval = FALSE}
+res <- run_deseq2(
+  counts, meta,
+  design   = ~ condition,
+  contrast = c("condition", "Treatment", "Control"),
+  shrink   = TRUE       # apeglm LFC shrinkage
+)
+head(res)
+```
+
+### Step 3 — Visualize
+
+```{r eval = FALSE}
+# Static, publication-ready
+p_pub <- fig_volcano(res, lfc_thr = 1, padj_thr = 0.05,
+                     n_label = 30, mode = "publication")
+save_ggplot(p_pub, "volcano.pdf", "pdf", w = 5, h = 4)
+
+# Interactive (for exploration in a notebook)
+fig_volcano_interactive(res)
+```
+
+### Step 4 — Heatmap and PCA
+
+For heatmap and PCA you also need a normalized counts matrix:
+
+```{r eval = FALSE}
+vst <- normalize_counts(counts, meta, method = "vst")
+
+ph <- fig_heatmap(
+  counts_mat = vst, res = res, metadata = meta,
+  n_genes = 40, padj_thr = 0.05, lfc_thr = 1,
+  palette_name = "RdBu", direction_annotation = TRUE
+)
+save_pheatmap(ph, "heatmap.pdf", "pdf", w = 6, h = 7)
+
+fig_pca(vst, meta, n_top = 500, color_by = "condition")
+```
+
+## Sessions
+
+Save your full analysis state to a `.rnaflow.rds` file:
+
+```{r eval = FALSE}
+p <- empty_project("mrl_lpr_hippocampus")
+p$counts     <- counts
+p$metadata   <- meta
+p$de_results <- res
+p$organism   <- "mouse"
+save_project(p, "mrl_lpr.rnaflow.rds")
+
+# Later...
+p <- load_project("mrl_lpr.rnaflow.rds")
+```
+
+## Next steps
+
+Phases 3–5 will add GSEA, WGCNA, and a one-click HTML report. See the README roadmap.
