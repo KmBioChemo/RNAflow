@@ -90,6 +90,7 @@ app_ui <- function() {
     bslib::nav_panel("PCA",     mod_pca_ui("pca")),
     bslib::nav_panel("Compare", mod_compare_ui("compare")),
     bslib::nav_panel("Enrichment", mod_enrich_ui("enrich")),
+    bslib::nav_panel("Network", mod_wgcna_ui("wgcna")),
     bslib::nav_panel("Project", mod_project_ui("project")),
     bslib::nav_spacer(),
     bslib::nav_item(
@@ -178,6 +179,7 @@ app_server <- function(input, output, session) {
   mod_pca_server("pca", counts_norm, data_mod$metadata)
   mod_compare_server("compare", shiny::reactive(contrasts_rv()))
   mod_enrich_server("enrich", de_combined, data_mod$organism)
+  mod_wgcna_server("wgcna", counts_norm, data_mod$metadata, data_mod$organism)
   mod_project_server("project", data_mod, contrasts_rv)
 }
 

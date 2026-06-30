@@ -1,5 +1,27 @@
 # RNAflow changelog
 
+## v0.4.0 (2026-06-30)
+
+### Phase 4 — WGCNA co-expression networks
+
+- **Network tab** (`mod_wgcna`): a guided workflow — pick the soft-threshold
+  power, detect modules, then explore module-trait correlations, module
+  sizes, eigengene profiles, hub genes, and per-module GO enrichment.
+- **Pure layer** (`analysis_wgcna.R`): `wgcna_datexpr()` (top-variance gene
+  selection + transpose), `wgcna_pick_power()` (scale-free fit), `run_wgcna()`
+  (blockwise modules + eigengenes), `build_traits()`, `module_trait_cor()`,
+  `hub_genes()` (signed kME), `module_gene_list()`, `module_summary()`. A
+  `with_wgcna_cor()` helper works around WGCNA's `cor` masking so the package
+  works without attaching WGCNA.
+- **Figures** (`fig_wgcna.R`): `fig_soft_threshold()`, `fig_module_trait()`
+  (correlation heatmap), `fig_module_sizes()`, `fig_eigengene()`.
+- **Module enrichment reuses phase 3**: hub modules feed `run_ora()` for
+  GO Biological Process terms.
+- On the demo, modules recover the planted biology — an LPS/inflammation
+  module (hub genes Tlr2, Cxcl2, Icam1, Ifih1) tracking treatment, a genotype
+  module, and the batch effect isolated into grey.
+- Added `WGCNA` (BiocManager) to the environment.
+
 ## v0.3.1 (2026-06-30)
 
 ### Enrichment UX

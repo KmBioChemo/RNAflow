@@ -49,14 +49,17 @@
 - [x] `mod_enrich` tab wired to the active contrast; demo modules seeded from real Hallmark sets
 - [ ] Deferred: ridgeline plot, enrichment map (emap) — can revisit if needed
 
-## Phase 4 (current) — WGCNA
+## Phase 4 ✅ — WGCNA
 
-- Network construction with soft-thresholding helper UI
-- Module detection + module-trait correlation
-- Hub gene tables, eigengene plots
-- Module-to-pathway enrichment (re-uses phase 3)
+- [x] Network construction with soft-thresholding helper UI (`wgcna_pick_power`, `fig_soft_threshold`)
+- [x] Module detection (`run_wgcna` / blockwiseModules) + module-trait correlation (`module_trait_cor`, `fig_module_trait`)
+- [x] Hub gene tables (`hub_genes` via signed kME), eigengene plots (`fig_eigengene`)
+- [x] Module-to-pathway enrichment — reuses phase 3 `run_ora`
+- [x] `mod_wgcna` Network tab (guided pick → detect → explore workflow)
 
-## Phase 5 — Reproducibility
+**Pure layer:** `analysis_wgcna.R` + `fig_wgcna.R`, tested without Shiny. Note: `with_wgcna_cor()` works around WGCNA's `cor`-masking so the package runs without attaching WGCNA.
+
+## Phase 5 (current) — Reproducibility
 
 - One-click HTML report via Quarto: all figures, parameters, sessionInfo embedded
 - R code export: generates a `.R` script reproducing the entire analysis from the loaded data, ready to paste into a Methods section
