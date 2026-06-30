@@ -108,6 +108,7 @@ mod_enrich_server <- function(id, de_reactive, organism_reactive) {
     mirror("nterm_sld", "nterm_num")
 
     result <- shiny::reactiveVal(NULL)   # list(method, table, gene_sets, de)
+    mismatch_msg <- shiny::reactiveVal(NULL)  # species-mismatch warning
 
     output$organism_note <- shiny::renderUI({
       org <- organism_reactive() %||% "human"
@@ -132,6 +133,19 @@ mod_enrich_server <- function(id, de_reactive, organism_reactive) {
       if (is.null(de)) {
         shiny::showNotification("No active contrast. Run DESeq2 first.",
                                 type = "warning"); return()
+      }
+      # Species sanity check: how many DE genes map to this organism's annotation?
+      mismatch_msg(NULL)
+      n_map <- length(symbols_to_entrez(utils::head(de$gene, 2000), org,
+                                        quiet = TRUE))
+      if (n_map < 5) {
+        result(NULL)
+        mismatch_msg(sprintf(
+          paste0("Almost none of your genes match the %s annotation ",
+                 "(%d / first 2000 mapped). The gene symbols look like a ",
+                 "different species — set the correct Organism on the Data tab."),
+          org, n_map))
+        return()
       }
       shiny::withProgress(message = "Running enrichment...", value = 0.3, {
         tryCatch({
@@ -174,6 +188,11 @@ mod_enrich_server <- function(id, de_reactive, organism_reactive) {
     })
 
     output$notice <- shiny::renderUI({
+      if (!is.null(mismatch_msg())) {
+        return(shiny::div(class = "demo-banner",
+                          style = "margin-bottom:8px;color:#C0392B;",
+                          mismatch_msg()))
+      }
       r <- result()
       if (is.null(r)) {
         return(shiny::div(class = "demo-banner", style = "margin-bottom:8px;",

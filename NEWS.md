@@ -1,5 +1,14 @@
 # RNAflow changelog
 
+## v0.3.1 (2026-06-30)
+
+### Enrichment UX
+
+- The Enrichment tab now detects an **organism / species mismatch**: if
+  almost none of the DE gene symbols map to the selected organism's
+  annotation, it shows a clear message pointing to the Organism setting on
+  the Data tab instead of silently returning zero enriched terms.
+
 ## v0.3.0 (2026-06-30)
 
 ### Phase 3 — Functional enrichment
