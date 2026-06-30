@@ -108,8 +108,8 @@ sample3,Treatment,B
 
 - **Phase 1** ✅ — Modular package, DESeq2, volcano, heatmap, PCA, publication mode, validation, tests
 - **Phase 2** ✅ — In-app project save/load + recent projects, named multi-contrast store, Compare tab (Venn / UpSet / volcano grid / log2FC heatmap)
-- **Phase 3** 🔄 — GSEA / ORA (MSigDB Hallmark/C2/C5, GO BP/MF/CC, KEGG, Reactome)
-- **Phase 4** — WGCNA module (network construction, modules, trait correlations, hub genes)
+- **Phase 3** ✅ — GSEA / ORA (MSigDB Hallmark/C2/C5, GO BP/MF/CC, KEGG, Reactome) with dotplot / bar / running-enrichment curve
+- **Phase 4** 🔄 — WGCNA module (network construction, modules, trait correlations, hub genes)
 - **Phase 5** — Quarto HTML report auto-generation + R code export for Methods
 
 ## Development

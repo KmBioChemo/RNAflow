@@ -1,5 +1,26 @@
 # RNAflow changelog
 
+## v0.3.0 (2026-06-30)
+
+### Phase 3 — Functional enrichment
+
+- **GSEA** (`run_gsea()`, via `fgsea`) against MSigDB collections
+  (`get_gene_sets()`, via `msigdbr`): Hallmark, Reactome / KEGG (C2),
+  GO BP/MF/CC (C5). Gene ranking by Wald statistic, signed -log10(p), or
+  log2FC (`rank_genes()`).
+- **ORA** (`run_ora()`, via `clusterProfiler` / `ReactomePA`) against GO,
+  KEGG and Reactome, with automatic symbol→ENTREZ conversion.
+- **Per-organism annotation** (`utils_annotation.R`): human / mouse / rat →
+  org.Hs/Mm/Rn.eg.db, MSigDB species, KEGG / Reactome organism codes.
+- **Figures** (`fig_enrich.R`): enrichment dotplot, -log10(FDR) bar, and the
+  GSEA running-enrichment curve — all theme-aware with publication mode.
+- **Enrichment tab** (`mod_enrich`): runs GSEA / ORA on the active contrast,
+  with results table and figure export.
+- **Richer demo**: `dev/make_demo_multi.R` now seeds the planted DE modules
+  from real MSigDB Hallmark sets (TNFA/NF-κB, inflammatory & interferon
+  responses, OXPHOS, E2F), so the whole pipeline — DE → multi-contrast →
+  enrichment — tells one coherent inflammation/rescue story.
+
 ## v0.2.0 (2026-06-30)
 
 ### Phase 2 — Project manager + multi-contrast

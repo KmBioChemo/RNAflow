@@ -40,14 +40,16 @@
 
 **Pure layer:** `analysis_compare.R` (`contrast_sig_genes`, `contrast_sig_sets`, `contrast_lfc_matrix`) and `fig_compare.R` (`fig_venn`, `fig_upset`, `fig_volcano_grid`, `fig_lfc_heatmap`), all tested without Shiny. State helpers in `project_state.R` (`contrast_store_upsert`, recent-project cache).
 
-## Phase 3 (current) — Functional enrichment
+## Phase 3 ✅ — Functional enrichment
 
-- **GSEA** via `fgsea` against MSigDB collections (Hallmark, C2 curated, C5 GO BP/MF/CC)
-- **ORA** via `clusterProfiler` against GO, KEGG, Reactome
-- Visualizations: dotplot, ridgeline, enrichment map, GSEA running enrichment curves
-- Per-organism annotation DB auto-selection (org.Hs / org.Mm / org.Rn)
+- [x] **GSEA** via `fgsea` against MSigDB collections (Hallmark, C2 Reactome/KEGG, C5 GO BP/MF/CC) — `run_gsea()`, `get_gene_sets()` (msigdbr)
+- [x] **ORA** via `clusterProfiler` / `ReactomePA` against GO, KEGG, Reactome — `run_ora()`, symbol→ENTREZ via `utils_annotation.R`
+- [x] Visualizations: dotplot, -log10(FDR) bar, GSEA running-enrichment curve (`fig_enrich.R`)
+- [x] Per-organism annotation DB selection (org.Hs / org.Mm / org.Rn) — `organism_info()`
+- [x] `mod_enrich` tab wired to the active contrast; demo modules seeded from real Hallmark sets
+- [ ] Deferred: ridgeline plot, enrichment map (emap) — can revisit if needed
 
-## Phase 4 — WGCNA
+## Phase 4 (current) — WGCNA
 
 - Network construction with soft-thresholding helper UI
 - Module detection + module-trait correlation

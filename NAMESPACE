@@ -23,5 +23,14 @@ export(fig_upset)
 export(fig_volcano_grid)
 export(fig_lfc_heatmap)
 
+# Phase 3 — functional enrichment
+export(get_gene_sets)
+export(rank_genes)
+export(run_gsea)
+export(run_ora)
+export(fig_enrich_dot)
+export(fig_enrich_bar)
+export(fig_gsea_curve)
+
 importFrom(shiny, shinyApp)
 importFrom(magrittr, "%>%")

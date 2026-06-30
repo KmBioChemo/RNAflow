@@ -16,22 +16,50 @@
 
 set.seed(2026)
 
-n_genes <- 4000
+n_genes <- 5000
 
-## ---- gene universe: real mouse symbols when available -----------------------
-symbols <- NULL
-if (requireNamespace("org.Mm.eg.db", quietly = TRUE) &&
-    requireNamespace("AnnotationDbi", quietly = TRUE)) {
+## ---- gene universe + biologically meaningful modules ------------------------
+# Plant the DE modules ON REAL MSigDB Hallmark gene sets so that downstream
+# GSEA / ORA (Phase 3) actually recover the right pathways. Falls back to a
+# random universe with synthetic modules if the annotation stack is absent.
+have_anno <- requireNamespace("org.Mm.eg.db", quietly = TRUE) &&
+  requireNamespace("AnnotationDbi", quietly = TRUE) &&
+  requireNamespace("msigdbr", quietly = TRUE)
+
+hallmark_module <- NULL
+if (have_anno) {
   all_sym <- AnnotationDbi::keys(org.Mm.eg.db::org.Mm.eg.db, keytype = "SYMBOL")
   all_sym <- unique(all_sym[grepl("^[A-Za-z][A-Za-z0-9]+$", all_sym)])
-  if (length(all_sym) >= n_genes) {
-    symbols <- sample(all_sym, n_genes)
-    message("Using ", n_genes, " real mouse symbols from org.Mm.eg.db")
+
+  H <- suppressMessages(msigdbr::msigdbr(species = "mouse", collection = "H"))
+  hg <- split(H$gene_symbol, H$gs_name)
+  pick <- function(set) intersect(unique(hg[[set]]), all_sym)
+
+  # Each module is sourced from a real pathway; genes are assigned to the
+  # first module they appear in (priority order) to keep effects clean.
+  raw_modules <- list(
+    infl   = union(pick("HALLMARK_TNFA_SIGNALING_VIA_NFKB"),
+                   pick("HALLMARK_INFLAMMATORY_RESPONSE")),
+    rescue = pick("HALLMARK_INTERFERON_GAMMA_RESPONSE"),
+    geno   = pick("HALLMARK_OXIDATIVE_PHOSPHORYLATION"),
+    inter  = pick("HALLMARK_E2F_TARGETS")
+  )
+  assigned <- character(0)
+  hallmark_module <- list()
+  for (nm in names(raw_modules)) {
+    g <- setdiff(raw_modules[[nm]], assigned)
+    hallmark_module[[nm]] <- g
+    assigned <- c(assigned, g)
   }
-}
-if (is.null(symbols)) {
+  # Universe: all module genes + random null genes up to n_genes
+  fill <- sample(setdiff(all_sym, assigned),
+                 max(0, n_genes - length(assigned)))
+  symbols <- c(assigned, fill)
+  n_genes <- length(symbols)
+  message("Using real mouse symbols; modules seeded from MSigDB Hallmark.")
+} else {
   symbols <- sprintf("Gene%04d", seq_len(n_genes))
-  message("org.Mm.eg.db not available - using synthetic gene IDs")
+  message("annotation stack not available - using synthetic gene IDs/modules")
 }
 
 ## ---- experimental design ----------------------------------------------------
@@ -55,13 +83,20 @@ groups <- c("WT_Veh", "WT_LPS", "WT_LPS_Drug", "KO_Veh", "KO_LPS", "KO_LPS_Drug"
 lfc <- matrix(0, nrow = n_genes, ncol = length(groups),
               dimnames = list(symbols, groups))
 
-idx <- sample(seq_len(n_genes))
-take <- function(n) { picked <- idx[seq_len(n)]; idx <<- idx[-seq_len(n)]; picked }
-
-m_infl   <- take(300)   # inflammation, both genotypes
-m_rescue <- take(150)   # LPS up, drug rescues
-m_geno   <- take(200)   # genotype effect
-m_inter  <- take(120)   # LPS effect only in KO
+if (!is.null(hallmark_module)) {
+  # Map module gene symbols to row indices
+  m_infl   <- match(hallmark_module$infl,   symbols)
+  m_rescue <- match(hallmark_module$rescue, symbols)
+  m_geno   <- match(hallmark_module$geno,   symbols)
+  m_inter  <- match(hallmark_module$inter,  symbols)
+} else {
+  idx <- sample(seq_len(n_genes))
+  take <- function(n) { picked <- idx[seq_len(n)]; idx <<- idx[-seq_len(n)]; picked }
+  m_infl   <- take(300)   # inflammation, both genotypes
+  m_rescue <- take(150)   # LPS up, drug rescues
+  m_geno   <- take(200)   # genotype effect
+  m_inter  <- take(120)   # LPS effect only in KO
+}
 
 set_lfc <- function(rows, vals) for (g in names(vals)) lfc[rows, g] <<- vals[[g]]
 
