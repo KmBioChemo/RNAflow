@@ -1,5 +1,27 @@
 # RNAflow changelog
 
+## v0.2.0 (2026-06-30)
+
+### Phase 2 — Project manager + multi-contrast
+
+- **Named contrast store.** Every DESeq2 run is now saved as a named
+  contrast (`"<var>: <treated> vs <reference>"`); an active-contrast
+  selector in the navbar drives the Volcano / Heatmap / PCA tabs. Uploaded
+  pre-computed DE tables are mirrored into the store too.
+- **Compare tab.** New multi-contrast views over the store:
+  - Venn diagram (`fig_venn()`, via `eulerr`) for 2-4 contrasts
+  - UpSet plot (`fig_upset()`, via `ComplexHeatmap`) for any number
+  - Side-by-side volcano grid (`fig_volcano_grid()`)
+  - log2FoldChange signature heatmap (`fig_lfc_heatmap()`)
+  with shared significance thresholds, direction filter, and figure export.
+- **Project manager tab.** Save the full session (counts, metadata,
+  organism, all contrasts) to a `.rnaflow.rds` file, reload one, and re-open
+  recent projects from a per-user cache.
+- **New pure functions** (testable, no Shiny): `contrast_sig_genes()`,
+  `contrast_sig_sets()`, `contrast_lfc_matrix()`, plus the `fig_compare`
+  family and the `save_compare()` exporter.
+- Added `eulerr` (Suggests) and `grid` (Imports) dependencies.
+
 ## v0.1.2 (2026-06-30)
 
 ### Bug fixes

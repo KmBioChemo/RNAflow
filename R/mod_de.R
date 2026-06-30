@@ -35,8 +35,12 @@ mod_de_ui <- function(id) {
 
 #' @rdname mod_de
 #' @param data_mod the value returned by [mod_data_server()]
+#' @param contrast_store optional `reactiveVal` holding the named contrast
+#'   store. When supplied, each successful DESeq2 run is added to (or updated
+#'   in) the store under a `"<var>: <treated> vs <reference>"` label, enabling
+#'   the multi-contrast comparison view.
 #' @export
-mod_de_server <- function(id, data_mod) {
+mod_de_server <- function(id, data_mod, contrast_store = NULL) {
   shiny::moduleServer(id, function(input, output, session) {
 
     de_r <- shiny::reactiveVal(NULL)
@@ -94,11 +98,32 @@ mod_de_server <- function(id, data_mod) {
           )
           shiny::incProgress(0.7)
           de_r(res)
+
+          # Add (or refresh) this contrast in the project store
+          added_msg <- ""
+          if (!is.null(contrast_store)) {
+            label <- sprintf("%s: %s vs %s", input$design_var,
+                             input$level_treated, input$level_reference)
+            params <- list(
+              design_var = input$design_var,
+              treated    = input$level_treated,
+              reference  = input$level_reference,
+              shrink     = isTRUE(input$shrink),
+              min_count  = as.integer(input$min_count %||% 10),
+              alpha      = as.numeric(input$alpha %||% 0.05)
+            )
+            contrast_store(
+              contrast_store_upsert(contrast_store(), label, res, params)
+            )
+            added_msg <- sprintf(" — saved as contrast “%s”", label)
+          }
+
           shiny::showNotification(
-            sprintf("DESeq2 done: %d genes (%d sig at padj < %.2f)",
+            sprintf("DESeq2 done: %d genes (%d sig at padj < %.2f)%s",
                     nrow(res),
                     sum(res$padj < (input$alpha %||% 0.05), na.rm = TRUE),
-                    input$alpha %||% 0.05),
+                    input$alpha %||% 0.05,
+                    added_msg),
             type = "message", duration = 5
           )
         }, error = function(e) {

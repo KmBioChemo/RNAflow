@@ -21,8 +21,9 @@ empty_project <- function(name = "untitled") {
     organism    = NA_character_,        # "human" / "mouse" / "rat"
     counts      = NULL,                 # numeric matrix
     metadata    = NULL,                 # data.frame
-    de_results  = NULL,                 # data.frame from DESeq2
+    de_results  = NULL,                 # data.frame from DESeq2 (active contrast)
     de_params   = list(),               # design formula, contrast, etc.
+    contrasts   = list(),               # named contrast store (multi-contrast)
     figures     = list(),               # cached plot params, not the plots themselves
     enrichment  = list(),               # GSEA/ORA results
     wgcna       = list(),               # WGCNA modules + correlations
@@ -61,4 +62,108 @@ load_project <- function(path) {
     stop("File does not look like a valid RNAflow project.", call. = FALSE)
   }
   obj
+}
+
+#' Insert or update a contrast in a contrast store
+#'
+#' A contrast store is a named list keyed by contrast label. Each entry holds
+#' the DE results data.frame, the parameters used to compute it, and a
+#' timestamp. Re-adding an existing label updates that entry in place
+#' (keeping its position), so re-running the same contrast refreshes it
+#' rather than duplicating it.
+#'
+#' @param store the current store (a named list; may be empty)
+#' @param label contrast label (unique key)
+#' @param results DE results data.frame
+#' @param params named list of parameters used to compute the contrast
+#' @param created optional timestamp (defaults to now)
+#' @return the updated store
+#' @keywords internal
+contrast_store_upsert <- function(store, label, results, params = list(),
+                                  created = Sys.time()) {
+  if (is.null(store)) store <- list()
+  label <- as.character(label)
+  if (!nzchar(label)) stop("Contrast label must be non-empty.", call. = FALSE)
+  store[[label]] <- list(
+    label   = label,
+    results = results,
+    params  = params,
+    created = created
+  )
+  store
+}
+
+#' Directory where recent projects are cached
+#'
+#' Defaults to a per-user data directory (`tools::R_user_dir`), overridable
+#' via `options(rnaflow.recent_dir = ...)` (used in tests). Created on first
+#' use.
+#'
+#' @return the directory path (created if missing)
+#' @keywords internal
+rnaflow_recent_dir <- function() {
+  dir <- getOption("rnaflow.recent_dir",
+                   tools::R_user_dir("RNAflow", "data"))
+  dir <- file.path(dir, "projects")
+  if (!dir.exists(dir)) dir.create(dir, recursive = TRUE, showWarnings = FALSE)
+  dir
+}
+
+#' Cache a project file in the recent-projects directory
+#'
+#' Copies a saved/loaded `.rnaflow.rds` into the recent directory so it can
+#' be re-opened from the launch panel later.
+#'
+#' @param path path to an existing project file
+#' @param name optional display name used to build the cached filename
+#' @return the cached file path (invisibly)
+#' @keywords internal
+cache_recent_project <- function(path, name = NULL) {
+  if (!file.exists(path)) return(invisible(NULL))
+  base <- if (!is.null(name) && nzchar(name)) {
+    gsub("[^A-Za-z0-9_-]+", "_", name)
+  } else {
+    sub("\\.rnaflow\\.rds$", "", basename(path))
+  }
+  dest <- file.path(rnaflow_recent_dir(), paste0(base, ".rnaflow.rds"))
+  file.copy(path, dest, overwrite = TRUE)
+  invisible(dest)
+}
+
+#' List recent cached projects
+#'
+#' @param max_n maximum number of entries to return (most recent first)
+#' @return a data.frame with columns `file`, `name`, `modified_at` (possibly
+#'   zero rows)
+#' @keywords internal
+list_recent_projects <- function(max_n = 8) {
+  dir <- rnaflow_recent_dir()
+  files <- list.files(dir, pattern = "\\.rnaflow\\.rds$", full.names = TRUE)
+  if (length(files) == 0) {
+    return(data.frame(file = character(0), name = character(0),
+                      modified_at = as.POSIXct(character(0))))
+  }
+  rows <- lapply(files, function(f) {
+    info <- tryCatch(readRDS(f), error = function(e) NULL)
+    nm <- if (is.list(info) && !is.null(info$name)) info$name
+          else sub("\\.rnaflow\\.rds$", "", basename(f))
+    mt <- if (is.list(info) && !is.null(info$modified_at)) info$modified_at
+          else file.info(f)$mtime
+    data.frame(file = f, name = nm, modified_at = as.POSIXct(mt),
+               stringsAsFactors = FALSE)
+  })
+  df <- do.call(rbind, rows)
+  df <- df[order(df$modified_at, decreasing = TRUE), , drop = FALSE]
+  utils::head(df, max_n)
+}
+
+#' Extract the bare DE results from a contrast store
+#'
+#' @param store a contrast store (named list)
+#' @return a named list of DE results data.frames (the shape expected by the
+#'   [analysis_compare] and [fig_compare] functions)
+#' @keywords internal
+contrast_store_results <- function(store) {
+  if (is.null(store) || length(store) == 0) return(list())
+  stats::setNames(lapply(store, function(e) e$results), names(store))
 }

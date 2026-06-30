@@ -134,11 +134,23 @@ mod_data_server <- function(id) {
                  sprintf("\u2713 DE results: %d genes", nrow(d)))
     })
 
+    # Restore data layer from a loaded project (used by the project manager)
+    set_state <- function(counts = NULL, metadata = NULL, organism = NULL,
+                          de_results = NULL) {
+      counts_r(counts)
+      meta_r(metadata)
+      de_r(de_results)
+      if (!is.null(organism)) {
+        shiny::updateSelectInput(session, "organism", selected = organism)
+      }
+    }
+
     list(
       counts     = shiny::reactive(counts_r()),
       metadata   = shiny::reactive(meta_r()),
       de_results = shiny::reactive(de_r()),
-      organism   = shiny::reactive(input$organism)
+      organism   = shiny::reactive(input$organism),
+      set_state  = set_state
     )
   })
 }

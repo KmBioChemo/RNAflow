@@ -1,6 +1,6 @@
 # RNAflow — architecture & roadmap
 
-## Phase 1 (current) — Foundations
+## Phase 1 ✅ — Foundations
 
 **Goal:** turn the original single-file `app.R` into a maintainable R package with clean module separation, validated inputs, and test coverage. No new analyses yet — just solid ground to build on.
 
@@ -30,14 +30,17 @@
 
 ---
 
-## Phase 2 — Project manager + multi-contrast
+## Phase 2 ✅ — Project manager + multi-contrast
 
-- UI to save/load `.rnaflow.rds` files from the app
-- Recent projects panel on launch
-- Multi-contrast comparisons: Venn / UpSet diagrams between contrasts, side-by-side volcano grids
-- Heatmap of log2FC across contrasts (transcriptional signature comparison)
+- [x] UI to save/load `.rnaflow.rds` files from the app (`mod_project`)
+- [x] Recent projects panel (per-user cache via `tools::R_user_dir`)
+- [x] Named contrast store: each DESeq2 run is saved and selectable; active-contrast selector drives the single-contrast tabs
+- [x] Multi-contrast comparisons (`mod_compare`): Venn (`eulerr`) / UpSet (`ComplexHeatmap`) diagrams, side-by-side volcano grid
+- [x] Heatmap of log2FC across contrasts (transcriptional signature comparison)
 
-## Phase 3 — Functional enrichment
+**Pure layer:** `analysis_compare.R` (`contrast_sig_genes`, `contrast_sig_sets`, `contrast_lfc_matrix`) and `fig_compare.R` (`fig_venn`, `fig_upset`, `fig_volcano_grid`, `fig_lfc_heatmap`), all tested without Shiny. State helpers in `project_state.R` (`contrast_store_upsert`, recent-project cache).
+
+## Phase 3 (current) — Functional enrichment
 
 - **GSEA** via `fgsea` against MSigDB collections (Hallmark, C2 curated, C5 GO BP/MF/CC)
 - **ORA** via `clusterProfiler` against GO, KEGG, Reactome

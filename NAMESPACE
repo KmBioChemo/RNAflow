@@ -14,5 +14,14 @@ export(fig_volcano)
 export(fig_heatmap)
 export(fig_pca)
 
+# Phase 2 — multi-contrast comparison
+export(contrast_sig_genes)
+export(contrast_sig_sets)
+export(contrast_lfc_matrix)
+export(fig_venn)
+export(fig_upset)
+export(fig_volcano_grid)
+export(fig_lfc_heatmap)
+
 importFrom(shiny, shinyApp)
 importFrom(magrittr, "%>%")

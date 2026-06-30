@@ -1,6 +1,6 @@
 Package: RNAflow
 Title: An Interactive Shiny Platform for End-to-End RNA-seq Analysis
-Version: 0.1.2
+Version: 0.2.0
 Authors@R: person("Karim", "Matmat", role = c("aut", "cre"),
                   email = "karim.matmat@example.com",
                   comment = c(ORCID = "0000-0000-0000-0000"))
@@ -44,10 +44,12 @@ Imports:
     DESeq2,
     SummarizedExperiment,
     S4Vectors,
-    matrixStats
+    matrixStats,
+    grid
 Suggests:
     testthat (>= 3.0.0),
     shinytest2,
+    eulerr,
     fgsea,
     clusterProfiler,
     msigdbr,

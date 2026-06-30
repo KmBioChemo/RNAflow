@@ -28,3 +28,48 @@ test_that("load_project rejects non-RNAflow files", {
   saveRDS(list(some = "random object"), tf)
   expect_error(load_project(tf), "valid RNAflow")
 })
+
+test_that("contrast_store_upsert adds, updates in place, and keeps order", {
+  res1 <- data.frame(gene = "g1", log2FoldChange = 1, padj = 0.01)
+  res2 <- data.frame(gene = "g2", log2FoldChange = 2, padj = 0.02)
+
+  s <- contrast_store_upsert(list(), "A", res1)
+  s <- contrast_store_upsert(s, "B", res2)
+  expect_named(s, c("A", "B"))
+  expect_equal(s$A$results$gene, "g1")
+
+  # Re-adding "A" updates in place without changing position
+  res1b <- data.frame(gene = "g1b", log2FoldChange = 9, padj = 0.001)
+  s <- contrast_store_upsert(s, "A", res1b)
+  expect_named(s, c("A", "B"))
+  expect_equal(s$A$results$gene, "g1b")
+
+  expect_error(contrast_store_upsert(list(), "", res1), "non-empty")
+})
+
+test_that("contrast_store_results strips to a named list of data.frames", {
+  res1 <- data.frame(gene = "g1", log2FoldChange = 1, padj = 0.01)
+  s <- contrast_store_upsert(list(), "A", res1)
+  out <- contrast_store_results(s)
+  expect_named(out, "A")
+  expect_s3_class(out$A, "data.frame")
+  expect_equal(contrast_store_results(list()), list())
+})
+
+test_that("recent project caching lists newest first by project name", {
+  withr::local_options(rnaflow.recent_dir = withr::local_tempdir())
+  expect_equal(nrow(list_recent_projects()), 0)
+
+  p1 <- empty_project("alpha"); p1$modified_at <- as.POSIXct("2026-01-01 10:00")
+  f1 <- tempfile(fileext = ".rnaflow.rds"); saveRDS(p1, f1)
+  cache_recent_project(f1, p1$name)
+
+  p2 <- empty_project("beta"); p2$modified_at <- as.POSIXct("2026-06-01 10:00")
+  f2 <- tempfile(fileext = ".rnaflow.rds"); saveRDS(p2, f2)
+  cache_recent_project(f2, p2$name)
+
+  rp <- list_recent_projects()
+  expect_equal(nrow(rp), 2)
+  expect_equal(rp$name[1], "beta")   # newest modified_at first
+  expect_true(all(file.exists(rp$file)))
+})

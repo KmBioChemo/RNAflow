@@ -66,6 +66,16 @@ app_ui <- function() {
               shiny::p("Then run DESeq2 with your design variable."),
               shiny::p("Already have DE results from elsewhere? Skip to the third upload box."),
               shiny::tags$hr(),
+              shiny::p(shiny::tags$small(
+                shiny::strong("Demo data: "),
+                "a simple 2-group set (", shiny::tags$code("demo_counts.csv"),
+                ") and a factorial set with 6 groups for multi-contrast testing (",
+                shiny::tags$code("demo_multi_counts.csv"),
+                ") live in the package's ", shiny::tags$code("inst/extdata/"), " folder. ",
+                "For the factorial set, use ", shiny::tags$code("group"),
+                " as the design variable and accumulate several contrasts, then open the Compare tab."
+              )),
+              shiny::tags$hr(),
               shiny::p(shiny::tags$small(shiny::tags$em(
                 "RNAflow validates everything on import. ",
                 "If a file is malformed, you'll see exactly why."
@@ -78,7 +88,16 @@ app_ui <- function() {
     bslib::nav_panel("Volcano", mod_volcano_ui("volcano")),
     bslib::nav_panel("Heatmap", mod_heatmap_ui("heatmap")),
     bslib::nav_panel("PCA",     mod_pca_ui("pca")),
+    bslib::nav_panel("Compare", mod_compare_ui("compare")),
+    bslib::nav_panel("Project", mod_project_ui("project")),
     bslib::nav_spacer(),
+    bslib::nav_item(
+      shiny::div(
+        style = "display:flex;align-items:center;gap:6px;min-width:260px;",
+        shiny::tags$small(style = "color:#7F8C8D;white-space:nowrap;", "Active:"),
+        shiny::uiOutput("active_contrast_ui")
+      )
+    ),
     bslib::nav_item(
       shiny::tags$a(
         href = "https://github.com/kmatmat/RNAflow",
@@ -98,11 +117,41 @@ app_server <- function(input, output, session) {
   # Shared data layer
   data_mod <- mod_data_server("data")
 
-  # DE analysis
-  de_mod <- mod_de_server("de", data_mod)
+  # Named store of DE contrasts, grown by each DESeq2 run
+  contrasts_rv <- shiny::reactiveVal(list())
 
-  # Resolved DE results: prefer computed results, fall back to uploaded
+  # DE analysis (auto-adds each run to the store)
+  de_mod <- mod_de_server("de", data_mod, contrasts_rv)
+
+  # Mirror an uploaded pre-computed DE table into the store as well
+  shiny::observeEvent(data_mod$de_results(), {
+    res <- data_mod$de_results()
+    if (is.null(res)) return()
+    contrasts_rv(contrast_store_upsert(
+      contrasts_rv(), "uploaded DE results", res,
+      params = list(source = "upload")))
+  })
+
+  # Active-contrast selector shown in the navbar
+  output$active_contrast_ui <- shiny::renderUI({
+    store <- contrasts_rv()
+    if (length(store) == 0) {
+      return(shiny::tags$small(style = "color:#95A5A6;", "no contrast yet"))
+    }
+    shiny::selectInput("active_contrast", NULL,
+                       choices = names(store),
+                       selected = isolate_active(input$active_contrast, names(store)),
+                       width = "210px")
+  })
+
+  # Resolved single DE table for the volcano / heatmap / PCA tabs:
+  # the selected store entry, falling back to the latest computed/uploaded.
   de_combined <- shiny::reactive({
+    store <- contrasts_rv()
+    if (length(store) > 0) {
+      sel <- isolate_active(input$active_contrast, names(store))
+      return(store[[sel]]$results)
+    }
     de_mod$de_results() %||% data_mod$de_results()
   })
 
@@ -126,4 +175,21 @@ app_server <- function(input, output, session) {
   mod_volcano_server("volcano", de_combined)
   mod_heatmap_server("heatmap", de_combined, counts_norm, data_mod$metadata)
   mod_pca_server("pca", counts_norm, data_mod$metadata)
+  mod_compare_server("compare", shiny::reactive(contrasts_rv()))
+  mod_project_server("project", data_mod, contrasts_rv)
+}
+
+#' Resolve the active contrast label against the available choices
+#'
+#' Keeps the current selection if still valid, otherwise falls back to the
+#' first available contrast. Avoids a transient NULL when the store changes.
+#'
+#' @param current the current `input$active_contrast` (may be NULL)
+#' @param choices available contrast labels
+#' @return a single valid label
+#' @keywords internal
+isolate_active <- function(current, choices) {
+  if (length(choices) == 0) return(NULL)
+  if (!is.null(current) && current %in% choices) return(current)
+  choices[[1]]
 }
