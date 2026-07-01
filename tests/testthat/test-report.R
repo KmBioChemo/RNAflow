@@ -48,3 +48,22 @@ test_that("build_report_html works with an empty project", {
   expect_silent(build_report_html(empty_project("empty"), f))
   expect_true(file.exists(f))
 })
+
+test_that("build_report_html renders an AI interpretation when present", {
+  p <- make_report_project()
+  p$ai_interpretation <- list(
+    text = "## Summary\nStrong **GR activation** signature.",
+    model = "claude-opus-4-8")
+  f <- tempfile(fileext = ".html")
+  build_report_html(p, f)
+  html <- paste(readLines(f, warn = FALSE), collapse = "\n")
+  expect_match(html, "AI interpretation", fixed = TRUE)
+  expect_match(html, "GR activation", fixed = TRUE)
+  expect_match(html, "claude-opus-4-8", fixed = TRUE)
+})
+
+test_that("assemble_project carries the AI interpretation from settings", {
+  s <- list(ai_interpretation = list(text = "hello", model = "claude-opus-4-8"))
+  p <- assemble_project("demo", organism = "human", settings = s)
+  expect_equal(p$ai_interpretation$text, "hello")
+})

@@ -28,6 +28,7 @@ empty_project <- function(name = "untitled") {
     figures     = list(),               # cached plot params, not the plots themselves
     enrichment  = list(),               # GSEA/ORA results
     wgcna       = list(),               # WGCNA modules + correlations
+    ai_interpretation = NULL,           # optional AI narrative (list: text, model)
     notes       = character(0)          # free-text annotations
   )
 }
@@ -89,6 +90,7 @@ assemble_project <- function(name, organism = NA_character_,
   p$contrasts <- contrasts %||% list()
   p$enrichment <- if (is.null(settings$enrichment)) list() else settings$enrichment
   p$wgcna      <- if (is.null(settings$wgcna)) list() else settings$wgcna
+  p$ai_interpretation <- settings$ai_interpretation
   active <- contrast_store_results(p$contrasts)
   p$de_results <- if (length(active)) active[[1]] else NULL
   p

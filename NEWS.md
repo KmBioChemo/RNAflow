@@ -1,3 +1,13 @@
+# RNAflow 0.9.1 (2026-07-01)
+
+## AI narrative in the HTML report
+
+- The AI interpretation is now archived in the standalone HTML report
+  (`build_report_html`): the latest narrative is threaded through `settings_rv`
+  -> `assemble_project()` -> the report as a rendered "AI interpretation"
+  section, so a saved/exported report carries the interpretation alongside the
+  reproducible script.
+
 # RNAflow 0.9.0 (2026-07-01)
 
 ## AI-assisted biological interpretation

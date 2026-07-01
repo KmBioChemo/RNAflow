@@ -71,10 +71,14 @@ mod_ai_ui <- function(id) {
 #' @param organism_reactive optional reactive returning the organism keyword
 #' @param contrast_params_reactive optional reactive returning the active
 #'   contrast's parameter list (design_var / treated / reference)
+#' @param settings_store optional `reactiveVal` holding a settings list; the
+#'   latest interpretation is recorded under `$ai_interpretation` so it can be
+#'   archived in the HTML report
 #' @export
 mod_ai_server <- function(id, de_reactive, enrich_reactive = NULL,
                           organism_reactive = NULL,
-                          contrast_params_reactive = NULL) {
+                          contrast_params_reactive = NULL,
+                          settings_store = NULL) {
   shiny::moduleServer(id, function(input, output, session) {
 
     mirror <- function(s, n) {
@@ -129,6 +133,11 @@ mod_ai_server <- function(id, de_reactive, enrich_reactive = NULL,
             top_n = as.integer(input$topn_num %||% 30),
             n_terms = as.integer(input$nterm_num %||% 15))
           result(res)
+          if (!is.null(settings_store)) {
+            s <- settings_store()
+            s$ai_interpretation <- list(text = res$text, model = res$model)
+            settings_store(s)
+          }
         }, error = function(e) {
           result(NULL)
           shiny::showNotification(

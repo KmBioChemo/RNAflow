@@ -13,7 +13,8 @@ mod_ai_server(
   de_reactive,
   enrich_reactive = NULL,
   organism_reactive = NULL,
-  contrast_params_reactive = NULL
+  contrast_params_reactive = NULL,
+  settings_store = NULL
 )
 }
 \arguments{
@@ -28,6 +29,10 @@ result list (\code{method}, \code{table}), as exposed by \code{\link[=mod_enrich
 
 \item{contrast_params_reactive}{optional reactive returning the active
 contrast's parameter list (design_var / treated / reference)}
+
+\item{settings_store}{optional \code{reactiveVal} holding a settings list; the
+latest interpretation is recorded under \verb{$ai_interpretation} so it can be
+archived in the HTML report}
 }
 \description{
 Shiny module wrapping the pure \link{ai_interpret} layer. Sends a compact summary

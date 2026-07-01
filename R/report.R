@@ -132,6 +132,24 @@ build_report_html <- function(project, file, title = "RNAflow analysis report",
                                          embed_fig(hm, 6, 6))
   }
 
+  # ---- AI interpretation (optional) ----
+  ai <- project$ai_interpretation
+  ai_section <- NULL
+  if (is.list(ai) && !is.null(ai$text) && nzchar(ai$text)) {
+    ai_html <- tryCatch(
+      htmltools::HTML(as.character(shiny::markdown(ai$text))),
+      error = function(e) h$pre(h$code(ai$text)))
+    ai_section <- section(
+      h$h2("AI interpretation"),
+      h$p(class = "muted",
+          sprintf(paste0("Generated with %s via the Anthropic Claude API. ",
+                         "AI-generated text can be wrong -- treat it as a ",
+                         "hypothesis-generating draft, not a conclusion."),
+                  ai$model %||% "an LLM")),
+      h$div(style = "background:#f8fbfa;border:1px solid #e1efe9;border-radius:6px;padding:2px 16px;",
+            ai_html))
+  }
+
   # ---- Reproducible script ----
   script <- generate_r_script(project, generated = generated)
 
@@ -155,6 +173,7 @@ build_report_html <- function(project, file, title = "RNAflow analysis report",
               h$p(class = "muted", "Thresholds: padj < 0.05, |log2FC| > 1."),
               contrast_tbl, volcanoes),
     compare,
+    ai_section,
     section(h$h2("Reproducible R script"),
             h$p(class = "muted",
                 "A template that reproduces the pipeline with RNAflow (with the ",
