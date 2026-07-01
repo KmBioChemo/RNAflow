@@ -71,7 +71,8 @@ mod_enrich_ui <- function(id) {
 
       ui_section_title("Display"),
       shiny::selectInput(ns("view"), "Plot",
-                         choices = c("Dotplot" = "dot", "Bar (-log10 FDR)" = "bar")),
+                         choices = c("Dotplot" = "dot", "Bar (-log10 FDR)" = "bar",
+                                     "Enrichment map" = "emap")),
       shiny::conditionalPanel(
         sprintf("input['%s'] == 'gsea' && input['%s'] == 'curve'",
                 ns("method"), ns("view")),
@@ -116,12 +117,13 @@ mod_enrich_server <- function(id, de_reactive, organism_reactive) {
                  sprintf("Organism: %s (set on the Data tab)", org))
     })
 
-    # Offer the GSEA curve view only after a GSEA run
+    # GSEA-only views (curve, ridgeline) appear after a GSEA run
     shiny::observeEvent(result(), {
       r <- result()
-      choices <- c("Dotplot" = "dot", "Bar (-log10 FDR)" = "bar")
+      choices <- c("Dotplot" = "dot", "Bar (-log10 FDR)" = "bar",
+                   "Enrichment map" = "emap")
       if (!is.null(r) && r$method == "gsea") {
-        choices <- c(choices, "GSEA curve" = "curve")
+        choices <- c(choices, "GSEA curve" = "curve", "Ridgeline" = "ridge")
       }
       shiny::updateSelectInput(session, "view", choices = choices,
                                selected = shiny::isolate(input$view))
@@ -210,14 +212,21 @@ mod_enrich_server <- function(id, de_reactive, organism_reactive) {
       shiny::req(r, nrow(r$table) > 0)
       mode <- if (isTRUE(input$publication)) "publication" else "exploration"
       n <- max(5L, as.integer(input$nterm_num %||% 20))
-      if (r$method == "gsea" && (input$view %||% "dot") == "curve") {
+      view <- input$view %||% "dot"
+      if (r$method == "gsea" && view == "curve") {
         shiny::req(input$pathway)
         return(fig_gsea_curve(r$de, r$gene_sets[[input$pathway]],
                               rank_by = input$rank_by, title = input$pathway,
                               mode = mode))
       }
-      if ((input$view %||% "dot") == "bar") fig_enrich_bar(r$table, n = n, mode = mode)
-      else fig_enrich_dot(r$table, n = n, mode = mode)
+      switch(
+        view,
+        emap  = fig_enrich_map(r$table, n = max(n, 15), mode = mode),
+        ridge = fig_gsea_ridge(r$de, r$gene_sets, r$table, n = n,
+                               rank_by = input$rank_by, mode = mode),
+        bar   = fig_enrich_bar(r$table, n = n, mode = mode),
+        fig_enrich_dot(r$table, n = n, mode = mode)
+      )
     })
 
     output$plot <- shiny::renderPlot({ print(cur_plot()) })

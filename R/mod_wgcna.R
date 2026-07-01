@@ -40,10 +40,11 @@ mod_wgcna_ui <- function(id) {
       shiny::radioButtons(
         ns("view"), NULL,
         choices = c("Soft threshold" = "sft", "Module-trait heatmap" = "mt",
-                    "Module sizes" = "sizes", "Module eigengene" = "eigen"),
+                    "Module sizes" = "sizes", "Module eigengene" = "eigen",
+                    "Module network" = "network"),
         selected = "sft"),
       shiny::conditionalPanel(
-        sprintf("input['%s'] == 'eigen' || input['%s'] == 'hub'",
+        sprintf("input['%s'] == 'eigen' || input['%s'] == 'network'",
                 ns("view"), ns("view")),
         shiny::uiOutput(ns("module_pick"))
       ),
@@ -186,10 +187,12 @@ mod_wgcna_server <- function(id, counts_norm_reactive, metadata_reactive,
       if (v == "sft") { shiny::req(sft_rv()); return(fig_soft_threshold(sft_rv(), mode)) }
       wg <- wg_rv(); shiny::req(wg)
       switch(v,
-        mt    = fig_module_trait(traits_cor(), mode),
-        sizes = fig_module_sizes(wg, mode = mode),
-        eigen = { shiny::req(input$module)
-                  fig_eigengene(wg, input$module, groups_vec(), mode) })
+        mt      = fig_module_trait(traits_cor(), mode),
+        sizes   = fig_module_sizes(wg, mode = mode),
+        eigen   = { shiny::req(input$module)
+                    fig_eigengene(wg, input$module, groups_vec(), mode) },
+        network = { shiny::req(input$module)
+                    fig_module_network(wg, input$module, mode = mode) })
     })
 
     output$plot <- shiny::renderPlot({ print(cur_plot()) })

@@ -29,6 +29,8 @@ mod_volcano_ui <- function(id) {
                                      "Bottom-left", "Bottom-right", "None")),
       shiny::checkboxInput(ns("publication"),
                            "Publication mode (export)", value = FALSE),
+      shiny::checkboxInput(ns("glow"), "Glow (halo on significant genes)",
+                           value = FALSE),
       ui_advanced_panel(
         ui_color_picker(ns("cu"), "Up",     "#C0392B"),
         ui_color_picker(ns("cd"), "Down",   "#2980B9"),
@@ -125,6 +127,7 @@ mod_volcano_server <- function(id, de_reactive) {
         show_title = input$show_title, show_subtitle = input$show_subtitle,
         leg_pos = input$leg,
         x_min = input$x_min, x_max = input$x_max, y_max = input$y_max,
+        glow = isTRUE(input$glow),
         mode = if (isTRUE(input$publication)) "publication" else "exploration"
       )
     })

@@ -23,6 +23,7 @@ fig_volcano(
   x_min = NULL,
   x_max = NULL,
   y_max = NULL,
+  glow = FALSE,
   mode = c("exploration", "publication")
 )
 }
@@ -46,6 +47,8 @@ fig_volcano(
 \item{leg_pos}{legend position keyword}
 
 \item{x_min, x_max, y_max}{optional axis limits}
+
+\item{glow}{if TRUE, draw a soft halo behind significant points}
 
 \item{mode}{"exploration" or "publication"}
 }

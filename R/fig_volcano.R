@@ -47,6 +47,7 @@ prep_volcano_data <- function(res, lfc_thr, padj_thr) {
 #' @param show_title,show_subtitle whether to draw title / subtitle
 #' @param leg_pos legend position keyword
 #' @param x_min,x_max,y_max optional axis limits
+#' @param glow if TRUE, draw a soft halo behind significant points
 #' @param mode "exploration" or "publication"
 #' @return a ggplot2 object
 #' @export
@@ -60,6 +61,7 @@ fig_volcano <- function(res,
                         show_title = TRUE, show_subtitle = TRUE,
                         leg_pos = "Right",
                         x_min = NULL, x_max = NULL, y_max = NULL,
+                        glow = FALSE,
                         mode = c("exploration", "publication")) {
 
   mode <- match.arg(mode)
@@ -111,9 +113,16 @@ fig_volcano <- function(res,
   label_size  <- if (mode == "publication") 2.2 else 2.85
   point_scale <- if (mode == "publication") 0.85 else 1
 
+  glow_layer <- if (isTRUE(glow)) {
+    ggplot2::geom_point(data = df[df$reg != "NS", ],
+                        size = pt_size * point_scale * 2.4, alpha = 0.10,
+                        stroke = 0)
+  } else NULL
+
   ggplot2::ggplot(df, ggplot2::aes(x = .data$lfc, y = .data$nlog, color = .data$reg)) +
     ggplot2::geom_point(data = df[df$reg == "NS", ],
                         size = pt_size * 0.70 * point_scale, alpha = 0.35) +
+    glow_layer +
     ggplot2::geom_point(data = df[df$reg != "NS", ],
                         size = pt_size * point_scale, alpha = 0.87) +
     ggplot2::geom_hline(yintercept = -log10(padj_thr),

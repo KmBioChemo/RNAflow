@@ -70,6 +70,8 @@ reference:
   - fig_enrich_dot
   - fig_enrich_bar
   - fig_gsea_curve
+  - fig_enrich_map
+  - fig_gsea_ridge
 
 - title: Co-expression networks (WGCNA)
   contents:
@@ -85,6 +87,7 @@ reference:
   - fig_module_trait
   - fig_module_sizes
   - fig_eigengene
+  - fig_module_network
 
 - title: Projects & reproducibility
   desc: Save/load sessions, export a Methods script and an HTML report.
