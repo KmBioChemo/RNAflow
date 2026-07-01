@@ -1,3 +1,19 @@
+# RNAflow 0.10.0 (2026-07-01)
+
+## TF & pathway activity inference (decoupleR)
+
+- **New "Activity" tab** (`mod_activity`, `analysis_decoupler.R`,
+  `fig_decoupler.R`). Instead of "which genes changed", it asks "which upstream
+  regulators / pathways best explain the change": transcription-factor activity
+  from **CollecTRI** regulons (univariate linear model) and pathway activity
+  from **PROGENy** (multivariate), scored against the ranked DE statistic with
+  \pkg{decoupleR}. Diverging bar chart of activated / repressed regulators plus
+  a sortable table.
+- **Pure core.** `activity_input()`, `run_activity()` and `fig_activity_bar()`
+  are Shiny-free and tested; only `get_tf_network()` / `get_pathway_network()`
+  reach OmniPath. Networks are cached per session.
+- `decoupleR` added to `Suggests` (guarded with a clear install message).
+
 # RNAflow 0.9.1 (2026-07-01)
 
 ## AI narrative in the HTML report

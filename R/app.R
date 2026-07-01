@@ -101,6 +101,7 @@ app_ui <- function() {
     bslib::nav_panel("Compare", mod_compare_ui("compare")),
     bslib::nav_panel("Enrichment", mod_enrich_ui("enrich")),
     bslib::nav_panel("Network", mod_wgcna_ui("wgcna")),
+    bslib::nav_panel("Activity", mod_activity_ui("activity")),
     bslib::nav_panel("AI", mod_ai_ui("ai")),
     bslib::nav_panel("Project", mod_project_ui("project")),
     bslib::nav_panel("Report", mod_report_ui("report")),
@@ -207,6 +208,7 @@ app_server <- function(input, output, session) {
                                      settings_rv)
   mod_wgcna_server("wgcna", counts_norm, data_mod$metadata, data_mod$organism,
                    settings_rv)
+  mod_activity_server("activity", de_combined, data_mod$organism)
   mod_ai_server("ai", de_combined, enrich_result, data_mod$organism,
                 active_contrast_params, settings_rv)
   mod_project_server("project", data_mod, contrasts_rv, settings_rv)

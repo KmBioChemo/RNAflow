@@ -98,6 +98,14 @@ reference:
   - enrich_modules
   - fig_module_enrichment
 
+- title: Activity inference
+  desc: Transcription-factor (CollecTRI) and pathway (PROGENy) activity via decoupleR.
+  contents:
+  - get_tf_network
+  - get_pathway_network
+  - run_activity
+  - fig_activity_bar
+
 - title: AI interpretation
   desc: Build a prompt from a contrast and ask the Claude API to interpret it.
   contents:
