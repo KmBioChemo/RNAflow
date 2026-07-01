@@ -1,5 +1,24 @@
 # Changelog
 
+## RNAflow 0.6.2 (2026-07-01)
+
+### Stabilization & pre-release polish
+
+- Verified that all app tabs open cleanly from an empty state (Data,
+  Volcano, Heatmap, PCA, Compare, Enrichment, Network, Project, Report)
+  and that the figure / table / project / script / report export buttons
+  are wired.
+- Softened promotional wording in documentation and code comments
+  (removed “Nature-style” / “high-impact” phrasing in favor of neutral,
+  sober terms).
+- Added a **Limitations** section to the README (bulk RNA-seq only; no
+  FASTQ processing; not a substitute for expert statistical review;
+  WGCNA and enrichment results are exploratory and need validation).
+- Network tab shows a brief, non-blocking note that WGCNA is more
+  reliable with larger sample sizes.
+- No new features, dependencies, or breaking changes; project file
+  format is unchanged (backward compatible).
+
 ## RNAflow 0.6.1 (2026-07-01)
 
 ### Module enrichment visualizations (WGCNA)
@@ -18,7 +37,7 @@
 
 ## RNAflow 0.6.0 (2026-07-01)
 
-### Signature “omics” visualizations (Nature-style)
+### Additional visualizations
 
 - **Enrichment map** (`fig_enrich_map`): enriched pathways drawn as a
   network, linked by shared genes (Jaccard), nodes colored by NES (GSEA)
@@ -30,9 +49,9 @@
   co-expression network with hub genes at the center, sized/colored by
   module membership (kME). Built on ggraph.
 - **Enhanced volcano**: optional `glow` halo on significant genes.
-- **Palette system** (`fig_palettes`): a Nature-style qualitative
-  palette plus perceptually-uniform continuous scales (via scico,
-  viridis fallback) used across the new figures.
+- **Palette system** (`fig_palettes`): a qualitative palette plus
+  perceptually-uniform continuous scales (via scico, viridis fallback)
+  used across the new figures.
 - Wired into the **Enrichment** (map + ridgeline), **Network** (module
   network) and **Volcano** (glow) tabs.
 - New Suggests: ggraph, igraph, tidygraph, ggridges, scico.

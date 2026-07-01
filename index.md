@@ -5,10 +5,10 @@
 
 **RNAflow** is a modular Shiny application built as a proper R package
 for end-to-end bulk RNA-seq analysis. It takes raw count matrices and
-sample metadata as input and produces publication-ready figures,
-validated differential expression results, multi-contrast comparisons,
-functional enrichment (GSEA / ORA), co-expression networks (WGCNA), and
-one-click reproducible reports — all reproducibly.
+sample metadata as input and provides differential expression (DESeq2),
+multi-contrast comparisons, functional enrichment (GSEA / ORA),
+co-expression network analysis (WGCNA), publication-ready figures, and
+reproducible R-script / HTML report export.
 
 Supported organisms: **human**, **mouse**, **rat**.
 
@@ -131,7 +131,27 @@ columns = annotations.
 - **Phase 5** ✅ — Self-contained HTML report + reproducible R script
   export for Methods
 
-All roadmap phases are complete. 🎉
+All roadmap phases are complete.
+
+## Limitations
+
+RNAflow is an exploratory analysis platform, not a turnkey pipeline or a
+substitute for expert statistical review. In particular:
+
+- **Bulk RNA-seq only.** It is not designed for single-cell or spatial
+  data.
+- **No read processing.** RNAflow starts from a count matrix; it does
+  not perform FASTQ alignment or transcript quantification (use
+  e.g. STAR / Salmon / featureCounts upstream).
+- **Not a replacement for expert statistical review.** Design choices,
+  batch handling, and model adequacy should be checked by someone
+  familiar with the experiment.
+- **WGCNA results are exploratory**, and are most reliable with larger
+  sample sizes (WGCNA’s own guidance suggests roughly ≥ 15–20 samples).
+  Treat modules from small datasets as hypotheses, not conclusions.
+- **Enrichment and network results require validation.** Pathway and
+  module interpretations are hypothesis-generating and should be
+  confirmed independently.
 
 ## Development
 

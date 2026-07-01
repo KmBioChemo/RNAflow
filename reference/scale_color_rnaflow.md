@@ -1,6 +1,6 @@
-# Discrete color / fill scales (Nature-style qualitative)
+# Discrete color / fill scales (qualitative)
 
-Discrete color / fill scales (Nature-style qualitative)
+Discrete color / fill scales (qualitative)
 
 ## Usage
 

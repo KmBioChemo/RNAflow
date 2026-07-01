@@ -1,7 +1,7 @@
 # Figure theme system
 
 Two-mode plotting theme: "exploration" (current style) vs "publication"
-(strict, Nature/Cell-friendly). All figure functions accept a `mode`
+(strict, publication-oriented). All figure functions accept a `mode`
 argument and dispatch to the appropriate theme here.
 
 ## Usage

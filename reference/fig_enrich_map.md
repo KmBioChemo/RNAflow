@@ -2,8 +2,8 @@
 
 Nodes are enriched terms, edges connect terms sharing genes (Jaccard
 similarity). Node color encodes NES (GSEA) or -log10(FDR) (ORA), node
-size encodes gene-set size. A compact, high-impact overview of how the
-enriched biology clusters.
+size encodes gene-set size. A compact overview of how the enriched
+biology clusters.
 
 ## Usage
 
