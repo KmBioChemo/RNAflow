@@ -46,5 +46,9 @@ export(fig_module_trait)
 export(fig_module_sizes)
 export(fig_eigengene)
 
+# Phase 5 — reproducibility
+export(generate_r_script)
+export(build_report_html)
+
 importFrom(shiny, shinyApp)
 importFrom(magrittr, "%>%")

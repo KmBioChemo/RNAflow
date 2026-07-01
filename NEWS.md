@@ -1,5 +1,25 @@
 # RNAflow changelog
 
+## v0.5.0 (2026-07-01)
+
+### Phase 5 — Reproducibility (roadmap complete)
+
+- **Reproducible R script export** (`generate_r_script()`): turns a session
+  into a runnable, commented .R script that reproduces the whole pipeline
+  (load → DESeq2 per contrast → figures → GSEA/ORA → WGCNA → sessionInfo)
+  with RNAflow's public API — ready for a Methods section. The output is
+  guaranteed to parse.
+- **Self-contained HTML report** (`build_report_html()`): a single-file
+  report with parameters, a DE summary table, per-contrast volcanoes and the
+  cross-contrast signature heatmap embedded as base64, the reproducible
+  script, and the package manifest. Built with `htmltools` — no pandoc /
+  Quarto toolchain required.
+- **Report tab** (`mod_report`): download the .R script or the HTML report,
+  preview the script, and view session package versions.
+- `assemble_project()` helper shared by the project-manager and report tabs.
+- Note: in place of a full `renv` lockfile (renv not present), the report
+  embeds a package-version manifest capturing the analysis environment.
+
 ## v0.4.0 (2026-06-30)
 
 ### Phase 4 — WGCNA co-expression networks

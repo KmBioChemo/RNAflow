@@ -2,7 +2,7 @@
 
 > End-to-end bulk RNA-seq analysis platform — interactive Shiny app, packaged as an R package.
 
-**RNAflow** is a modular Shiny application built as a proper R package for end-to-end bulk RNA-seq analysis. It takes raw count matrices and sample metadata as input and produces publication-ready figures, validated differential expression results, and (in later phases) functional enrichment and co-expression network analyses — all reproducibly.
+**RNAflow** is a modular Shiny application built as a proper R package for end-to-end bulk RNA-seq analysis. It takes raw count matrices and sample metadata as input and produces publication-ready figures, validated differential expression results, multi-contrast comparisons, functional enrichment (GSEA / ORA), co-expression networks (WGCNA), and one-click reproducible reports — all reproducibly.
 
 Supported organisms: **human**, **mouse**, **rat**.
 
@@ -110,7 +110,9 @@ sample3,Treatment,B
 - **Phase 2** ✅ — In-app project save/load + recent projects, named multi-contrast store, Compare tab (Venn / UpSet / volcano grid / log2FC heatmap)
 - **Phase 3** ✅ — GSEA / ORA (MSigDB Hallmark/C2/C5, GO BP/MF/CC, KEGG, Reactome) with dotplot / bar / running-enrichment curve
 - **Phase 4** ✅ — WGCNA co-expression networks (soft-threshold picking, module detection, module-trait correlation, hub genes, per-module enrichment)
-- **Phase 5** 🔄 — Quarto HTML report auto-generation + R code export for Methods
+- **Phase 5** ✅ — Self-contained HTML report + reproducible R script export for Methods
+
+All roadmap phases are complete. 🎉
 
 ## Development
 

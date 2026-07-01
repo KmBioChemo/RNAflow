@@ -1,6 +1,6 @@
 Package: RNAflow
 Title: An Interactive Shiny Platform for End-to-End RNA-seq Analysis
-Version: 0.4.0
+Version: 0.5.0
 Authors@R: person("Karim", "Matmat", role = c("aut", "cre"),
                   email = "karim.matmat@example.com",
                   comment = c(ORCID = "0000-0000-0000-0000"))
@@ -24,6 +24,7 @@ Imports:
     golem,
     config,
     htmltools,
+    xfun,
     DT,
     shinycssloaders,
     shinyjs,

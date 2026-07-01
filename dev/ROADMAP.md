@@ -59,8 +59,13 @@
 
 **Pure layer:** `analysis_wgcna.R` + `fig_wgcna.R`, tested without Shiny. Note: `with_wgcna_cor()` works around WGCNA's `cor`-masking so the package runs without attaching WGCNA.
 
-## Phase 5 (current) — Reproducibility
+## Phase 5 ✅ — Reproducibility
 
-- One-click HTML report via Quarto: all figures, parameters, sessionInfo embedded
-- R code export: generates a `.R` script reproducing the entire analysis from the loaded data, ready to paste into a Methods section
-- `renv` lockfile bundled with each project for full environment reproducibility
+- [x] One-click **self-contained HTML report** (`build_report_html`): parameters, DE summary, volcano + cross-contrast figures embedded as base64, reproducible script, session manifest. Built with `htmltools` (no pandoc/Quarto toolchain needed — pandoc was unavailable, and a self-contained htmltools report is more portable anyway).
+- [x] **R code export** (`generate_r_script`): a runnable, commented `.R` script reproducing the full analysis, ready for a Methods section (guaranteed to parse).
+- [x] `mod_report` Report tab (download script / HTML, preview, session packages).
+- [~] Environment reproducibility: instead of a full `renv` lockfile (renv absent), the report embeds a **package-version manifest** (`session_manifest`). Full renv integration can be revisited later.
+
+---
+
+**All roadmap phases (1-5) are complete** as of 2026-07-01 (v0.5.0).

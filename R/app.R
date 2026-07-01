@@ -92,6 +92,7 @@ app_ui <- function() {
     bslib::nav_panel("Enrichment", mod_enrich_ui("enrich")),
     bslib::nav_panel("Network", mod_wgcna_ui("wgcna")),
     bslib::nav_panel("Project", mod_project_ui("project")),
+    bslib::nav_panel("Report", mod_report_ui("report")),
     bslib::nav_spacer(),
     bslib::nav_item(
       shiny::div(
@@ -181,6 +182,7 @@ app_server <- function(input, output, session) {
   mod_enrich_server("enrich", de_combined, data_mod$organism)
   mod_wgcna_server("wgcna", counts_norm, data_mod$metadata, data_mod$organism)
   mod_project_server("project", data_mod, contrasts_rv)
+  mod_report_server("report", data_mod, contrasts_rv)
 }
 
 #' Resolve the active contrast label against the available choices

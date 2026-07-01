@@ -64,6 +64,31 @@ load_project <- function(path) {
   obj
 }
 
+#' Assemble a project from the current session state
+#'
+#' Bundles the live analysis objects into the canonical project structure
+#' (see [empty_project()]). Shared by the project-manager and report modules.
+#'
+#' @param name project name
+#' @param organism organism keyword
+#' @param counts counts matrix (or NULL)
+#' @param metadata metadata data.frame (or NULL)
+#' @param contrasts the contrast store (named list)
+#' @return a project list
+#' @keywords internal
+assemble_project <- function(name, organism = NA_character_,
+                             counts = NULL, metadata = NULL,
+                             contrasts = list()) {
+  p <- empty_project(if (!is.null(name) && nzchar(name)) name else "untitled")
+  p$organism  <- organism %||% NA_character_
+  p$counts    <- counts
+  p$metadata  <- metadata
+  p$contrasts <- contrasts %||% list()
+  active <- contrast_store_results(p$contrasts)
+  p$de_results <- if (length(active)) active[[1]] else NULL
+  p
+}
+
 #' Insert or update a contrast in a contrast store
 #'
 #' A contrast store is a named list keyed by contrast label. Each entry holds
