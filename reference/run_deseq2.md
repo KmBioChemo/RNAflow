@@ -60,10 +60,16 @@ run_deseq2(
 ## Value
 
 a tidy data.frame with columns: gene, baseMean, log2FoldChange, lfcSE,
-stat, pvalue, padj. Inference columns (`stat`, `pvalue`, `padj`) always
-come from the unshrunken Wald test; when `shrink = TRUE` only
-`log2FoldChange` and `lfcSE` are the shrunken estimates. The estimator
-actually used is recorded in `attr(result, "shrink")`.
+stat, pvalue, padj. The estimator actually used is recorded in
+`attr(result, "shrink")`.
+
+## Details
+
+Shrinkage adjusts only the effect-size estimates (`log2FoldChange`,
+`lfcSE`), improving ranking and visualization. Inference is unaffected:
+`stat`, `pvalue` and `padj` always come from the unshrunken Wald test.
+Consequently the default GSEA ranking (`rank_genes(by = "stat")`) uses
+the unshrunken Wald statistic even when `shrink = TRUE`.
 
 ## Examples
 

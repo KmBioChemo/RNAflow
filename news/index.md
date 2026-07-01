@@ -1,5 +1,27 @@
 # Changelog
 
+## RNAflow 0.7.2 (2026-07-01)
+
+### Audit polish
+
+- **[`run_deseq2()`](https://KmBioChemo.github.io/RNAflow/reference/run_deseq2.md)
+  no longer coerces every design variable to a factor.** Character /
+  logical / factor columns become factors (categorical), but numeric
+  covariates stay numeric so they enter the model as continuous
+  adjustments; the contrast variable is always treated as a factor.
+  Added a test for numeric-covariate preservation.
+- **[`run_wgcna()`](https://KmBioChemo.github.io/RNAflow/reference/run_wgcna.md)
+  sets `TOMType` consistently with `networkType`** (unsigned network -\>
+  unsigned TOM), preserving the user’s choice.
+- **Clarified
+  [`run_deseq2()`](https://KmBioChemo.github.io/RNAflow/reference/run_deseq2.md)
+  docs**: shrinkage affects only the effect-size estimates; inference
+  stays the unshrunken Wald test; the default GSEA ranking by `stat`
+  therefore uses the unshrunken Wald statistic.
+- **[`generate_r_script()`](https://KmBioChemo.github.io/RNAflow/reference/generate_r_script.md)
+  header** now states that enrichment / WGCNA use the recorded settings
+  when available and example defaults otherwise.
+
 ## RNAflow 0.7.1 (2026-07-01)
 
 ### Exact reproducibility & remaining audit items

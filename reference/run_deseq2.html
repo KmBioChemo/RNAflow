@@ -11,7 +11,7 @@ LFC shrinkage (apeglm by default)."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,10 +104,17 @@ level_reference). Example: <code>c("condition", "Treatment", "Control")</code>.<
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>a tidy data.frame with columns: gene, baseMean, log2FoldChange,
-lfcSE, stat, pvalue, padj. Inference columns (<code>stat</code>, <code>pvalue</code>, <code>padj</code>)
-always come from the unshrunken Wald test; when <code>shrink = TRUE</code> only
-<code>log2FoldChange</code> and <code>lfcSE</code> are the shrunken estimates. The estimator
-actually used is recorded in <code>attr(result, "shrink")</code>.</p>
+lfcSE, stat, pvalue, padj. The estimator actually used is recorded in
+<code>attr(result, "shrink")</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Shrinkage adjusts only the effect-size estimates
+(<code>log2FoldChange</code>, <code>lfcSE</code>), improving ranking and visualization.
+Inference is unaffected: <code>stat</code>, <code>pvalue</code> and <code>padj</code> always come from the
+unshrunken Wald test. Consequently the default GSEA ranking
+(<code>rank_genes(by = "stat")</code>) uses the unshrunken Wald statistic even when
+<code>shrink = TRUE</code>.</p>
     </div>
 
     <div class="section level2">
