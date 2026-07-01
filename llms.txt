@@ -285,6 +285,10 @@ GSEA (fgsea / MSigDB) and ORA (clusterProfiler; GO / KEGG / Reactome).
   : Module eigengene profile
 - [`fig_module_network()`](https://KmBioChemo.github.io/RNAflow/reference/fig_module_network.md)
   : Module co-expression network
+- [`enrich_modules()`](https://KmBioChemo.github.io/RNAflow/reference/enrich_modules.md)
+  : Enrich every module against a pathway database
+- [`fig_module_enrichment()`](https://KmBioChemo.github.io/RNAflow/reference/fig_module_enrichment.md)
+  : Module x pathway enrichment dotplot
 
 ## Projects & reproducibility
 

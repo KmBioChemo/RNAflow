@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,17 @@
       <small>Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.1" id="rnaflow-061-2026-07-01">RNAflow 0.6.1 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-061-2026-07-01"></a></h2>
+<div class="section level3">
+<h3 id="module-enrichment-visualizations-wgcna-0-6-1">Module enrichment visualizations (WGCNA)<a class="anchor" aria-label="anchor" href="#module-enrichment-visualizations-wgcna-0-6-1"></a></h3>
+<ul><li>
+<strong><code><a href="../reference/enrich_modules.html">enrich_modules()</a></code></strong>: runs ORA on every co-expression module (reusing the phase-3 enrichment layer) and returns a combined tidy table.</li>
+<li>
+<strong><code><a href="../reference/fig_module_enrichment.html">fig_module_enrichment()</a></code></strong>: a modules x pathways dotplot (compareCluster-style) — dot size = gene count, color = -log10(FDR), module axis labels colored by their WGCNA color (via ggtext). Shows each module’s biological identity at a glance.</li>
+<li>Network tab: the module-enrichment card now shows a <strong>dotplot</strong> for the selected module (“This module”) and a cross-module comparison (“All modules”), in addition to the table. New Suggests: ggtext.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.0" id="rnaflow-060-2026-07-01">RNAflow 0.6.0 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-060-2026-07-01"></a></h2>
 <div class="section level3">
