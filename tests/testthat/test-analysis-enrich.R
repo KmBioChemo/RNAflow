@@ -51,6 +51,15 @@ test_that("run_gsea validates inputs", {
   expect_error(run_gsea(res, list()), "non-empty named list")
 })
 
+test_that("run_gsea warns when the ranking metric has ties", {
+  skip_if_not_installed("fgsea")
+  res <- make_ranked_de(200)
+  res$stat <- rep(c(-1, 1), each = 100)          # heavily tied ranks
+  gs <- list(SET = head(res$gene, 40))
+  expect_warning(run_gsea(res, gs, rank_by = "stat", min_size = 15),
+                 "tied ranking scores")
+})
+
 # ---- integration with the real annotation stack -----------------------------
 
 test_that("get_gene_sets returns Hallmark sets for mouse", {

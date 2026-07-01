@@ -58,8 +58,10 @@ mod_report_ui <- function(id) {
 #' @rdname mod_report
 #' @param data_mod the value returned by [mod_data_server()]
 #' @param contrast_store a `reactiveVal` holding the contrast store
+#' @param settings_store optional `reactiveVal` with enrichment / WGCNA settings
 #' @export
-mod_report_server <- function(id, data_mod, contrast_store) {
+mod_report_server <- function(id, data_mod, contrast_store,
+                              settings_store = NULL) {
   shiny::moduleServer(id, function(input, output, session) {
 
     project <- shiny::reactive({
@@ -68,7 +70,8 @@ mod_report_server <- function(id, data_mod, contrast_store) {
         organism  = data_mod$organism(),
         counts    = data_mod$counts(),
         metadata  = data_mod$metadata(),
-        contrasts = contrast_store())
+        contrasts = contrast_store(),
+        settings  = if (is.null(settings_store)) list() else settings_store())
     })
 
     stamp <- function() format(Sys.time(), "%Y-%m-%d %H:%M")

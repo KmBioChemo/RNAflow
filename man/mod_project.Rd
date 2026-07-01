@@ -8,7 +8,7 @@
 \usage{
 mod_project_ui(id)
 
-mod_project_server(id, data_mod, contrast_store)
+mod_project_server(id, data_mod, contrast_store, settings_store = NULL)
 }
 \arguments{
 \item{id}{namespace ID}
@@ -17,6 +17,8 @@ mod_project_server(id, data_mod, contrast_store)
 \code{set_state})}
 
 \item{contrast_store}{a \code{reactiveVal} holding the contrast store}
+
+\item{settings_store}{optional \code{reactiveVal} with enrichment / WGCNA settings}
 }
 \description{
 Save the full analysis session (counts, metadata, organism, and the whole

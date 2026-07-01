@@ -92,9 +92,11 @@ mod_wgcna_ui <- function(id) {
 #'   (genes x samples)
 #' @param metadata_reactive reactive returning the sample metadata
 #' @param organism_reactive reactive returning the organism keyword
+#' @param settings_store optional `reactiveVal` holding a settings list; the
+#'   module records its parameters under `$wgcna` for reproducibility
 #' @export
 mod_wgcna_server <- function(id, counts_norm_reactive, metadata_reactive,
-                             organism_reactive) {
+                             organism_reactive, settings_store = NULL) {
   shiny::moduleServer(id, function(input, output, session) {
 
     shiny::observeEvent(input$ngenes_sld,
@@ -145,6 +147,17 @@ mod_wgcna_server <- function(id, counts_norm_reactive, metadata_reactive,
                           merge_cut_height = as.numeric(input$merge_cut %||% 0.25),
                           deep_split = as.integer(input$deep_split %||% 2))
           wg_rv(wg); enrich_rv(NULL)
+          if (!is.null(settings_store)) {
+            s <- settings_store()
+            s$wgcna <- list(
+              n_genes = as.integer(input$ngenes_num %||% 3000),
+              network_type = input$net_type,
+              power = as.integer(input$power %||% 6),
+              min_module_size = as.integer(input$min_size %||% 30),
+              merge_cut_height = as.numeric(input$merge_cut %||% 0.25),
+              deep_split = as.integer(input$deep_split %||% 2))
+            settings_store(s)
+          }
           shiny::updateRadioButtons(session, "view", selected = "mt")
           shiny::showNotification(
             sprintf("Found %d modules (+ grey).",

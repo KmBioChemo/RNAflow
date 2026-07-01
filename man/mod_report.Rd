@@ -8,7 +8,7 @@
 \usage{
 mod_report_ui(id)
 
-mod_report_server(id, data_mod, contrast_store)
+mod_report_server(id, data_mod, contrast_store, settings_store = NULL)
 }
 \arguments{
 \item{id}{namespace ID}
@@ -16,6 +16,8 @@ mod_report_server(id, data_mod, contrast_store)
 \item{data_mod}{the value returned by \code{\link[=mod_data_server]{mod_data_server()}}}
 
 \item{contrast_store}{a \code{reactiveVal} holding the contrast store}
+
+\item{settings_store}{optional \code{reactiveVal} with enrichment / WGCNA settings}
 }
 \description{
 Exports the session as a reproducible R script and a self-contained HTML

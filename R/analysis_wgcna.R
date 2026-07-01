@@ -55,7 +55,19 @@ wgcna_datexpr <- function(counts_norm, n_genes = 3000) {
   }
   v <- matrixStats::rowVars(m)
   keep <- order(v, decreasing = TRUE)[seq_len(min(n_genes, nrow(m)))]
-  t(m[sort(keep), , drop = FALSE])
+  datExpr <- t(m[sort(keep), , drop = FALSE])
+
+  # Flag/drop genes or samples with too many missing or zero-variance entries
+  if (requireNamespace("WGCNA", quietly = TRUE)) {
+    gsg <- with_wgcna_cor(WGCNA::goodSamplesGenes(datExpr, verbose = 0))
+    if (!gsg$allOK) {
+      nb_g <- sum(!gsg$goodGenes); nb_s <- sum(!gsg$goodSamples)
+      message("goodSamplesGenes flagged ", nb_g, " gene(s) and ", nb_s,
+              " sample(s) as low quality; removing them.")
+      datExpr <- datExpr[gsg$goodSamples, gsg$goodGenes, drop = FALSE]
+    }
+  }
+  datExpr
 }
 
 #' Soft-threshold (power) selection

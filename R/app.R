@@ -123,6 +123,9 @@ app_server <- function(input, output, session) {
   # Named store of DE contrasts, grown by each DESeq2 run
   contrasts_rv <- shiny::reactiveVal(list())
 
+  # Enrichment / WGCNA settings captured for reproducible export
+  settings_rv <- shiny::reactiveVal(list())
+
   # DE analysis (auto-adds each run to the store)
   de_mod <- mod_de_server("de", data_mod, contrasts_rv)
 
@@ -179,10 +182,11 @@ app_server <- function(input, output, session) {
   mod_heatmap_server("heatmap", de_combined, counts_norm, data_mod$metadata)
   mod_pca_server("pca", counts_norm, data_mod$metadata)
   mod_compare_server("compare", shiny::reactive(contrasts_rv()))
-  mod_enrich_server("enrich", de_combined, data_mod$organism)
-  mod_wgcna_server("wgcna", counts_norm, data_mod$metadata, data_mod$organism)
-  mod_project_server("project", data_mod, contrasts_rv)
-  mod_report_server("report", data_mod, contrasts_rv)
+  mod_enrich_server("enrich", de_combined, data_mod$organism, settings_rv)
+  mod_wgcna_server("wgcna", counts_norm, data_mod$metadata, data_mod$organism,
+                   settings_rv)
+  mod_project_server("project", data_mod, contrasts_rv, settings_rv)
+  mod_report_server("report", data_mod, contrasts_rv, settings_rv)
 }
 
 #' Resolve the active contrast label against the available choices

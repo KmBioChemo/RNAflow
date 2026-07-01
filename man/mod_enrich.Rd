@@ -8,7 +8,7 @@
 \usage{
 mod_enrich_ui(id)
 
-mod_enrich_server(id, de_reactive, organism_reactive)
+mod_enrich_server(id, de_reactive, organism_reactive, settings_store = NULL)
 }
 \arguments{
 \item{id}{namespace ID}
@@ -16,6 +16,9 @@ mod_enrich_server(id, de_reactive, organism_reactive)
 \item{de_reactive}{a reactive returning the active contrast DE data.frame}
 
 \item{organism_reactive}{a reactive returning the organism keyword}
+
+\item{settings_store}{optional \code{reactiveVal} holding a settings list; the
+last enrichment run is recorded under \verb{$enrichment} for reproducibility}
 }
 \description{
 Shiny module wrapping the \link{analysis_enrich} layer. Runs GSEA (against

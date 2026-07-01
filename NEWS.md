@@ -1,3 +1,19 @@
+# RNAflow 0.7.1 (2026-07-01)
+
+## Exact reproducibility & remaining audit items
+
+- **Exact parameter capture.** The Enrichment and Network tabs now record the
+  settings they were run with (GSEA/ORA collection, ranking metric, database,
+  thresholds; WGCNA gene count, network type, power, module parameters). These
+  are saved in the project and emitted verbatim by `generate_r_script()`, so
+  the exported script reproduces the *exact* analysis (not just a template).
+  Loading a project restores these settings too.
+- **WGCNA quality control.** `wgcna_datexpr()` now runs
+  `WGCNA::goodSamplesGenes()` and removes flagged genes / samples (with a
+  message).
+- **GSEA ties.** `run_gsea()` warns when the ranking metric has tied values
+  (and muffles fgsea's redundant internal warning).
+
 # RNAflow 0.7.0 (2026-07-01)
 
 ## Methodological fixes (scientific audit)

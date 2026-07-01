@@ -104,8 +104,20 @@ run_gsea <- function(res, gene_sets, rank_by = "stat",
     stop("Too few ranked genes (", length(ranks), ") to run GSEA.",
          call. = FALSE)
   }
-  fg <- fgsea::fgsea(pathways = gene_sets, stats = ranks,
-                     minSize = min_size, maxSize = max_size, eps = eps)
+  n_tied <- sum(duplicated(ranks))
+  if (n_tied > 0) {
+    warning(n_tied, " of ", length(ranks), " genes have tied ranking scores; ",
+            "GSEA enrichment scores may be slightly order-dependent. Ranking ",
+            "by 'stat' usually has fewer ties than 'log2fc'.", call. = FALSE)
+  }
+  # We surface our own ties message above; muffle fgsea's redundant one.
+  fg <- withCallingHandlers(
+    fgsea::fgsea(pathways = gene_sets, stats = ranks,
+                 minSize = min_size, maxSize = max_size, eps = eps),
+    warning = function(w) {
+      if (grepl("ties in the preranked", conditionMessage(w), fixed = TRUE))
+        invokeRestart("muffleWarning")
+    })
   fg <- as.data.frame(fg)
   if (nrow(fg) == 0) {
     return(data.frame(pathway = character(0), pval = numeric(0),

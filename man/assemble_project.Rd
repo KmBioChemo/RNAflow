@@ -9,7 +9,8 @@ assemble_project(
   organism = NA_character_,
   counts = NULL,
   metadata = NULL,
-  contrasts = list()
+  contrasts = list(),
+  settings = list()
 )
 }
 \arguments{
@@ -22,6 +23,9 @@ assemble_project(
 \item{metadata}{metadata data.frame (or NULL)}
 
 \item{contrasts}{the contrast store (named list)}
+
+\item{settings}{optional list with \code{enrichment} / \code{wgcna} parameter records
+(captured by the Enrichment / Network tabs) for exact reproducibility}
 }
 \value{
 a project list

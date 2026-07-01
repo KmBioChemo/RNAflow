@@ -104,24 +104,50 @@ generate_r_script <- function(project,
         "")
   }
 
-  # ---- Enrichment ----
-  add("## 4. Functional enrichment (GSEA + ORA) --------------------------------",
-      'gene_sets <- get_gene_sets(organism, collection = "H")',
-      sprintf('gsea      <- run_gsea(%s, gene_sets, rank_by = "stat")', ex),
-      "fig_enrich_dot(gsea)",
-      sprintf('sig <- contrast_sig_genes(%s, padj_thr = 0.05, lfc_thr = 1)', ex),
-      'ora <- run_ora(sig, organism, db = "GO", ont = "BP", universe = ' ,
-      sprintf('               %s$gene)', ex),
-      "fig_enrich_bar(ora)",
-      "")
+  # ---- Enrichment (exact settings when recorded, else a template) ----
+  add("## 4. Functional enrichment ---------------------------------------------")
+  en <- project$enrichment
+  if (is.list(en) && length(en) && !is.null(en$method) && en$method == "gsea") {
+    sub <- if (!is.null(en$subcollection))
+      sprintf(', subcollection = "%s"', en$subcollection) else ""
+    add(sprintf('gene_sets <- get_gene_sets(organism, collection = "%s"%s)',
+                en$collection, sub),
+        sprintf('gsea <- run_gsea(%s, gene_sets, rank_by = "%s")', ex, en$rank_by),
+        "fig_enrich_dot(gsea)", "")
+  } else if (is.list(en) && length(en) && !is.null(en$method) && en$method == "ora") {
+    add(sprintf('sig <- contrast_sig_genes(%s, padj_thr = %s, lfc_thr = %s, direction = "%s")',
+                ex, en$padj %||% 0.05, en$lfc %||% 1, en$direction %||% "either"),
+        sprintf('ora <- run_ora(sig, organism, db = "%s", ont = "%s", universe = %s$gene)',
+                en$db %||% "GO", en$ont %||% "BP", ex),
+        "fig_enrich_bar(ora)", "")
+  } else {
+    add("# (no enrichment run recorded -- example with default settings)",
+        'gene_sets <- get_gene_sets(organism, collection = "H")',
+        sprintf('gsea <- run_gsea(%s, gene_sets, rank_by = "stat")', ex),
+        "fig_enrich_dot(gsea)",
+        sprintf('sig <- contrast_sig_genes(%s, padj_thr = 0.05, lfc_thr = 1)', ex),
+        sprintf('ora <- run_ora(sig, organism, db = "GO", ont = "BP", universe = %s$gene)', ex),
+        "fig_enrich_bar(ora)", "")
+  }
 
-  # ---- WGCNA ----
+  # ---- WGCNA (exact settings when recorded, else a template) ----
   add("## 5. Co-expression network (WGCNA) -------------------------------------",
-      'norm    <- normalize_counts(counts, meta, method = "vst")',
-      "datExpr <- wgcna_datexpr(norm, n_genes = 3000)",
-      "sft     <- wgcna_pick_power(datExpr)",
-      "wg      <- run_wgcna(datExpr, power = sft$suggested)",
-      "traits  <- build_traits(meta, rownames(datExpr))",
+      'norm    <- normalize_counts(counts, meta, method = "vst")')
+  wg <- project$wgcna
+  if (is.list(wg) && length(wg) && !is.null(wg$power)) {
+    add(sprintf("datExpr <- wgcna_datexpr(norm, n_genes = %s)", wg$n_genes %||% 3000),
+        sprintf('wg <- run_wgcna(datExpr, power = %s, network_type = "%s",',
+                wg$power, wg$network_type %||% "signed"),
+        sprintf("                min_module_size = %s, merge_cut_height = %s, deep_split = %s)",
+                wg$min_module_size %||% 30, wg$merge_cut_height %||% 0.25,
+                wg$deep_split %||% 2))
+  } else {
+    add("# (no module run recorded -- example with an auto-picked power)",
+        "datExpr <- wgcna_datexpr(norm, n_genes = 3000)",
+        "sft     <- wgcna_pick_power(datExpr)",
+        "wg      <- run_wgcna(datExpr, power = sft$suggested)")
+  }
+  add("traits  <- build_traits(meta, rownames(datExpr))",
       "fig_module_trait(module_trait_cor(wg$MEs, traits))",
       "",
       "## 6. Session information -----------------------------------------------",

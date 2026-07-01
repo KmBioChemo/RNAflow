@@ -12,7 +12,8 @@ mod_wgcna_server(
   id,
   counts_norm_reactive,
   metadata_reactive,
-  organism_reactive
+  organism_reactive,
+  settings_store = NULL
 )
 }
 \arguments{
@@ -24,6 +25,9 @@ mod_wgcna_server(
 \item{metadata_reactive}{reactive returning the sample metadata}
 
 \item{organism_reactive}{reactive returning the organism keyword}
+
+\item{settings_store}{optional \code{reactiveVal} holding a settings list; the
+module records its parameters under \verb{$wgcna} for reproducibility}
 }
 \description{
 Shiny module wrapping the \link{analysis_wgcna} layer: soft-threshold picking,

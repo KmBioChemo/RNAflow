@@ -49,15 +49,20 @@ mod_project_ui <- function(id) {
 #' @param data_mod the value returned by [mod_data_server()] (must expose
 #'   `set_state`)
 #' @param contrast_store a `reactiveVal` holding the contrast store
+#' @param settings_store optional `reactiveVal` with enrichment / WGCNA settings
 #' @export
-mod_project_server <- function(id, data_mod, contrast_store) {
+mod_project_server <- function(id, data_mod, contrast_store,
+                               settings_store = NULL) {
   shiny::moduleServer(id, function(input, output, session) {
 
     recent_tick <- shiny::reactiveVal(0)  # bump to refresh the recent list
 
     gather_project <- function(name) {
       store <- contrast_store()
+      s <- if (is.null(settings_store)) list() else settings_store()
       p <- empty_project(if (nzchar(name)) name else "untitled")
+      p$enrichment <- if (is.null(s$enrichment)) list() else s$enrichment
+      p$wgcna      <- if (is.null(s$wgcna)) list() else s$wgcna
       p$organism  <- data_mod$organism()
       p$counts    <- data_mod$counts()
       p$metadata  <- data_mod$metadata()
@@ -73,6 +78,10 @@ mod_project_server <- function(id, data_mod, contrast_store) {
       data_mod$set_state(counts = p$counts, metadata = p$metadata,
                          organism = p$organism, de_results = NULL)
       contrast_store(if (is.null(p$contrasts)) list() else p$contrasts)
+      if (!is.null(settings_store)) {
+        settings_store(list(enrichment = p$enrichment %||% NULL,
+                            wgcna = p$wgcna %||% NULL))
+      }
     }
 
     output$save_summary <- shiny::renderUI({

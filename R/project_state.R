@@ -75,16 +75,20 @@ load_project <- function(path) {
 #' @param counts counts matrix (or NULL)
 #' @param metadata metadata data.frame (or NULL)
 #' @param contrasts the contrast store (named list)
+#' @param settings optional list with `enrichment` / `wgcna` parameter records
+#'   (captured by the Enrichment / Network tabs) for exact reproducibility
 #' @return a project list
 #' @keywords internal
 assemble_project <- function(name, organism = NA_character_,
                              counts = NULL, metadata = NULL,
-                             contrasts = list()) {
+                             contrasts = list(), settings = list()) {
   p <- empty_project(if (!is.null(name) && nzchar(name)) name else "untitled")
   p$organism  <- organism %||% NA_character_
   p$counts    <- counts
   p$metadata  <- metadata
   p$contrasts <- contrasts %||% list()
+  p$enrichment <- if (is.null(settings$enrichment)) list() else settings$enrichment
+  p$wgcna      <- if (is.null(settings$wgcna)) list() else settings$wgcna
   active <- contrast_store_results(p$contrasts)
   p$de_results <- if (length(active)) active[[1]] else NULL
   p

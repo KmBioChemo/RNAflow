@@ -95,8 +95,11 @@ mod_enrich_ui <- function(id) {
 #' @rdname mod_enrich
 #' @param de_reactive a reactive returning the active contrast DE data.frame
 #' @param organism_reactive a reactive returning the organism keyword
+#' @param settings_store optional `reactiveVal` holding a settings list; the
+#'   last enrichment run is recorded under `$enrichment` for reproducibility
 #' @export
-mod_enrich_server <- function(id, de_reactive, organism_reactive) {
+mod_enrich_server <- function(id, de_reactive, organism_reactive,
+                              settings_store = NULL) {
   shiny::moduleServer(id, function(input, output, session) {
 
     mirror <- function(s, n) {
@@ -168,6 +171,20 @@ mod_enrich_server <- function(id, de_reactive, organism_reactive) {
                            ont = if (input$db == "GO") input$ont else "BP",
                            universe = de$gene)
             result(list(method = "ora", table = tab, gene_sets = NULL, de = de))
+          }
+          # Record the exact settings used (for reproducible export)
+          if (!is.null(settings_store)) {
+            es <- if (input$method == "gsea") {
+              cc <- ENRICH_COLLECTIONS[[input$collection]]
+              list(method = "gsea", organism = org, collection = cc$collection,
+                   subcollection = cc$sub, rank_by = input$rank_by)
+            } else {
+              list(method = "ora", organism = org, db = input$db,
+                   ont = if (input$db == "GO") input$ont else "BP",
+                   direction = input$direction,
+                   padj = input$padj_num %||% 0.05, lfc = input$lfc_num %||% 1)
+            }
+            s <- settings_store(); s$enrichment <- es; settings_store(s)
           }
           shiny::showNotification(
             sprintf("Enrichment done: %d term%s.", nrow(result()$table),
