@@ -2,7 +2,7 @@
 #'
 #' Differential expression heatmap with z-scored rows, sample annotations,
 #' and optional direction (up/down) annotation. Requires a real counts
-#' matrix — the silent simulation from the original app has been removed
+#' matrix -- the silent simulation from the original app has been removed
 #' to prevent accidentally publishing fake data.
 #'
 #' @name fig_heatmap

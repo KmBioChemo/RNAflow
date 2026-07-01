@@ -73,6 +73,10 @@ symbols_to_entrez <- function(symbols, organism, quiet = FALSE) {
   symbols <- unique(as.character(symbols))
   symbols <- symbols[!is.na(symbols) & nzchar(symbols)]
   if (length(symbols) == 0) return(stats::setNames(character(0), character(0)))
+  if (!requireNamespace("AnnotationDbi", quietly = TRUE)) {
+    stop("Package 'AnnotationDbi' is required for ID mapping. ",
+         "Install with: BiocManager::install('AnnotationDbi')", call. = FALSE)
+  }
   orgdb <- get_orgdb(organism)
   # mapIds() errors when *none* of the keys are valid; treat that as "no match".
   mapped <- tryCatch(

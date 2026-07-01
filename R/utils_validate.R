@@ -14,7 +14,7 @@ NULL
 #' problems early (negative values, all-zero rows/cols, non-integer for
 #' DESeq2, missing rownames, duplicated genes).
 #'
-#' @param counts a matrix or data.frame of counts (genes × samples)
+#' @param counts a matrix or data.frame of counts (genes x samples)
 #' @param strict if TRUE, enforce integer counts (required for DESeq2)
 #' @return invisibly returns the counts coerced to a numeric matrix;
 #'   throws an error with a clear message if invalid.

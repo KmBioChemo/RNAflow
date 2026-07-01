@@ -1,9 +1,8 @@
 Package: RNAflow
 Title: An Interactive Shiny Platform for End-to-End RNA-seq Analysis
-Version: 0.5.0
+Version: 0.5.1
 Authors@R: person("Karim", "Matmat", role = c("aut", "cre"),
-                  email = "karim.matmat@example.com",
-                  comment = c(ORCID = "0000-0000-0000-0000"))
+                  email = "karimatmat@gmail.com")
 Description: RNAflow is a modular Shiny application packaged as an R package
     for end-to-end bulk RNA-seq analysis. It takes raw count matrices and
     sample metadata as input and provides differential expression analysis
@@ -15,19 +14,16 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
 Depends:
     R (>= 4.2.0)
 Imports:
     shiny (>= 1.8.0),
     bslib,
-    golem,
-    config,
     htmltools,
+    htmlwidgets,
     xfun,
     DT,
     shinycssloaders,
-    shinyjs,
     ggplot2,
     ggrepel,
     plotly,
@@ -36,35 +32,33 @@ Imports:
     RColorBrewer,
     scales,
     dplyr,
-    tibble,
-    tidyr,
     readxl,
-    readr,
     rlang,
-    purrr,
+    magrittr,
     DESeq2,
     SummarizedExperiment,
-    S4Vectors,
     matrixStats,
     grid
 Suggests:
     testthat (>= 3.0.0),
-    shinytest2,
+    withr,
+    apeglm,
+    ashr,
     eulerr,
     fgsea,
     clusterProfiler,
     msigdbr,
     ReactomePA,
+    AnnotationDbi,
     org.Hs.eg.db,
     org.Mm.eg.db,
     org.Rn.eg.db,
     WGCNA,
-    quarto,
     knitr,
     rmarkdown,
-    pkgdown,
-    covr
+    pkgdown
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-URL: https://github.com/kmatmat/RNAflow
-BugReports: https://github.com/kmatmat/RNAflow/issues
+URL: https://github.com/KmBioChemo/RNAflow
+BugReports: https://github.com/KmBioChemo/RNAflow/issues
+Config/roxygen2/version: 8.0.0

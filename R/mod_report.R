@@ -20,7 +20,7 @@ mod_report_ui <- function(id) {
         bslib::card_body(
           shiny::p(shiny::tags$small(
             "A runnable .R script that reproduces the whole pipeline ",
-            "(DE, comparison, enrichment, network) with RNAflow's API — ",
+            "(DE, comparison, enrichment, network) with RNAflow's API -- ",
             "ready for a Methods section.")),
           shiny::downloadButton(ns("dl_script"), "Download .R script",
                                 class = "btn btn-primary btn-sm")
@@ -32,7 +32,7 @@ mod_report_ui <- function(id) {
           shiny::p(shiny::tags$small(
             "A self-contained HTML report: parameters, DE summary, volcano ",
             "and cross-contrast figures, the reproducible script, and session ",
-            "info. No external files — open it anywhere.")),
+            "info. No external files -- open it anywhere.")),
           shiny::downloadButton(ns("dl_html"), "Download HTML report",
                                 class = "btn btn-success btn-sm"),
           shiny::uiOutput(ns("report_note"))

@@ -13,7 +13,7 @@ NULL
 #' Designed to drop into a Nature / Cell / Science figure without further
 #' tweaking.
 #'
-#' @param base_size base font size (default 8 pt — journal-friendly)
+#' @param base_size base font size (default 8 pt -- journal-friendly)
 #' @return a ggplot2 theme object
 #' @export
 theme_publication <- function(base_size = 8) {
@@ -79,7 +79,7 @@ fig_theme <- function(mode = c("exploration", "publication"), base_size = NULL) 
   }
 }
 
-# Local null/empty-coalesce — scalar-safe.
+# Local null/empty-coalesce -- scalar-safe.
 # Returns b if a is NULL, empty, NA, or a non-finite numeric.
 `%||%` <- function(a, b) {
   if (is.null(a)) return(b)

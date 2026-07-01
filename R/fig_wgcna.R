@@ -22,14 +22,14 @@ fig_soft_threshold <- function(sft, mode = c("exploration", "publication")) {
   rsq <- -sign(fi$slope) * fi$SFT.R.sq
   long <- rbind(
     data.frame(power = fi$Power, value = rsq,
-               metric = "Scale-free fit (signed R²)"),
+               metric = "Scale-free fit (signed R2)"),
     data.frame(power = fi$Power, value = fi$mean.k.,
                metric = "Mean connectivity")
   )
   long$metric <- factor(long$metric,
-                        levels = c("Scale-free fit (signed R²)",
+                        levels = c("Scale-free fit (signed R2)",
                                    "Mean connectivity"))
-  hl <- data.frame(metric = factor("Scale-free fit (signed R²)",
+  hl <- data.frame(metric = factor("Scale-free fit (signed R2)",
                                     levels = levels(long$metric)),
                    yint = sft$rsq_cut)
 

@@ -33,9 +33,10 @@
 #' @export
 NULL
 
-#' Tidy evaluation helpers
+#' Internal imports
 #'
 #' @importFrom rlang .data
-#' @name tidy-eval
+#' @importFrom utils head tail
+#' @name rnaflow-internal
 #' @keywords internal
 NULL

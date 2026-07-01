@@ -60,7 +60,7 @@ app_ui <- function() {
             bslib::card_header("Getting started"),
             bslib::card_body(
               shiny::p("Upload a ", shiny::strong("counts matrix"),
-                       " (genes × samples) and ",
+                       " (genes x samples) and ",
                        shiny::strong("sample metadata"),
                        " (column 1 = sample ID matching counts colnames)."),
               shiny::p("Then run DESeq2 with your design variable."),
@@ -103,7 +103,7 @@ app_ui <- function() {
     ),
     bslib::nav_item(
       shiny::tags$a(
-        href = "https://github.com/kmatmat/RNAflow",
+        href = "https://github.com/KmBioChemo/RNAflow",
         target = "_blank",
         shiny::icon("github"), " GitHub"
       )
@@ -167,7 +167,7 @@ app_server <- function(input, output, session) {
       error = function(e) {
         shiny::showNotification(
           paste("Normalization failed:", conditionMessage(e),
-                "— using log2(counts+1) instead."),
+                "-- using log2(counts+1) instead."),
           type = "warning", duration = 6
         )
         log2(counts + 1)

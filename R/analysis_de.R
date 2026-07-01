@@ -12,7 +12,7 @@ NULL
 #' extracts results for a user-specified contrast. Optionally applies
 #' LFC shrinkage (apeglm by default).
 #'
-#' @param counts validated counts matrix (genes × samples, integer)
+#' @param counts validated counts matrix (genes x samples, integer)
 #' @param metadata data.frame with sample ID in column 1
 #' @param design a one-sided formula referring to columns of `metadata`,
 #'   e.g. `~ condition` or `~ batch + condition`. The variable of interest

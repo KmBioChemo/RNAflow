@@ -143,7 +143,7 @@ mod_enrich_server <- function(id, de_reactive, organism_reactive) {
         mismatch_msg(sprintf(
           paste0("Almost none of your genes match the %s annotation ",
                  "(%d / first 2000 mapped). The gene symbols look like a ",
-                 "different species — set the correct Organism on the Data tab."),
+                 "different species -- set the correct Organism on the Data tab."),
           org, n_map))
         return()
       }
@@ -160,7 +160,7 @@ mod_enrich_server <- function(id, de_reactive, organism_reactive) {
             sig <- contrast_sig_genes(de, input$padj_num %||% 0.05,
                                       input$lfc_num %||% 1, input$direction)
             if (length(sig) < 5) stop("Only ", length(sig),
-                                      " significant genes — loosen thresholds.")
+                                      " significant genes -- loosen thresholds.")
             shiny::incProgress(0.4)
             tab <- run_ora(sig, org, db = input$db,
                            ont = if (input$db == "GO") input$ont else "BP",

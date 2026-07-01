@@ -1,5 +1,25 @@
 # RNAflow changelog
 
+## v0.5.1 (2026-07-01)
+
+### Quality pass — clean `R CMD check`
+
+The package now passes `R CMD check` with 0 errors / 0 warnings (the only
+NOTE is an environment "unable to verify current time" artifact).
+
+- **Documentation**: generated the full `man/` (123 Rd pages) via roxygen2;
+  roxygen now owns `NAMESPACE`.
+- **Portability**: replaced all non-ASCII characters in R code with ASCII
+  equivalents.
+- **Dependencies**: added the actually-used `magrittr`, `htmlwidgets`
+  (Imports) and `AnnotationDbi`, `withr`, `apeglm`, `ashr` (Suggests);
+  removed 8 unused Imports (golem, config, purrr, tibble, tidyr, readr,
+  shinyjs, S4Vectors); pruned unused Suggests.
+- **Fixes**: `importFrom(utils, head, tail)`; corrected a broken Rd
+  cross-reference; `.Rbuildignore` for `dev/`, `.claude/`, `LICENSE.md`;
+  fixed the GitHub owner in URLs (`KmBioChemo/RNAflow`); cleaned the
+  author record.
+
 ## v0.5.0 (2026-07-01)
 
 ### Phase 5 — Reproducibility (roadmap complete)

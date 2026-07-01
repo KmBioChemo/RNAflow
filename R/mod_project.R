@@ -79,7 +79,7 @@ mod_project_server <- function(id, data_mod, contrast_store) {
       store <- contrast_store()
       has_counts <- !is.null(data_mod$counts())
       shiny::div(class = "demo-banner", style = "margin-top:8px;",
-                 sprintf("Counts: %s · %d contrast%s",
+                 sprintf("Counts: %s - %d contrast%s",
                          if (has_counts) "yes" else "no",
                          length(store), if (length(store) == 1) "" else "s"))
     })
@@ -107,9 +107,9 @@ mod_project_server <- function(id, data_mod, contrast_store) {
         recent_tick(recent_tick() + 1)
         output$load_status <- shiny::renderUI(
           shiny::div(class = "demo-banner",
-                     sprintf("✓ Loaded “%s” (%d contrasts)",
+                     sprintf(" Loaded '%s' (%d contrasts)",
                              p$name, length(p$contrasts %||% list()))))
-        shiny::showNotification(sprintf("Project “%s” loaded.", p$name),
+        shiny::showNotification(sprintf("Project '%s' loaded.", p$name),
                                 type = "message", duration = 4)
       }, error = function(e) {
         output$load_status <- shiny::renderUI(
@@ -162,7 +162,7 @@ mod_project_server <- function(id, data_mod, contrast_store) {
       tryCatch({
         p <- load_project(path)
         restore_project(p)
-        shiny::showNotification(sprintf("Project “%s” opened.", p$name),
+        shiny::showNotification(sprintf("Project '%s' opened.", p$name),
                                 type = "message", duration = 4)
       }, error = function(e) {
         shiny::showNotification(paste("Open failed:", conditionMessage(e)),

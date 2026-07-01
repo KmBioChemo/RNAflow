@@ -115,7 +115,7 @@ mod_de_server <- function(id, data_mod, contrast_store = NULL) {
             contrast_store(
               contrast_store_upsert(contrast_store(), label, res, params)
             )
-            added_msg <- sprintf(" — saved as contrast “%s”", label)
+            added_msg <- sprintf(" -- saved as contrast '%s'", label)
           }
 
           shiny::showNotification(

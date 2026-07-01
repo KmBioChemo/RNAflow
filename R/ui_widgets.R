@@ -16,7 +16,7 @@ ui_section_title <- function(lbl) {
 
 #' Color picker with synchronized hex text input
 #'
-#' @param id input ID (Shiny will see input[[id]] with the hex value)
+#' @param id input ID (Shiny will see `input[[id]]` with the hex value)
 #' @param lbl display label
 #' @param default starting hex color
 #' @return a UI element

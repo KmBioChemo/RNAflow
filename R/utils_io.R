@@ -15,7 +15,7 @@ NULL
 #' @param ext optional file extension override (auto-detected if NULL)
 #' @param validate if TRUE, run [validate_counts()] before returning
 #' @param strict_integer if TRUE, enforce integer counts during validation
-#' @return a numeric matrix (genes × samples)
+#' @return a numeric matrix (genes x samples)
 #' @export
 read_counts <- function(path, ext = NULL, validate = TRUE,
                         strict_integer = TRUE) {

@@ -23,7 +23,7 @@ mod_data_ui <- function(id) {
                                      "Rat"   = "rat"),
                          selected = "human"),
       shiny::tags$hr(style = "margin:8px 0;"),
-      ui_section_title("Counts matrix (genes × samples)"),
+      ui_section_title("Counts matrix (genes x samples)"),
       shiny::fileInput(ns("counts_file"), NULL,
                        accept = c(".csv", ".tsv", ".txt", ".xlsx", ".xls"),
                        buttonLabel = "Browse", placeholder = "No file"),
@@ -61,7 +61,7 @@ mod_data_server <- function(id) {
                          validate = TRUE, strict_integer = TRUE)
         counts_r(m)
         shiny::showNotification(
-          sprintf("Counts loaded: %d genes × %d samples",
+          sprintf("Counts loaded: %d genes x %d samples",
                   nrow(m), ncol(m)),
           type = "message", duration = 4
         )
@@ -83,7 +83,7 @@ mod_data_server <- function(id) {
         )
         meta_r(df)
         shiny::showNotification(
-          sprintf("Metadata loaded: %d samples × %d annotations",
+          sprintf("Metadata loaded: %d samples x %d annotations",
                   nrow(df), ncol(df) - 1),
           type = "message", duration = 4
         )

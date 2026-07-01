@@ -21,7 +21,7 @@ Most exploratory RNA-seq tools are either notebook-stuck (great for one project,
 
 ```r
 # install.packages("devtools")
-devtools::install_github("kmatmat/RNAflow")
+devtools::install_github("KmBioChemo/RNAflow")
 ```
 
 Or, from a local clone:
