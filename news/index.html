@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,18 @@
       <small>Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.10.0" id="rnaflow-0100-2026-07-01">RNAflow 0.10.0 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-0100-2026-07-01"></a></h2>
+<div class="section level3">
+<h3 id="tf--pathway-activity-inference-decoupler-0-10-0">TF &amp; pathway activity inference (decoupleR)<a class="anchor" aria-label="anchor" href="#tf--pathway-activity-inference-decoupler-0-10-0"></a></h3>
+<ul><li>
+<strong>New “Activity” tab</strong> (<code>mod_activity</code>, <code>analysis_decoupler.R</code>, <code>fig_decoupler.R</code>). Instead of “which genes changed”, it asks “which upstream regulators / pathways best explain the change”: transcription-factor activity from <strong>CollecTRI</strong> regulons (univariate linear model) and pathway activity from <strong>PROGENy</strong> (multivariate), scored against the ranked DE statistic with . Diverging bar chart of activated / repressed regulators plus a sortable table.</li>
+<li>
+<strong>Pure core.</strong> <code><a href="../reference/activity_input.html">activity_input()</a></code>, <code><a href="../reference/run_activity.html">run_activity()</a></code> and <code><a href="../reference/fig_activity_bar.html">fig_activity_bar()</a></code> are Shiny-free and tested; only <code><a href="../reference/get_tf_network.html">get_tf_network()</a></code> / <code><a href="../reference/get_pathway_network.html">get_pathway_network()</a></code> reach OmniPath. Networks are cached per session.</li>
+<li>
+<code>decoupleR</code> added to <code>Suggests</code> (guarded with a clear install message).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.1" id="rnaflow-091-2026-07-01">RNAflow 0.9.1 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-091-2026-07-01"></a></h2>
 <div class="section level3">

@@ -3,7 +3,7 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   getting-started: getting-started.html
-last_built: 2026-07-01T15:31Z
+last_built: 2026-07-01T15:36Z
 urls:
   reference: https://KmBioChemo.github.io/RNAflow/reference
   article: https://KmBioChemo.github.io/RNAflow/articles

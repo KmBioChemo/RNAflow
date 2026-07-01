@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -509,6 +509,43 @@
         </dt>
         <dd>Module x pathway enrichment dotplot</dd>
       </dl></div><div class="section level2">
+      <h2 id="activity-inference">Activity inference<a class="anchor" aria-label="anchor" href="#activity-inference"></a></h2>
+
+      <div class="section-desc"><p>Transcription-factor (CollecTRI) and pathway (PROGENy) activity via decoupleR.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="get_tf_network.html">get_tf_network()</a></code>
+
+        </dt>
+        <dd>Fetch a transcription-factor regulon network (CollecTRI)</dd>
+
+        <dt>
+
+          <code><a href="get_pathway_network.html">get_pathway_network()</a></code>
+
+        </dt>
+        <dd>Fetch a pathway-responsive-gene network (PROGENy)</dd>
+
+        <dt>
+
+          <code><a href="run_activity.html">run_activity()</a></code>
+
+        </dt>
+        <dd>Infer regulator / pathway activity from a DE contrast</dd>
+
+        <dt>
+
+          <code><a href="fig_activity_bar.html">fig_activity_bar()</a></code>
+
+        </dt>
+        <dd>Diverging bar chart of top activity scores</dd>
+      </dl></div><div class="section level2">
       <h2 id="ai-interpretation">AI interpretation<a class="anchor" aria-label="anchor" href="#ai-interpretation"></a></h2>
 
       <div class="section-desc"><p>Build a prompt from a contrast and ask the Claude API to interpret it.</p></div>
@@ -593,6 +630,13 @@
 
 
       <dl><dt>
+
+          <code><a href="mod_activity.html">mod_activity_ui()</a></code> <code><a href="mod_activity.html">mod_activity_server()</a></code>
+
+        </dt>
+        <dd>Activity inference module</dd>
+
+        <dt>
 
           <code><a href="mod_ai.html">mod_ai_ui()</a></code> <code><a href="mod_ai.html">mod_ai_server()</a></code>
 

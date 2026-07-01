@@ -339,6 +339,20 @@ GSEA (fgsea / MSigDB) and ORA (clusterProfiler; GO / KEGG / Reactome).
 - [`fig_module_enrichment()`](https://KmBioChemo.github.io/RNAflow/reference/fig_module_enrichment.md)
   : Module x pathway enrichment dotplot
 
+## Activity inference
+
+Transcription-factor (CollecTRI) and pathway (PROGENy) activity via
+decoupleR.
+
+- [`get_tf_network()`](https://KmBioChemo.github.io/RNAflow/reference/get_tf_network.md)
+  : Fetch a transcription-factor regulon network (CollecTRI)
+- [`get_pathway_network()`](https://KmBioChemo.github.io/RNAflow/reference/get_pathway_network.md)
+  : Fetch a pathway-responsive-gene network (PROGENy)
+- [`run_activity()`](https://KmBioChemo.github.io/RNAflow/reference/run_activity.md)
+  : Infer regulator / pathway activity from a DE contrast
+- [`fig_activity_bar()`](https://KmBioChemo.github.io/RNAflow/reference/fig_activity_bar.md)
+  : Diverging bar chart of top activity scores
+
 ## AI interpretation
 
 Build a prompt from a contrast and ask the Claude API to interpret it.
@@ -370,6 +384,9 @@ Save/load sessions, export a Methods script and an HTML report.
 
 UI + server pairs, one per feature.
 
+- [`mod_activity_ui()`](https://KmBioChemo.github.io/RNAflow/reference/mod_activity.md)
+  [`mod_activity_server()`](https://KmBioChemo.github.io/RNAflow/reference/mod_activity.md)
+  : Activity inference module
 - [`mod_ai_ui()`](https://KmBioChemo.github.io/RNAflow/reference/mod_ai.md)
   [`mod_ai_server()`](https://KmBioChemo.github.io/RNAflow/reference/mod_ai.md)
   : AI interpretation module
