@@ -4,10 +4,16 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  workflow_dispatch:
 
 name: R-CMD-check.yaml
 
 permissions: read-all
+
+# Cancel superseded runs when several commits are pushed in quick succession.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   R-CMD-check:
@@ -19,7 +25,9 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macos-latest,  r: 'release'}
+          # Ubuntu only: macOS Actions minutes are billed at a 10x multiplier
+          # and compile all of Bioconductor from source. Test other OSes
+          # manually via workflow_dispatch when needed.
           - {os: ubuntu-latest, r: 'release'}
 
     env:
