@@ -94,3 +94,61 @@ symbols_to_entrez <- function(symbols, organism, quiet = FALSE) {
   }
   mapped
 }
+
+#' Guess the identifier type of a gene vector
+#'
+#' @param ids character vector of gene identifiers
+#' @return one of "ensembl", "entrez", "symbol" (by majority vote)
+#' @keywords internal
+guess_id_type <- function(ids) {
+  ids <- as.character(ids)
+  ids <- ids[!is.na(ids) & nzchar(ids)]
+  if (length(ids) == 0) return("symbol")
+  s <- utils::head(ids, 200)
+  frac <- function(rx) mean(grepl(rx, s))
+  if (frac("^ENS[A-Z]*[0-9]{6,}") > 0.5) "ensembl"
+  else if (frac("^[0-9]+$") > 0.5)       "entrez"
+  else                                   "symbol"
+}
+
+#' Convert a DE table's gene identifiers to gene symbols
+#'
+#' If the `gene` column looks like Ensembl or ENTREZ IDs, map it to symbols
+#' via the organism's OrgDb (stripping Ensembl version suffixes), drop
+#' unmapped rows, and collapse duplicate symbols keeping the most significant
+#' row. Symbol input is returned unchanged. Enrichment (GSEA / ORA) works on
+#' symbols, so this removes a common footgun.
+#'
+#' @param res a DE results data.frame
+#' @param organism one of "human", "mouse", "rat"
+#' @return the DE table with a symbol `gene` column; `attr(., "id_converted")`
+#'   is the source type when a conversion happened, else NULL
+#' @keywords internal
+map_de_to_symbols <- function(res, organism) {
+  type <- guess_id_type(res$gene)
+  if (type == "symbol") return(res)
+  if (!requireNamespace("AnnotationDbi", quietly = TRUE)) return(res)
+  orgdb <- get_orgdb(organism)
+  keytype <- if (type == "ensembl") "ENSEMBL" else "ENTREZID"
+  keys <- if (type == "ensembl") sub("\\..*$", "", as.character(res$gene))
+          else as.character(res$gene)
+  sym <- tryCatch(
+    suppressMessages(suppressWarnings(AnnotationDbi::mapIds(
+      orgdb, keys = keys, column = "SYMBOL", keytype = keytype,
+      multiVals = "first"))),
+    error = function(e) rep(NA_character_, length(keys)))
+  res$gene <- unname(sym)
+  res <- res[!is.na(res$gene) & nzchar(res$gene), , drop = FALSE]
+  if (nrow(res) == 0) return(res)
+  if (anyDuplicated(res$gene)) {
+    key <- if ("stat" %in% colnames(res)) abs(as.numeric(res$stat))
+           else if ("baseMean" %in% colnames(res)) as.numeric(res$baseMean)
+           else seq_len(nrow(res))
+    key[is.na(key)] <- -Inf
+    ord <- order(key, decreasing = TRUE)
+    res <- res[ord, , drop = FALSE]
+    res <- res[!duplicated(res$gene), , drop = FALSE]
+  }
+  attr(res, "id_converted") <- type
+  res
+}

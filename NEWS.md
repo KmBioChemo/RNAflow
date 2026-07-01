@@ -1,3 +1,18 @@
+# RNAflow 0.8.0 (2026-07-01)
+
+## QC diagnostics, gene-ID auto-mapping, Methods generator
+
+- **QC / Diagnostics tab** (`mod_qc`, `fig_qc.R`): p-value histogram (model
+  calibration), MA plot, sample-sample correlation heatmap, and library-size
+  bar chart -- standard checks to run before interpreting results.
+- **Automatic gene-ID conversion.** The Enrichment tab now detects Ensembl or
+  ENTREZ identifiers and maps them to gene symbols (`map_de_to_symbols()`,
+  `guess_id_type()`), collapsing duplicates, so enrichment works regardless of
+  the input ID type.
+- **Methods paragraph generator** (`generate_methods_text()`): a prose summary
+  of the analysis naming the tools, their versions, and the exact parameters
+  used -- downloadable from the Report tab, ready to adapt for a manuscript.
+
 # RNAflow 0.7.3 (2026-07-01)
 
 ## Real published demo dataset (airway)

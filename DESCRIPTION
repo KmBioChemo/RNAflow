@@ -1,6 +1,6 @@
 Package: RNAflow
 Title: An Interactive Shiny Platform for End-to-End RNA-seq Analysis
-Version: 0.7.3
+Version: 0.8.0
 Authors@R: person("Karim", "Matmat", role = c("aut", "cre"),
                   email = "karimatmat@gmail.com")
 Description: RNAflow is a modular Shiny application packaged as an R package

@@ -139,6 +139,15 @@ mod_enrich_server <- function(id, de_reactive, organism_reactive,
         shiny::showNotification("No active contrast. Run DESeq2 first.",
                                 type = "warning"); return()
       }
+      # Auto-convert Ensembl / ENTREZ IDs to gene symbols (enrichment needs symbols)
+      de <- tryCatch(map_de_to_symbols(de, org), error = function(e) de)
+      conv <- attr(de, "id_converted")
+      if (!is.null(conv)) {
+        shiny::showNotification(
+          sprintf("Converted %s IDs to gene symbols for enrichment (%d genes).",
+                  toupper(conv), nrow(de)),
+          type = "message", duration = 5)
+      }
       # Species sanity check: how many DE genes map to this organism's annotation?
       mismatch_msg(NULL)
       n_map <- length(symbols_to_entrez(utils::head(de$gene, 2000), org,

@@ -40,6 +40,21 @@ mod_report_ui <- function(id) {
       )
     ),
     bslib::card(
+      bslib::card_header(
+        shiny::div(style = "display:flex;justify-content:space-between;align-items:center;",
+                   shiny::span("Methods paragraph"),
+                   shiny::downloadButton(ns("dl_methods"), "Download .txt",
+                                         class = "btn btn-outline-primary btn-sm"))),
+      bslib::card_body(
+        shiny::p(shiny::tags$small(
+          "A prose summary naming the tools, versions and parameters actually ",
+          "used -- adapt it for a manuscript's Methods section.")),
+        shiny::tags$blockquote(
+          style = "font-size:13px;line-height:1.5;border-left:3px solid #1D9E75;padding-left:10px;",
+          shiny::textOutput(ns("methods_preview")))
+      )
+    ),
+    bslib::card(
       bslib::card_header("Script preview"),
       bslib::card_body(
         shiny::tags$pre(
@@ -79,6 +94,17 @@ mod_report_server <- function(id, data_mod, contrast_store,
     output$script_preview <- shiny::renderText({
       generate_r_script(project(), generated = stamp())
     })
+
+    output$methods_preview <- shiny::renderText({
+      generate_methods_text(project())
+    })
+
+    output$dl_methods <- shiny::downloadHandler(
+      filename = function() "rnaflow_methods.txt",
+      content  = function(file) {
+        writeLines(generate_methods_text(project()), file)
+      }
+    )
 
     output$report_note <- shiny::renderUI({
       if (length(contrast_store()) == 0) {

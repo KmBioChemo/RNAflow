@@ -40,6 +40,13 @@ reference:
   - fig_pca
   - compute_pca
 
+- title: QC & diagnostics
+  contents:
+  - fig_pval_hist
+  - fig_ma
+  - fig_sample_cor
+  - fig_lib_sizes
+
 - title: Themes & figure export
   contents:
   - fig_theme
@@ -97,6 +104,7 @@ reference:
   - save_project
   - load_project
   - generate_r_script
+  - generate_methods_text
   - build_report_html
 
 - title: Shiny modules
