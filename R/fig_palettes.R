@@ -1,7 +1,7 @@
 #' Scientific color palettes
 #'
 #' A cohesive, publication-oriented palette system used across RNAflow's
-#' figures: a Nature-style qualitative palette for categories, and
+#' figures: a publication-oriented qualitative palette for categories, and
 #' perceptually-uniform continuous scales (via \pkg{scico}, with a viridis
 #' fallback) for scores such as NES, correlation, or -log10(FDR).
 #'
@@ -9,8 +9,7 @@
 #' @keywords internal
 NULL
 
-# Nature Publishing Group-inspired qualitative palette (distinct, muted,
-# print-safe).
+# Distinct, muted, print-safe qualitative palette (colorblind-aware).
 RNAFLOW_QUAL <- c(
   "#E64B35", "#4DBBD5", "#00A087", "#3C5488", "#F39B7F",
   "#8491B4", "#91D1C2", "#DC0000", "#7E6148", "#B09C85",
@@ -29,7 +28,7 @@ rnaflow_colors <- function(n) {
   grDevices::colorRampPalette(base)(n)
 }
 
-#' Discrete color / fill scales (Nature-style qualitative)
+#' Discrete color / fill scales (qualitative)
 #' @param ... passed to the underlying ggplot2 scale
 #' @keywords internal
 scale_color_rnaflow <- function(...) {

@@ -1,9 +1,9 @@
 #' Network and distribution enrichment figures
 #'
-#' High-impact enrichment visuals: an enrichment map (pathways as a network
+#' Additional enrichment visuals: an enrichment map (pathways as a network
 #' linked by shared genes) and a GSEA ridgeline (per-pathway distributions of
 #' the ranking metric). Built on \pkg{ggraph} / \pkg{igraph} and
-#' \pkg{ggridges}. Nature-style aesthetics via the shared theme and palettes.
+#' \pkg{ggridges}. Publication-oriented aesthetics via the shared theme.
 #'
 #' @name fig_enrich_net
 #' @keywords internal
@@ -48,7 +48,7 @@ enrich_network_data <- function(df, n = 30) {
 #'
 #' Nodes are enriched terms, edges connect terms sharing genes (Jaccard
 #' similarity). Node color encodes NES (GSEA) or -log10(FDR) (ORA), node size
-#' encodes gene-set size. A compact, high-impact overview of how the enriched
+#' encodes gene-set size. A compact overview of how the enriched
 #' biology clusters.
 #'
 #' @param df a data.frame from [run_gsea()] or [run_ora()]

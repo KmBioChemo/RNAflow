@@ -3,7 +3,7 @@
 \name{scale_color_rnaflow}
 \alias{scale_color_rnaflow}
 \alias{scale_fill_rnaflow}
-\title{Discrete color / fill scales (Nature-style qualitative)}
+\title{Discrete color / fill scales (qualitative)}
 \usage{
 scale_color_rnaflow(...)
 
@@ -13,6 +13,6 @@ scale_fill_rnaflow(...)
 \item{...}{passed to the underlying ggplot2 scale}
 }
 \description{
-Discrete color / fill scales (Nature-style qualitative)
+Discrete color / fill scales (qualitative)
 }
 \keyword{internal}

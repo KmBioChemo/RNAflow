@@ -16,6 +16,6 @@ a ggplot2 theme
 }
 \description{
 Two-mode plotting theme: "exploration" (current style) vs "publication"
-(strict, Nature/Cell-friendly). All figure functions accept a \code{mode}
+(strict, publication-oriented). All figure functions accept a \code{mode}
 argument and dispatch to the appropriate theme here.
 }

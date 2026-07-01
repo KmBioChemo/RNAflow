@@ -1,7 +1,7 @@
 #' Figure theme system
 #'
 #' Two-mode plotting theme: "exploration" (current style) vs "publication"
-#' (strict, Nature/Cell-friendly). All figure functions accept a `mode`
+#' (strict, publication-oriented). All figure functions accept a `mode`
 #' argument and dispatch to the appropriate theme here.
 #'
 #' @name fig_theme
@@ -10,7 +10,7 @@ NULL
 #' Publication-ready ggplot2 theme
 #'
 #' Sans-serif font (Arial / Helvetica), black axes, no grid, fixed margins.
-#' Designed to drop into a Nature / Cell / Science figure without further
+#' Designed to produce clean, journal-ready figures without further
 #' tweaking.
 #'
 #' @param base_size base font size (default 8 pt -- journal-friendly)

@@ -14,6 +14,6 @@ a ggplot2 theme object
 }
 \description{
 Sans-serif font (Arial / Helvetica), black axes, no grid, fixed margins.
-Designed to drop into a Nature / Cell / Science figure without further
+Designed to produce clean, journal-ready figures without further
 tweaking.
 }

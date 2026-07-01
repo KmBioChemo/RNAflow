@@ -35,6 +35,11 @@ mod_wgcna_ui <- function(id) {
       ),
       shiny::actionButton(ns("detect"), "Detect modules",
                           class = "btn btn-primary btn-sm", style = "width:100%;"),
+      shiny::p(shiny::tags$small(
+        style = "color:#7F8C8D;display:block;margin-top:6px;",
+        "WGCNA is exploratory and most reliable with larger sample sizes ",
+        "(roughly 15 or more). Treat modules from small datasets as ",
+        "hypotheses.")),
       shiny::tags$hr(style = "margin:8px 0;"),
       ui_section_title("Display"),
       shiny::radioButtons(

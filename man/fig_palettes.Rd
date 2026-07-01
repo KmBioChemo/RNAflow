@@ -5,7 +5,7 @@
 \title{Scientific color palettes}
 \description{
 A cohesive, publication-oriented palette system used across RNAflow's
-figures: a Nature-style qualitative palette for categories, and
+figures: a publication-oriented qualitative palette for categories, and
 perceptually-uniform continuous scales (via \pkg{scico}, with a viridis
 fallback) for scores such as NES, correlation, or -log10(FDR).
 }
