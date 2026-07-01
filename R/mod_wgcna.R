@@ -65,10 +65,16 @@ mod_wgcna_ui <- function(id) {
         ),
         bslib::card(
           bslib::card_header(
-            shiny::div(style = "display:flex;justify-content:space-between;align-items:center;",
+            shiny::div(style = "display:flex;justify-content:space-between;align-items:center;gap:6px;",
                        shiny::span("Module enrichment (GO BP)"),
-                       shiny::actionButton(ns("enrich"), "Enrich module",
-                                           class = "btn btn-success btn-sm"))),
+                       shiny::div(
+                         shiny::actionButton(ns("enrich"), "This module",
+                                             class = "btn btn-success btn-sm"),
+                         shiny::actionButton(ns("enrich_all"), "All modules",
+                                             class = "btn btn-outline-success btn-sm")))),
+          shinycssloaders::withSpinner(
+            shiny::plotOutput(ns("enrich_plot"), height = "340px"),
+            type = 6, color = "#1D9E75"),
           DT::DTOutput(ns("enrich_table"))
         )
       )
@@ -93,9 +99,11 @@ mod_wgcna_server <- function(id, counts_norm_reactive, metadata_reactive,
       shiny::updateSliderInput(session, "ngenes_sld", value = input$ngenes_num),
       ignoreInit = TRUE)
 
-    sft_rv    <- shiny::reactiveVal(NULL)
-    wg_rv     <- shiny::reactiveVal(NULL)
-    enrich_rv <- shiny::reactiveVal(NULL)
+    sft_rv     <- shiny::reactiveVal(NULL)
+    wg_rv      <- shiny::reactiveVal(NULL)
+    enrich_rv  <- shiny::reactiveVal(NULL)   # single-module ORA
+    modules_rv <- shiny::reactiveVal(NULL)   # all-module comparison
+    enrich_view <- shiny::reactiveVal("single")
 
     datexpr <- function() {
       cn <- counts_norm_reactive()
@@ -204,10 +212,12 @@ mod_wgcna_server <- function(id, counts_norm_reactive, metadata_reactive,
                     options = list(pageLength = 8, dom = "tp"))
     })
 
+    # Single selected module
     shiny::observeEvent(input$enrich, {
       wg <- wg_rv(); shiny::req(wg, input$module)
       org <- organism_reactive() %||% "human"
       genes <- names(wg$modules)[wg$modules == input$module]
+      enrich_view("single")
       shiny::withProgress(message = "Enriching module...", value = 0.4, {
         tryCatch({
           enrich_rv(run_ora(genes, org, db = "GO", ont = "BP",
@@ -224,10 +234,42 @@ mod_wgcna_server <- function(id, counts_norm_reactive, metadata_reactive,
       })
     })
 
+    # All modules at once (compareCluster-style)
+    shiny::observeEvent(input$enrich_all, {
+      wg <- wg_rv(); shiny::req(wg)
+      org <- organism_reactive() %||% "human"
+      enrich_view("all")
+      shiny::withProgress(message = "Enriching all modules...", value = 0.3, {
+        tryCatch({
+          modules_rv(enrich_modules(wg, org, db = "GO", ont = "BP", n_per = 5))
+        }, error = function(e) {
+          modules_rv(NULL)
+          shiny::showNotification(paste("Module enrichment failed:",
+                                        conditionMessage(e)),
+                                  type = "error", duration = 10)
+        })
+      })
+    })
+
+    output$enrich_plot <- shiny::renderPlot({
+      if (enrich_view() == "all") {
+        shiny::req(modules_rv())
+        print(fig_module_enrichment(modules_rv()))
+      } else {
+        er <- enrich_rv(); shiny::req(er, nrow(er) > 0)
+        print(fig_enrich_dot(er, n = 15))
+      }
+    })
+
     output$enrich_table <- DT::renderDT({
-      er <- enrich_rv()
-      shiny::req(er, nrow(er) > 0)
-      df <- er[, intersect(c("Description", "Count", "padj"), colnames(er))]
+      df <- if (enrich_view() == "all") {
+        shiny::req(modules_rv())
+        modules_rv()[, intersect(c("module", "Description", "Count", "padj"),
+                                 colnames(modules_rv()))]
+      } else {
+        er <- enrich_rv(); shiny::req(er, nrow(er) > 0)
+        er[, intersect(c("Description", "Count", "padj"), colnames(er))]
+      }
       df$padj <- formatC(df$padj, format = "e", digits = 2)
       DT::datatable(df, rownames = FALSE, class = "compact stripe hover",
                     options = list(pageLength = 8, dom = "tp"))

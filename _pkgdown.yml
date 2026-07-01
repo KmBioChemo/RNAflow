@@ -88,6 +88,8 @@ reference:
   - fig_module_sizes
   - fig_eigengene
   - fig_module_network
+  - enrich_modules
+  - fig_module_enrichment
 
 - title: Projects & reproducibility
   desc: Save/load sessions, export a Methods script and an HTML report.

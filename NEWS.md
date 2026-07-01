@@ -1,3 +1,17 @@
+# RNAflow 0.6.1 (2026-07-01)
+
+## Module enrichment visualizations (WGCNA)
+
+- **`enrich_modules()`**: runs ORA on every co-expression module (reusing the
+  phase-3 enrichment layer) and returns a combined tidy table.
+- **`fig_module_enrichment()`**: a modules x pathways dotplot
+  (compareCluster-style) — dot size = gene count, color = -log10(FDR),
+  module axis labels colored by their WGCNA color (via ggtext). Shows each
+  module's biological identity at a glance.
+- Network tab: the module-enrichment card now shows a **dotplot** for the
+  selected module ("This module") and a cross-module comparison
+  ("All modules"), in addition to the table. New Suggests: ggtext.
+
 # RNAflow 0.6.0 (2026-07-01)
 
 ## Signature "omics" visualizations (Nature-style)
