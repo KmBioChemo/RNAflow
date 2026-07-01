@@ -49,8 +49,19 @@ get_tf_network <- function(organism) {
     stop("Package 'decoupleR' is required for activity inference. ",
          "Install with: BiocManager::install('decoupleR')", call. = FALSE)
   }
-  as.data.frame(decoupleR::get_collectri(
-    organism = decoupler_organism(organism), split_complexes = FALSE))
+  net <- tryCatch(
+    as.data.frame(decoupleR::get_collectri(
+      organism = decoupler_organism(organism), split_complexes = FALSE)),
+    error = function(e) stop(
+      "Could not fetch the CollecTRI transcription-factor network. The ",
+      "OmniPath web service is likely temporarily unavailable (its offline ",
+      "fallback is broken upstream). Pathway activity (PROGENy) still works -- ",
+      "please retry TF activity later.", call. = FALSE))
+  if (!is.data.frame(net) || nrow(net) == 0) {
+    stop("The CollecTRI network came back empty (OmniPath may be down). ",
+         "Try again later, or use pathway activity.", call. = FALSE)
+  }
+  net
 }
 
 #' Fetch a pathway-responsive-gene network (PROGENy)
@@ -64,8 +75,18 @@ get_pathway_network <- function(organism, top = 500) {
     stop("Package 'decoupleR' is required for activity inference. ",
          "Install with: BiocManager::install('decoupleR')", call. = FALSE)
   }
-  as.data.frame(decoupleR::get_progeny(
-    organism = decoupler_organism(organism), top = top))
+  net <- tryCatch(
+    as.data.frame(decoupleR::get_progeny(
+      organism = decoupler_organism(organism), top = top)),
+    error = function(e) stop(
+      "Could not fetch the PROGENy pathway network. The OmniPath web service ",
+      "may be temporarily unavailable -- please try again later.",
+      call. = FALSE))
+  if (!is.data.frame(net) || nrow(net) == 0) {
+    stop("The PROGENy network came back empty (OmniPath may be down). ",
+         "Try again later.", call. = FALSE)
+  }
+  net
 }
 
 #' Infer regulator / pathway activity from a DE contrast
