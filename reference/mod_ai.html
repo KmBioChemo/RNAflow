@@ -17,7 +17,7 @@ is never written to disk."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,8 @@ is never written to disk.</p>
 <span>  <span class="va">de_reactive</span>,</span>
 <span>  enrich_reactive <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  organism_reactive <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  contrast_params_reactive <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  contrast_params_reactive <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  settings_store <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -93,6 +94,12 @@ result list (<code>method</code>, <code>table</code>), as exposed by <code><a hr
 <dt id="arg-contrast-params-reactive">contrast_params_reactive<a class="anchor" aria-label="anchor" href="#arg-contrast-params-reactive"></a></dt>
 <dd><p>optional reactive returning the active
 contrast's parameter list (design_var / treated / reference)</p></dd>
+
+
+<dt id="arg-settings-store">settings_store<a class="anchor" aria-label="anchor" href="#arg-settings-store"></a></dt>
+<dd><p>optional <code>reactiveVal</code> holding a settings list; the
+latest interpretation is recorded under <code>$ai_interpretation</code> so it can be
+archived in the HTML report</p></dd>
 
 </dl></div>
 

@@ -18,7 +18,8 @@ mod_ai_server(
   de_reactive,
   enrich_reactive = NULL,
   organism_reactive = NULL,
-  contrast_params_reactive = NULL
+  contrast_params_reactive = NULL,
+  settings_store = NULL
 )
 ```
 
@@ -46,3 +47,9 @@ mod_ai_server(
 
   optional reactive returning the active contrast's parameter list
   (design_var / treated / reference)
+
+- settings_store:
+
+  optional `reactiveVal` holding a settings list; the latest
+  interpretation is recorded under `$ai_interpretation` so it can be
+  archived in the HTML report
