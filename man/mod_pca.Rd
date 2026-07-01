@@ -8,7 +8,12 @@
 \usage{
 mod_pca_ui(id)
 
-mod_pca_server(id, counts_reactive, metadata_reactive)
+mod_pca_server(
+  id,
+  counts_reactive,
+  metadata_reactive,
+  contrast_params_reactive = NULL
+)
 }
 \arguments{
 \item{id}{namespace ID}
@@ -16,6 +21,9 @@ mod_pca_server(id, counts_reactive, metadata_reactive)
 \item{counts_reactive}{reactive for counts matrix (normalized recommended)}
 
 \item{metadata_reactive}{reactive for metadata}
+
+\item{contrast_params_reactive}{optional reactive returning the active
+contrast's parameter list (to enable "restrict to contrast")}
 }
 \description{
 PCA module

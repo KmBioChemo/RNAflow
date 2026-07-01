@@ -25,6 +25,8 @@ mod_heatmap_ui <- function(id) {
                     "padj <", 0.001, 0.2, 0.05, 0.001),
       shiny::selectInput(ns("palette"), "Palette",
                          choices = PALETTE_CHOICES, selected = "RdBu"),
+      shiny::checkboxInput(ns("restrict"),
+                           "Restrict to active contrast groups", value = FALSE),
       ui_advanced_panel(
         shiny::textInput(ns("title"), "Title", ""),
         shiny::checkboxInput(ns("show_title"), "Show title", TRUE),
@@ -55,8 +57,11 @@ mod_heatmap_ui <- function(id) {
 #' @param de_reactive reactive for DE results
 #' @param counts_reactive reactive for counts (raw or normalized)
 #' @param metadata_reactive reactive for metadata
+#' @param contrast_params_reactive optional reactive returning the active
+#'   contrast's parameter list (to enable "restrict to contrast")
 #' @export
-mod_heatmap_server <- function(id, de_reactive, counts_reactive, metadata_reactive) {
+mod_heatmap_server <- function(id, de_reactive, counts_reactive, metadata_reactive,
+                               contrast_params_reactive = NULL) {
   shiny::moduleServer(id, function(input, output, session) {
 
     hm_obj <- shiny::reactive({
@@ -66,9 +71,14 @@ mod_heatmap_server <- function(id, de_reactive, counts_reactive, metadata_reacti
       if (is.null(counts)) {
         return(NULL)
       }
+      meta <- metadata_reactive()
+      if (isTRUE(input$restrict) && !is.null(contrast_params_reactive)) {
+        sub <- restrict_to_contrast(counts, meta, contrast_params_reactive())
+        counts <- sub$counts; meta <- sub$metadata
+      }
       tryCatch({
         fig_heatmap(
-          counts_mat = counts, res = res, metadata = metadata_reactive(),
+          counts_mat = counts, res = res, metadata = meta,
           group_colors = list(),
           n_genes = input$n_num %||% 40,
           gene_src = input$src %||% "top_n",

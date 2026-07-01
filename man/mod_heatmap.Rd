@@ -8,7 +8,13 @@
 \usage{
 mod_heatmap_ui(id)
 
-mod_heatmap_server(id, de_reactive, counts_reactive, metadata_reactive)
+mod_heatmap_server(
+  id,
+  de_reactive,
+  counts_reactive,
+  metadata_reactive,
+  contrast_params_reactive = NULL
+)
 }
 \arguments{
 \item{id}{namespace ID}
@@ -18,6 +24,9 @@ mod_heatmap_server(id, de_reactive, counts_reactive, metadata_reactive)
 \item{counts_reactive}{reactive for counts (raw or normalized)}
 
 \item{metadata_reactive}{reactive for metadata}
+
+\item{contrast_params_reactive}{optional reactive returning the active
+contrast's parameter list (to enable "restrict to contrast")}
 }
 \description{
 Heatmap module

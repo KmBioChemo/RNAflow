@@ -14,6 +14,8 @@ mod_pca_ui <- function(id) {
       ui_slider_num(ns("n_sld"), ns("n_num"),
                     "Top variable genes", 50, 5000, 500, 50),
       shiny::uiOutput(ns("col_ui")),
+      shiny::checkboxInput(ns("restrict"),
+                           "Restrict to active contrast groups", value = FALSE),
       shiny::textInput(ns("title"), "Title", ""),
       ui_export_bar(ns("pca"), 7, 6)
     ),
@@ -28,9 +30,22 @@ mod_pca_ui <- function(id) {
 #' @rdname mod_pca
 #' @param counts_reactive reactive for counts matrix (normalized recommended)
 #' @param metadata_reactive reactive for metadata
+#' @param contrast_params_reactive optional reactive returning the active
+#'   contrast's parameter list (to enable "restrict to contrast")
 #' @export
-mod_pca_server <- function(id, counts_reactive, metadata_reactive) {
+mod_pca_server <- function(id, counts_reactive, metadata_reactive,
+                           contrast_params_reactive = NULL) {
   shiny::moduleServer(id, function(input, output, session) {
+
+    # counts + metadata, optionally restricted to the active contrast's groups
+    data_r <- shiny::reactive({
+      counts <- counts_reactive(); meta <- metadata_reactive()
+      if (isTRUE(input$restrict) && !is.null(contrast_params_reactive)) {
+        sub <- restrict_to_contrast(counts, meta, contrast_params_reactive())
+        return(sub)
+      }
+      list(counts = counts, metadata = meta)
+    })
 
     output$col_ui <- shiny::renderUI({
       meta <- metadata_reactive()
@@ -44,14 +59,14 @@ mod_pca_server <- function(id, counts_reactive, metadata_reactive) {
     })
 
     pca_plot <- shiny::reactive({
-      counts <- counts_reactive()
+      d <- data_r()
       shiny::validate(shiny::need(
-        !is.null(counts),
+        !is.null(d$counts),
         "Load a counts matrix to generate the PCA."
       ))
       shiny::req(input$n_num)
       col_by <- if (!is.null(input$col_by) && input$col_by != "(none)") input$col_by else NULL
-      fig_pca(counts, metadata_reactive(), input$n_num, col_by, input$title)
+      fig_pca(d$counts, d$metadata, input$n_num, col_by, input$title)
     })
 
     output$msg <- shiny::renderUI({

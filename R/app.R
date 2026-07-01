@@ -171,6 +171,14 @@ app_server <- function(input, output, session) {
     de_mod$de_results() %||% data_mod$de_results()
   })
 
+  # Parameters of the active contrast (design_var / treated / reference), used
+  # by the Heatmap / PCA "restrict to contrast" option.
+  active_contrast_params <- shiny::reactive({
+    store <- contrasts_rv()
+    if (length(store) == 0) return(NULL)
+    store[[isolate_active(input$active_contrast, names(store))]]$params
+  })
+
   # Normalized counts for heatmap / PCA
   counts_norm <- shiny::reactive({
     counts <- data_mod$counts()
@@ -189,8 +197,9 @@ app_server <- function(input, output, session) {
   })
 
   mod_volcano_server("volcano", de_combined)
-  mod_heatmap_server("heatmap", de_combined, counts_norm, data_mod$metadata)
-  mod_pca_server("pca", counts_norm, data_mod$metadata)
+  mod_heatmap_server("heatmap", de_combined, counts_norm, data_mod$metadata,
+                     active_contrast_params)
+  mod_pca_server("pca", counts_norm, data_mod$metadata, active_contrast_params)
   mod_qc_server("qc", de_combined, data_mod$counts, counts_norm, data_mod$metadata)
   mod_compare_server("compare", shiny::reactive(contrasts_rv()))
   mod_enrich_server("enrich", de_combined, data_mod$organism, settings_rv)

@@ -156,6 +156,35 @@ run_deseq2 <- function(counts, metadata,
   df
 }
 
+#' Restrict counts + metadata to the samples of a contrast
+#'
+#' Given a contrast's parameters (`design_var`, `treated`, `reference`), keep
+#' only the samples belonging to the two compared groups. Returns the inputs
+#' unchanged when the parameters are missing or fewer than 2 samples remain.
+#' Used by the Heatmap / PCA tabs to optionally focus on the active contrast.
+#'
+#' @param counts counts (or normalized) matrix, genes x samples
+#' @param metadata sample metadata (column 1 = sample ID)
+#' @param params a contrast parameter list
+#' @return a list with `counts` and `metadata`, possibly subset
+#' @keywords internal
+restrict_to_contrast <- function(counts, metadata, params) {
+  if (is.null(counts) || is.null(metadata) || is.null(params) ||
+      is.null(params$design_var) || is.null(params$treated) ||
+      is.null(params$reference) ||
+      !params$design_var %in% colnames(metadata)) {
+    return(list(counts = counts, metadata = metadata))
+  }
+  samp_col <- colnames(metadata)[1]
+  dv <- params$design_var
+  keep <- metadata[[samp_col]][
+    as.character(metadata[[dv]]) %in% c(params$treated, params$reference)]
+  keep <- intersect(as.character(keep), colnames(counts))
+  if (length(keep) < 2) return(list(counts = counts, metadata = metadata))
+  list(counts   = counts[, keep, drop = FALSE],
+       metadata = metadata[metadata[[samp_col]] %in% keep, , drop = FALSE])
+}
+
 #' Normalize counts (variance-stabilized transform)
 #'
 #' For visualization (heatmap, PCA). Uses DESeq2::vst when the dataset is
