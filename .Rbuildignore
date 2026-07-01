@@ -8,3 +8,6 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^inst/extdata/Book1_deduplicated\.xlsx$
+^inst/extdata/Book2\.xlsx$
+^omnipathr-log
