@@ -1,5 +1,21 @@
 # Changelog
 
+## RNAflow 0.11.0 (2026-07-01)
+
+### Linked interactive explorer (crosstalk)
+
+- **New “Explore” tab** (`mod_linked`, `fig_linked.R`). A -linked
+  volcano () and DE table: brush a box or lasso on the volcano and the
+  table filters to your selection; the chosen genes are echoed as a
+  copyable list and downloadable as a `.txt`. Toggle Up / Down / NS from
+  the legend.
+- **Pure core.**
+  [`linked_volcano_df()`](https://KmBioChemo.github.io/RNAflow/reference/linked_volcano_df.md)
+  (significance-categorized tidy frame) and
+  [`fig_linked_volcano()`](https://KmBioChemo.github.io/RNAflow/reference/fig_linked_volcano.md)
+  are Shiny-free and tested.
+- `crosstalk` added to `Imports` (already pulled in by ).
+
 ## RNAflow 0.10.0 (2026-07-01)
 
 ### TF & pathway activity inference (decoupleR)

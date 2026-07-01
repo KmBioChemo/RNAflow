@@ -153,6 +153,15 @@ GSEA (fgsea / MSigDB) and ORA (clusterProfiler; GO / KEGG / Reactome).
 - [`fig_module_enrichment()`](https://KmBioChemo.github.io/RNAflow/reference/fig_module_enrichment.md)
   : Module x pathway enrichment dotplot
 
+## Linked explorer
+
+crosstalk-linked interactive volcano + table.
+
+- [`linked_volcano_df()`](https://KmBioChemo.github.io/RNAflow/reference/linked_volcano_df.md)
+  : Prepare the tidy data frame behind the linked volcano
+- [`fig_linked_volcano()`](https://KmBioChemo.github.io/RNAflow/reference/fig_linked_volcano.md)
+  : Build a crosstalk-linked plotly volcano
+
 ## Activity inference
 
 Transcription-factor (CollecTRI) and pathway (PROGENy) activity via
@@ -219,6 +228,9 @@ UI + server pairs, one per feature.
 - [`mod_heatmap_ui()`](https://KmBioChemo.github.io/RNAflow/reference/mod_heatmap.md)
   [`mod_heatmap_server()`](https://KmBioChemo.github.io/RNAflow/reference/mod_heatmap.md)
   : Heatmap module
+- [`mod_linked_ui()`](https://KmBioChemo.github.io/RNAflow/reference/mod_linked.md)
+  [`mod_linked_server()`](https://KmBioChemo.github.io/RNAflow/reference/mod_linked.md)
+  : Linked explorer module
 - [`mod_pca_ui()`](https://KmBioChemo.github.io/RNAflow/reference/mod_pca.md)
   [`mod_pca_server()`](https://KmBioChemo.github.io/RNAflow/reference/mod_pca.md)
   : PCA module
