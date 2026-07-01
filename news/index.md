@@ -1,5 +1,18 @@
 # Changelog
 
+## RNAflow 0.8.1 (2026-07-01)
+
+### “Restrict to active contrast” on Heatmap and PCA
+
+- The Heatmap and PCA tabs now have a **“Restrict to active contrast
+  groups”** checkbox. When ticked, only the samples of the two groups in
+  the active contrast are shown (via
+  [`restrict_to_contrast()`](https://KmBioChemo.github.io/RNAflow/reference/restrict_to_contrast.md));
+  unticked keeps the previous behavior of showing all samples. This
+  clarifies that DESeq2 fits the model on all samples for dispersion,
+  while you can choose whether the visualizations display the whole
+  dataset or just the compared groups.
+
 ## RNAflow 0.8.0 (2026-07-01)
 
 ### QC diagnostics, gene-ID auto-mapping, Methods generator

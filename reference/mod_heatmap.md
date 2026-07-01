@@ -7,7 +7,13 @@ Heatmap module
 ``` r
 mod_heatmap_ui(id)
 
-mod_heatmap_server(id, de_reactive, counts_reactive, metadata_reactive)
+mod_heatmap_server(
+  id,
+  de_reactive,
+  counts_reactive,
+  metadata_reactive,
+  contrast_params_reactive = NULL
+)
 ```
 
 ## Arguments
@@ -27,3 +33,8 @@ mod_heatmap_server(id, de_reactive, counts_reactive, metadata_reactive)
 - metadata_reactive:
 
   reactive for metadata
+
+- contrast_params_reactive:
+
+  optional reactive returning the active contrast's parameter list (to
+  enable "restrict to contrast")

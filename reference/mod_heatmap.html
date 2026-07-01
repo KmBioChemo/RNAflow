@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,13 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mod_heatmap_ui</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">mod_heatmap_server</span><span class="op">(</span><span class="va">id</span>, <span class="va">de_reactive</span>, <span class="va">counts_reactive</span>, <span class="va">metadata_reactive</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">mod_heatmap_server</span><span class="op">(</span></span>
+<span>  <span class="va">id</span>,</span>
+<span>  <span class="va">de_reactive</span>,</span>
+<span>  <span class="va">counts_reactive</span>,</span>
+<span>  <span class="va">metadata_reactive</span>,</span>
+<span>  contrast_params_reactive <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -66,6 +72,11 @@
 
 <dt id="arg-metadata-reactive">metadata_reactive<a class="anchor" aria-label="anchor" href="#arg-metadata-reactive"></a></dt>
 <dd><p>reactive for metadata</p></dd>
+
+
+<dt id="arg-contrast-params-reactive">contrast_params_reactive<a class="anchor" aria-label="anchor" href="#arg-contrast-params-reactive"></a></dt>
+<dd><p>optional reactive returning the active
+contrast's parameter list (to enable "restrict to contrast")</p></dd>
 
 </dl></div>
 
