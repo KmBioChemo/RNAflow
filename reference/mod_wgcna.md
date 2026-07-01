@@ -17,7 +17,8 @@ mod_wgcna_server(
   id,
   counts_norm_reactive,
   metadata_reactive,
-  organism_reactive
+  organism_reactive,
+  settings_store = NULL
 )
 ```
 
@@ -38,3 +39,8 @@ mod_wgcna_server(
 - organism_reactive:
 
   reactive returning the organism keyword
+
+- settings_store:
+
+  optional `reactiveVal` holding a settings list; the module records its
+  parameters under `$wgcna` for reproducibility

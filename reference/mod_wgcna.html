@@ -11,7 +11,7 @@ and per-module pathway enrichment (reusing run_ora() from phase 3)."></head><bod
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +55,8 @@ and per-module pathway enrichment (reusing <code><a href="run_ora.html">run_ora(
 <span>  <span class="va">id</span>,</span>
 <span>  <span class="va">counts_norm_reactive</span>,</span>
 <span>  <span class="va">metadata_reactive</span>,</span>
-<span>  <span class="va">organism_reactive</span></span>
+<span>  <span class="va">organism_reactive</span>,</span>
+<span>  settings_store <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -78,6 +79,11 @@ and per-module pathway enrichment (reusing <code><a href="run_ora.html">run_ora(
 
 <dt id="arg-organism-reactive">organism_reactive<a class="anchor" aria-label="anchor" href="#arg-organism-reactive"></a></dt>
 <dd><p>reactive returning the organism keyword</p></dd>
+
+
+<dt id="arg-settings-store">settings_store<a class="anchor" aria-label="anchor" href="#arg-settings-store"></a></dt>
+<dd><p>optional <code>reactiveVal</code> holding a settings list; the
+module records its parameters under <code>$wgcna</code> for reproducibility</p></dd>
 
 </dl></div>
 

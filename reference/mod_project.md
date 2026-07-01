@@ -10,7 +10,7 @@ the contrast store so every downstream tab updates.
 ``` r
 mod_project_ui(id)
 
-mod_project_server(id, data_mod, contrast_store)
+mod_project_server(id, data_mod, contrast_store, settings_store = NULL)
 ```
 
 ## Arguments
@@ -28,3 +28,7 @@ mod_project_server(id, data_mod, contrast_store)
 - contrast_store:
 
   a `reactiveVal` holding the contrast store
+
+- settings_store:
+
+  optional `reactiveVal` with enrichment / WGCNA settings

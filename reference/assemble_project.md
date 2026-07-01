@@ -13,7 +13,8 @@ assemble_project(
   organism = NA_character_,
   counts = NULL,
   metadata = NULL,
-  contrasts = list()
+  contrasts = list(),
+  settings = list()
 )
 ```
 
@@ -38,6 +39,11 @@ assemble_project(
 - contrasts:
 
   the contrast store (named list)
+
+- settings:
+
+  optional list with `enrichment` / `wgcna` parameter records (captured
+  by the Enrichment / Network tabs) for exact reproducibility
 
 ## Value
 

@@ -11,7 +11,7 @@ plus a results table.
 ``` r
 mod_enrich_ui(id)
 
-mod_enrich_server(id, de_reactive, organism_reactive)
+mod_enrich_server(id, de_reactive, organism_reactive, settings_store = NULL)
 ```
 
 ## Arguments
@@ -27,3 +27,8 @@ mod_enrich_server(id, de_reactive, organism_reactive)
 - organism_reactive:
 
   a reactive returning the organism keyword
+
+- settings_store:
+
+  optional `reactiveVal` holding a settings list; the last enrichment
+  run is recorded under `$enrichment` for reproducibility

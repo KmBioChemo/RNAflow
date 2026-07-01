@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,18 @@
       <small>Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.7.1" id="rnaflow-071-2026-07-01">RNAflow 0.7.1 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-071-2026-07-01"></a></h2>
+<div class="section level3">
+<h3 id="exact-reproducibility--remaining-audit-items-0-7-1">Exact reproducibility &amp; remaining audit items<a class="anchor" aria-label="anchor" href="#exact-reproducibility--remaining-audit-items-0-7-1"></a></h3>
+<ul><li>
+<strong>Exact parameter capture.</strong> The Enrichment and Network tabs now record the settings they were run with (GSEA/ORA collection, ranking metric, database, thresholds; WGCNA gene count, network type, power, module parameters). These are saved in the project and emitted verbatim by <code><a href="../reference/generate_r_script.html">generate_r_script()</a></code>, so the exported script reproduces the <em>exact</em> analysis (not just a template). Loading a project restores these settings too.</li>
+<li>
+<strong>WGCNA quality control.</strong> <code><a href="../reference/wgcna_datexpr.html">wgcna_datexpr()</a></code> now runs <code><a href="https://rdrr.io/pkg/WGCNA/man/goodSamplesGenes.html" class="external-link">WGCNA::goodSamplesGenes()</a></code> and removes flagged genes / samples (with a message).</li>
+<li>
+<strong>GSEA ties.</strong> <code><a href="../reference/run_gsea.html">run_gsea()</a></code> warns when the ranking metric has tied values (and muffles fgsea’s redundant internal warning).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.0" id="rnaflow-070-2026-07-01">RNAflow 0.7.0 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-070-2026-07-01"></a></h2>
 <div class="section level3">

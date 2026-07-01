@@ -11,7 +11,7 @@ and
 ``` r
 mod_report_ui(id)
 
-mod_report_server(id, data_mod, contrast_store)
+mod_report_server(id, data_mod, contrast_store, settings_store = NULL)
 ```
 
 ## Arguments
@@ -28,3 +28,7 @@ mod_report_server(id, data_mod, contrast_store)
 - contrast_store:
 
   a `reactiveVal` holding the contrast store
+
+- settings_store:
+
+  optional `reactiveVal` with enrichment / WGCNA settings

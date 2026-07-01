@@ -9,7 +9,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,8 @@
 <span>  organism <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
 <span>  counts <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  metadata <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  contrasts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  contrasts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  settings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -77,6 +78,11 @@
 
 <dt id="arg-contrasts">contrasts<a class="anchor" aria-label="anchor" href="#arg-contrasts"></a></dt>
 <dd><p>the contrast store (named list)</p></dd>
+
+
+<dt id="arg-settings">settings<a class="anchor" aria-label="anchor" href="#arg-settings"></a></dt>
+<dd><p>optional list with <code>enrichment</code> / <code>wgcna</code> parameter records
+(captured by the Enrichment / Network tabs) for exact reproducibility</p></dd>
 
 </dl></div>
     <div class="section level2">
