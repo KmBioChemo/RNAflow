@@ -13,3 +13,4 @@ GSEA runs on gene \strong{symbols} (MSigDB gene sets are fetched as symbols, the
 ranking is keyed by the DE table's \code{gene} column). ORA converts the
 significant symbols to ENTREZ IDs first (see \code{\link[=symbols_to_entrez]{symbols_to_entrez()}}).
 }
+\keyword{internal}

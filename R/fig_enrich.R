@@ -5,6 +5,7 @@
 #' exploration / publication theme mode.
 #'
 #' @name fig_enrich
+#' @keywords internal
 NULL
 
 #' Tidy enrichment label

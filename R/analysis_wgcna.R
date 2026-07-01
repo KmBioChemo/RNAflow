@@ -10,6 +10,7 @@
 #' (`datExpr`) that the other functions consume.
 #'
 #' @name analysis_wgcna
+#' @keywords internal
 NULL
 
 #' Run an expression while WGCNA's `cor` shadows `stats::cor`

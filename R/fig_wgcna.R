@@ -5,6 +5,7 @@
 #' profiles. Pure ggplot2 functions respecting the theme mode.
 #'
 #' @name fig_wgcna
+#' @keywords internal
 NULL
 
 #' Soft-threshold diagnostic plot

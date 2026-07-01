@@ -3,6 +3,7 @@
 #' Save ggplot, pheatmap, and plotly objects to disk in publication formats.
 #'
 #' @name fig_export
+#' @keywords internal
 NULL
 
 #' Save a ggplot to disk

@@ -7,6 +7,7 @@
 #' where it makes sense.
 #'
 #' @name fig_compare
+#' @keywords internal
 NULL
 
 # Default qualitative fill palette for set diagrams.

@@ -11,3 +11,4 @@ figures (DE volcanoes, cross-contrast comparison) are rendered inline; the
 heavier enrichment / network steps are documented via the reproducible
 script (see \code{\link[=generate_r_script]{generate_r_script()}}).
 }
+\keyword{internal}

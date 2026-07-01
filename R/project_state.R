@@ -5,6 +5,7 @@
 #' that can be reopened later or shared with collaborators.
 #'
 #' @name project_state
+#' @keywords internal
 NULL
 
 #' Create an empty project state

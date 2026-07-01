@@ -9,3 +9,4 @@ reproduces the pipeline with RNAflow's public functions -- ready to drop
 into a Methods section or a supplementary file. Pure string generation,
 no side effects.
 }
+\keyword{internal}

@@ -30,8 +30,9 @@ To launch the app: \code{RNAflow::run_app()}
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/kmatmat/RNAflow}
-  \item Report bugs at \url{https://github.com/kmatmat/RNAflow/issues}
+  \item \url{https://github.com/KmBioChemo/RNAflow}
+  \item \url{https://KmBioChemo.github.io/RNAflow/}
+  \item Report bugs at \url{https://github.com/KmBioChemo/RNAflow/issues}
 }
 
 }

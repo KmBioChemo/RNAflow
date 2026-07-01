@@ -10,3 +10,4 @@ gene x contrast log2FoldChange signature heatmap. Pure functions -- no
 Shiny dependency. They respect the exploration / publication theme mode
 where it makes sense.
 }
+\keyword{internal}

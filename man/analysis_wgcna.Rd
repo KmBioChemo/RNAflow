@@ -14,3 +14,4 @@ in rows and samples in columns (as elsewhere in RNAflow). WGCNA wants the
 transpose, so \code{\link[=wgcna_datexpr]{wgcna_datexpr()}} returns a samples x genes matrix
 (\code{datExpr}) that the other functions consume.
 }
+\keyword{internal}

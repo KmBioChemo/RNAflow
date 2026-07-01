@@ -1,8 +1,6 @@
-# RNAflow changelog
+# RNAflow 0.5.1 (2026-07-01)
 
-## v0.5.1 (2026-07-01)
-
-### Quality pass — clean `R CMD check`
+## Quality pass — clean `R CMD check`
 
 The package now passes `R CMD check` with 0 errors / 0 warnings (the only
 NOTE is an environment "unable to verify current time" artifact).
@@ -20,9 +18,9 @@ NOTE is an environment "unable to verify current time" artifact).
   fixed the GitHub owner in URLs (`KmBioChemo/RNAflow`); cleaned the
   author record.
 
-## v0.5.0 (2026-07-01)
+# RNAflow 0.5.0 (2026-07-01)
 
-### Phase 5 — Reproducibility (roadmap complete)
+## Phase 5 — Reproducibility (roadmap complete)
 
 - **Reproducible R script export** (`generate_r_script()`): turns a session
   into a runnable, commented .R script that reproduces the whole pipeline
@@ -40,9 +38,9 @@ NOTE is an environment "unable to verify current time" artifact).
 - Note: in place of a full `renv` lockfile (renv not present), the report
   embeds a package-version manifest capturing the analysis environment.
 
-## v0.4.0 (2026-06-30)
+# RNAflow 0.4.0 (2026-06-30)
 
-### Phase 4 — WGCNA co-expression networks
+## Phase 4 — WGCNA co-expression networks
 
 - **Network tab** (`mod_wgcna`): a guided workflow — pick the soft-threshold
   power, detect modules, then explore module-trait correlations, module
@@ -62,18 +60,18 @@ NOTE is an environment "unable to verify current time" artifact).
   module, and the batch effect isolated into grey.
 - Added `WGCNA` (BiocManager) to the environment.
 
-## v0.3.1 (2026-06-30)
+# RNAflow 0.3.1 (2026-06-30)
 
-### Enrichment UX
+## Enrichment UX
 
 - The Enrichment tab now detects an **organism / species mismatch**: if
   almost none of the DE gene symbols map to the selected organism's
   annotation, it shows a clear message pointing to the Organism setting on
   the Data tab instead of silently returning zero enriched terms.
 
-## v0.3.0 (2026-06-30)
+# RNAflow 0.3.0 (2026-06-30)
 
-### Phase 3 — Functional enrichment
+## Phase 3 — Functional enrichment
 
 - **GSEA** (`run_gsea()`, via `fgsea`) against MSigDB collections
   (`get_gene_sets()`, via `msigdbr`): Hallmark, Reactome / KEGG (C2),
@@ -92,9 +90,9 @@ NOTE is an environment "unable to verify current time" artifact).
   responses, OXPHOS, E2F), so the whole pipeline — DE → multi-contrast →
   enrichment — tells one coherent inflammation/rescue story.
 
-## v0.2.0 (2026-06-30)
+# RNAflow 0.2.0 (2026-06-30)
 
-### Phase 2 — Project manager + multi-contrast
+## Phase 2 — Project manager + multi-contrast
 
 - **Named contrast store.** Every DESeq2 run is now saved as a named
   contrast (`"<var>: <treated> vs <reference>"`); an active-contrast
@@ -114,9 +112,9 @@ NOTE is an environment "unable to verify current time" artifact).
   family and the `save_compare()` exporter.
 - Added `eulerr` (Suggests) and `grid` (Imports) dependencies.
 
-## v0.1.2 (2026-06-30)
+# RNAflow 0.1.2 (2026-06-30)
 
-### Bug fixes
+## Bug fixes
 - Eliminate `Error in &&: 'length = 2000' in coercion to 'logical(1)'`
   in the Volcano tab by replacing fragile multi-clause `&&` chains around
   axis-limit checks (`x_min`, `x_max`, `y_max`) with new helpers
@@ -125,9 +123,9 @@ NOTE is an environment "unable to verify current time" artifact).
 - Harden `%||%` to handle NULL, empty, NA, and non-finite numerics
   uniformly; leave longer vectors alone.
 
-## v0.1.1 (2026-06-30)
+# RNAflow 0.1.1 (2026-06-30)
 
-### Bug fixes
+## Bug fixes
 - Fix `'length = N' in coercion to 'logical(1)'` warnings in the Volcano
   tab (R 4.3+ strict mode). NAs in `padj` / `log2FoldChange` are now
   handled explicitly in regulation classification, both in
@@ -137,7 +135,7 @@ NOTE is an environment "unable to verify current time" artifact).
   falls back to `"normal"` shrinkage with an informative message instead
   of throwing.
 
-## v0.1.0 (2026-06-30)
+# RNAflow 0.1.0 (2026-06-30)
 
 Initial package-structured release. Refactor of the original `app.R`
 single-file Shiny app into a modular R package:

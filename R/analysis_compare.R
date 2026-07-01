@@ -10,6 +10,7 @@
 #' contrast labels used in plots and tables.
 #'
 #' @name analysis_compare
+#' @keywords internal
 NULL
 
 #' Significant genes of a single contrast

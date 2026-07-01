@@ -4,6 +4,7 @@
 #' All return validated objects ready for downstream analysis.
 #'
 #' @name io_utils
+#' @keywords internal
 NULL
 
 #' Read a counts matrix from a file

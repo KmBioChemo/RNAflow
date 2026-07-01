@@ -14,3 +14,4 @@ data.frames, each with at least \code{gene}, \code{log2FoldChange}, \code{padj}
 (i.e. anything that passes \code{\link[=validate_de_results]{validate_de_results()}}). The names are the
 contrast labels used in plots and tables.
 }
+\keyword{internal}

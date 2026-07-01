@@ -7,3 +7,4 @@
 Flexible importers for counts matrices, metadata, and DE results.
 All return validated objects ready for downstream analysis.
 }
+\keyword{internal}

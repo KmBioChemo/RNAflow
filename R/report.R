@@ -8,6 +8,7 @@
 #' script (see [generate_r_script()]).
 #'
 #' @name report
+#' @keywords internal
 NULL
 
 #' Key package versions used in the session

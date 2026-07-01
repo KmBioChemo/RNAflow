@@ -9,6 +9,7 @@
 #' significant symbols to ENTREZ IDs first (see [symbols_to_entrez()]).
 #'
 #' @name analysis_enrich
+#' @keywords internal
 NULL
 
 #' Fetch MSigDB gene sets for an organism

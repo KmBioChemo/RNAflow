@@ -1,0 +1,105 @@
+url: https://KmBioChemo.github.io/RNAflow/
+
+template:
+  bootstrap: 5
+  bslib:
+    primary: "#1D9E75"
+
+home:
+  title: RNAflow
+  description: End-to-end bulk RNA-seq analysis platform.
+
+reference:
+- title: Application
+  desc: Launch the interactive Shiny app.
+  contents:
+  - run_app
+  - launch_app
+
+- title: Data input & validation
+  desc: Read and strictly validate counts, metadata, and DE results.
+  contents:
+  - read_counts
+  - read_metadata
+  - read_de_results
+  - validate_counts
+  - validate_metadata
+  - validate_de_results
+
+- title: Differential expression
+  contents:
+  - run_deseq2
+  - normalize_counts
+
+- title: Core figures
+  desc: Volcano, heatmap and PCA, with exploration / publication modes.
+  contents:
+  - fig_volcano
+  - fig_volcano_interactive
+  - fig_heatmap
+  - fig_pca
+  - compute_pca
+
+- title: Themes & figure export
+  contents:
+  - fig_theme
+  - theme_publication
+  - theme_exploration
+  - save_ggplot
+  - save_pheatmap
+  - save_compare
+
+- title: Multi-contrast comparison
+  desc: Compare significant-gene sets and signatures across contrasts.
+  contents:
+  - contrast_sig_genes
+  - contrast_sig_sets
+  - contrast_lfc_matrix
+  - fig_venn
+  - fig_upset
+  - fig_volcano_grid
+  - fig_lfc_heatmap
+
+- title: Functional enrichment
+  desc: GSEA (fgsea / MSigDB) and ORA (clusterProfiler; GO / KEGG / Reactome).
+  contents:
+  - get_gene_sets
+  - rank_genes
+  - run_gsea
+  - run_ora
+  - fig_enrich_dot
+  - fig_enrich_bar
+  - fig_gsea_curve
+
+- title: Co-expression networks (WGCNA)
+  contents:
+  - wgcna_datexpr
+  - wgcna_pick_power
+  - run_wgcna
+  - build_traits
+  - module_trait_cor
+  - hub_genes
+  - module_gene_list
+  - module_summary
+  - fig_soft_threshold
+  - fig_module_trait
+  - fig_module_sizes
+  - fig_eigengene
+
+- title: Projects & reproducibility
+  desc: Save/load sessions, export a Methods script and an HTML report.
+  contents:
+  - save_project
+  - load_project
+  - generate_r_script
+  - build_report_html
+
+- title: Shiny modules
+  desc: UI + server pairs, one per feature.
+  contents:
+  - starts_with("mod_")
+
+- title: Package overview
+  contents:
+  - RNAflow-package
+  - "%>%"

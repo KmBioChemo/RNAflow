@@ -4,6 +4,7 @@
 #' tidy results compatible with the rest of RNAflow.
 #'
 #' @name analysis_de
+#' @keywords internal
 NULL
 
 #' Run DESeq2 on a counts matrix

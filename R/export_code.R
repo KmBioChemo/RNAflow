@@ -6,6 +6,7 @@
 #' no side effects.
 #'
 #' @name export_code
+#' @keywords internal
 NULL
 
 #' Sanitize a contrast label into a valid R object suffix
