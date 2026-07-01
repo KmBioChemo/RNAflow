@@ -43,8 +43,13 @@ fig_soft_threshold <- function(sft, mode = c("exploration", "publication")) {
     ggplot2::geom_text(ggplot2::aes(label = .data$power), size = 2.8,
                        color = "#2C3E50") +
     ggplot2::facet_wrap(~ .data$metric, scales = "free_y") +
-    ggplot2::labs(x = "Soft-threshold power", y = NULL,
-                  title = sprintf("Suggested power: %s", sft$suggested)) +
+    ggplot2::labs(
+      x = "Soft-threshold power", y = NULL,
+      title = sprintf("Suggested power: %s", sft$suggested),
+      subtitle = if (isTRUE(sft$fallback))
+        sprintf(paste0("Scale-free fit did not reach R2 = %.2f; using WGCNA's ",
+                       "default for %d samples (interpret with caution)."),
+                sft$rsq_cut, sft$n_samples %||% NA) else NULL) +
     fig_theme(mode)
 }
 
@@ -58,13 +63,18 @@ fig_soft_threshold <- function(sft, mode = c("exploration", "publication")) {
 fig_module_trait <- function(mt, mode = c("exploration", "publication"),
                              text_size = 2.6) {
   mode <- match.arg(mode)
-  cmat <- mt$cor; pmat <- mt$p
+  cmat <- mt$cor
+  # Prefer BH-adjusted p-values (many correlations are tested at once)
+  pmat <- mt$padj %||% mt$p
   df <- expand.grid(module = rownames(cmat), trait = colnames(cmat),
                     stringsAsFactors = FALSE)
   df$r <- as.vector(cmat)
   df$p <- as.vector(pmat)
   df$module <- sub("^ME", "", df$module)
-  df$label <- sprintf("%.2f\n(%.0e)", df$r, df$p)
+  star <- ifelse(df$p < 0.001, "***",
+          ifelse(df$p < 0.01, "**",
+          ifelse(df$p < 0.05, "*", "")))
+  df$label <- sprintf("%.2f%s", df$r, star)
   df$txt_col <- ifelse(abs(df$r) > 0.6, "white", "black")
   df$module <- factor(df$module, levels = rev(sub("^ME", "", rownames(cmat))))
   df$trait  <- factor(df$trait, levels = colnames(cmat))
@@ -77,7 +87,8 @@ fig_module_trait <- function(mt, mode = c("exploration", "publication"),
     ggplot2::scale_fill_gradient2(low = "#2980B9", mid = "white",
                                   high = "#C0392B", midpoint = 0,
                                   limits = c(-1, 1), name = "Correlation") +
-    ggplot2::labs(x = NULL, y = "Module") +
+    ggplot2::labs(x = NULL, y = "Module",
+                  caption = "* FDR < 0.05   ** < 0.01   *** < 0.001") +
     fig_theme(mode) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
 }

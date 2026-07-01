@@ -1,3 +1,29 @@
+# RNAflow 0.7.0 (2026-07-01)
+
+## Methodological fixes (scientific audit)
+
+- **Inference vs. shrinkage separation (fixes a GSEA crash).** `run_deseq2()`
+  now always takes `stat` / `pvalue` / `padj` from the unshrunken Wald test
+  and overlays only the shrunken `log2FoldChange` / `lfcSE`. Previously,
+  apeglm shrinkage (the default) dropped the `stat` column, so the default
+  GSEA ranking (`rank_by = "stat"`) errored. The estimator actually used is
+  recorded in `attr(result, "shrink")` and shown in the DE tab.
+- **Covariate / batch adjustment in the app.** The DE tab now has an optional
+  "Adjust for" selector; the variable of interest stays the last design term
+  so contrasts are unchanged, while covariates (e.g. batch) enter the model.
+- **Multiple-testing correction for module-trait correlations.**
+  `module_trait_cor()` now returns BH-adjusted `padj`; `fig_module_trait()`
+  shows correlation with FDR significance stars.
+- **Transparent shrinkage fallback.** When apeglm cannot be used for a given
+  contrast (its coefficient is not in the model), the switch to `normal`
+  shrinkage is now reported rather than silent.
+- **WGCNA soft-power fallback.** When the scale-free fit does not reach the
+  target (common at small sample sizes), `wgcna_pick_power()` falls back to
+  WGCNA's sample-size-based default and flags it on the plot.
+- **Reproducibility.** The R-script export records each contrast's covariates;
+  the HTML report now embeds full `sessionInfo()`. Both clarify that
+  downstream (enrichment/WGCNA) steps use default parameters.
+
 # RNAflow 0.6.2 (2026-07-01)
 
 ## Stabilization & pre-release polish

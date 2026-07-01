@@ -157,13 +157,18 @@ build_report_html <- function(project, file, title = "RNAflow analysis report",
     compare,
     section(h$h2("Reproducible R script"),
             h$p(class = "muted",
-                "Paste into R (with RNAflow installed) to reproduce the full ",
-                "pipeline, including enrichment and network analysis."),
+                "A template that reproduces the pipeline with RNAflow (with the ",
+                "package installed). DE calls reflect each saved contrast; ",
+                "downstream steps use default parameters -- adjust to match ",
+                "the settings you used."),
             h$pre(h$code(script))),
     section(h$h2("Session"),
             h$p(h$span(class = "badge", paste0("RNAflow ", ver)),
                 h$span(class = "badge", paste0("R ", getRversion()))),
-            man_tbl)
+            man_tbl,
+            h$h3("sessionInfo()", style = "font-size:15px;margin-top:14px;"),
+            h$pre(h$code(paste(utils::capture.output(utils::sessionInfo()),
+                               collapse = "\n"))))
   )
 
   htmltools::save_html(doc, file = file, background = "white")

@@ -20,12 +20,16 @@ NULL
 #'   should be the last term.
 #' @param contrast a length-3 character vector: c(variable, level_treated,
 #'   level_reference). Example: `c("condition", "Treatment", "Control")`.
-#' @param shrink logical, apply LFC shrinkage (recommended for visualization)
+#' @param shrink logical, apply LFC shrinkage to the effect-size estimate
+#'   (recommended for ranking / visualization). Inference is unaffected.
 #' @param shrink_type shrinkage estimator: "apeglm" (default), "ashr", or "normal"
 #' @param min_count minimum row sum to keep a gene (default 10)
 #' @param alpha FDR threshold passed to `results()` for independent filtering
 #' @return a tidy data.frame with columns: gene, baseMean, log2FoldChange,
-#'   lfcSE, stat, pvalue, padj
+#'   lfcSE, stat, pvalue, padj. Inference columns (`stat`, `pvalue`, `padj`)
+#'   always come from the unshrunken Wald test; when `shrink = TRUE` only
+#'   `log2FoldChange` and `lfcSE` are the shrunken estimates. The estimator
+#'   actually used is recorded in `attr(result, "shrink")`.
 #' @export
 #' @examples
 #' \dontrun{
@@ -87,11 +91,19 @@ run_deseq2 <- function(counts, metadata,
   dds <- dds[rowSums(DESeq2::counts(dds)) >= min_count, ]
   dds <- DESeq2::DESeq(dds, quiet = TRUE)
 
+  # Inference (Wald statistic, p-value, adjusted p-value) always comes from the
+  # unshrunken test. Shrinkage only adjusts the *effect-size* estimate
+  # (log2FoldChange / lfcSE) for ranking and visualization -- this keeps the
+  # two concerns separate, and guarantees a `stat` column even when apeglm
+  # (which otherwise drops it) is used.
+  res <- DESeq2::results(dds, contrast = contrast, alpha = alpha)
+  used_shrink <- "none"
+
   if (isTRUE(shrink)) {
     coef_name <- paste0(contrast[1], "_", contrast[2], "_vs_", contrast[3])
     available_coefs <- DESeq2::resultsNames(dds)
 
-    # Auto-fallback if apeglm requested but not installed
+    # Auto-fallback if the requested estimator is not installed
     if (shrink_type == "apeglm" && !requireNamespace("apeglm", quietly = TRUE)) {
       message("Package 'apeglm' not installed. Falling back to 'normal' shrinkage. ",
               "Install with: BiocManager::install('apeglm')")
@@ -103,20 +115,31 @@ run_deseq2 <- function(counts, metadata,
     }
 
     if (coef_name %in% available_coefs && shrink_type == "apeglm") {
-      res <- DESeq2::lfcShrink(dds, coef = coef_name, type = "apeglm")
+      shr <- DESeq2::lfcShrink(dds, coef = coef_name, type = "apeglm", quiet = TRUE)
+      used_shrink <- "apeglm"
     } else {
-      res <- DESeq2::lfcShrink(dds,
-                               contrast = contrast,
-                               type = if (shrink_type == "apeglm") "normal" else shrink_type)
+      if (shrink_type == "apeglm") {
+        message("apeglm shrinkage requires the contrast to match the model's ",
+                "reference level; using 'normal' shrinkage for this contrast.")
+        used_shrink <- "normal"
+      } else {
+        used_shrink <- shrink_type
+      }
+      shr <- DESeq2::lfcShrink(
+        dds, contrast = contrast, quiet = TRUE,
+        type = if (shrink_type == "apeglm") "normal" else shrink_type)
     }
-  } else {
-    res <- DESeq2::results(dds, contrast = contrast, alpha = alpha)
+    # Overlay the shrunken effect size, keep Wald stat / p-values for inference
+    idx <- match(rownames(res), rownames(shr))
+    res$log2FoldChange <- shr$log2FoldChange[idx]
+    res$lfcSE          <- shr$lfcSE[idx]
   }
 
   df <- as.data.frame(res)
   df$gene <- rownames(df)
   df <- df[, c("gene", setdiff(colnames(df), "gene"))]
   rownames(df) <- NULL
+  attr(df, "shrink") <- used_shrink
   df
 }
 

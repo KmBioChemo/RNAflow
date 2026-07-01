@@ -75,14 +75,39 @@ wgcna_pick_power <- function(datExpr, powers = 1:20,
   sft <- with_wgcna_cor(WGCNA::pickSoftThreshold(
     datExpr, powerVector = powers, networkType = network_type, verbose = 0))
   fi <- sft$fitIndices
-  # Suggest: first power reaching the R^2 target, else WGCNA's estimate, else max R^2
+  # Suggest: first power reaching the R^2 target, else WGCNA's estimate.
   sft_rsq <- -sign(fi$slope) * fi$SFT.R.sq
   hit <- which(sft_rsq >= rsq_cut)
-  suggested <- if (length(hit) > 0) fi$Power[hit[1]]
-               else if (!is.na(sft$powerEstimate)) sft$powerEstimate
-               else fi$Power[which.max(sft_rsq)]
-  list(fit_indices = fi, suggested = suggested,
-       network_type = network_type, rsq_cut = rsq_cut)
+  fallback <- FALSE
+  suggested <- if (length(hit) > 0) {
+    fi$Power[hit[1]]
+  } else if (!is.na(sft$powerEstimate)) {
+    sft$powerEstimate
+  } else {
+    # Scale-free fit never reached the target (common with small sample sizes):
+    # fall back to WGCNA's recommended default power for this sample size.
+    fallback <- TRUE
+    wgcna_default_power(nrow(datExpr), network_type)
+  }
+  list(fit_indices = fi, suggested = suggested, fallback = fallback,
+       n_samples = nrow(datExpr), network_type = network_type, rsq_cut = rsq_cut)
+}
+
+#' WGCNA's recommended default soft-thresholding power
+#'
+#' Used when scale-free topology fit does not reach the target (e.g. small
+#' sample sizes). Values follow the WGCNA FAQ recommendations.
+#'
+#' @param n_samples number of samples
+#' @param network_type network type
+#' @return a numeric power
+#' @keywords internal
+wgcna_default_power <- function(n_samples, network_type = "signed") {
+  signed <- !identical(network_type, "unsigned")
+  if (n_samples < 20)      if (signed) 18 else 9
+  else if (n_samples < 30) if (signed) 16 else 8
+  else if (n_samples < 40) if (signed) 14 else 7
+  else                     if (signed) 12 else 6
 }
 
 #' Detect co-expression modules
@@ -162,7 +187,10 @@ build_traits <- function(metadata, samples) {
 #'
 #' @param MEs module eigengenes (samples x modules) from [run_wgcna()]
 #' @param traits numeric trait matrix from [build_traits()]
-#' @return a list: `cor` (modules x traits), `p` (same shape), `n` (samples)
+#' @return a list: `cor` (modules x traits), `p` (raw p-values), `padj`
+#'   (Benjamini-Hochberg across the whole matrix), `n` (samples)
+#' @details Many correlations are tested at once, so `padj` applies BH
+#'   correction across all module x trait cells; prefer it over raw `p`.
 #' @export
 module_trait_cor <- function(MEs, traits) {
   if (!requireNamespace("WGCNA", quietly = TRUE)) {
@@ -177,7 +205,9 @@ module_trait_cor <- function(MEs, traits) {
   traits <- traits[common, , drop = FALSE]
   cmat <- stats::cor(MEs, traits, use = "pairwise.complete.obs")
   pmat <- WGCNA::corPvalueStudent(cmat, length(common))
-  list(cor = cmat, p = pmat, n = length(common))
+  padj <- matrix(stats::p.adjust(as.vector(pmat), method = "BH"),
+                 nrow = nrow(pmat), dimnames = dimnames(pmat))
+  list(cor = cmat, p = pmat, padj = padj, n = length(common))
 }
 
 #' Intramodular hub genes

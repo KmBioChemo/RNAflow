@@ -18,6 +18,7 @@ mod_de_ui <- function(id) {
       shiny::uiOutput(ns("design_ui")),
       shiny::uiOutput(ns("contrast_ui")),
       ui_advanced_panel(
+        shiny::uiOutput(ns("adjust_ui")),
         shiny::checkboxInput(ns("shrink"), "Apply LFC shrinkage (apeglm)",
                              value = TRUE),
         shiny::numericInput(ns("min_count"), "Minimum row sum to keep gene",
@@ -76,6 +77,18 @@ mod_de_server <- function(id, data_mod, contrast_store = NULL) {
       )
     })
 
+    # Optional covariates to adjust for (e.g. batch); design_var stays last
+    output$adjust_ui <- shiny::renderUI({
+      meta <- data_mod$metadata()
+      shiny::req(meta, input$design_var)
+      others <- setdiff(colnames(meta)[-1], input$design_var)
+      if (length(others) == 0) return(NULL)
+      shiny::checkboxGroupInput(
+        session$ns("covariates"),
+        "Adjust for (covariates, e.g. batch)",
+        choices = others, selected = character(0))
+    })
+
     shiny::observeEvent(input$run, {
       counts <- data_mod$counts()
       meta   <- data_mod$metadata()
@@ -86,11 +99,15 @@ mod_de_server <- function(id, data_mod, contrast_store = NULL) {
                                 type = "warning")
         return()
       }
+      # Build design: covariates first, variable of interest last (for the contrast)
+      covs <- setdiff(input$covariates, input$design_var)
+      design_terms <- c(covs, input$design_var)
+      design_fml <- stats::as.formula(paste0("~", paste(design_terms, collapse = " + ")))
       shiny::withProgress(message = "Running DESeq2...", value = 0.3, {
         tryCatch({
           res <- run_deseq2(
             counts, meta,
-            design   = stats::as.formula(paste0("~", input$design_var)),
+            design   = design_fml,
             contrast = c(input$design_var, input$level_treated, input$level_reference),
             shrink   = isTRUE(input$shrink),
             min_count = as.integer(input$min_count %||% 10),
@@ -108,7 +125,9 @@ mod_de_server <- function(id, data_mod, contrast_store = NULL) {
               design_var = input$design_var,
               treated    = input$level_treated,
               reference  = input$level_reference,
+              covariates = covs,
               shrink     = isTRUE(input$shrink),
+              shrink_used = attr(res, "shrink") %||% "none",
               min_count  = as.integer(input$min_count %||% 10),
               alpha      = as.numeric(input$alpha %||% 0.05)
             )
@@ -136,8 +155,14 @@ mod_de_server <- function(id, data_mod, contrast_store = NULL) {
     output$status <- shiny::renderUI({
       d <- de_r()
       if (is.null(d)) return(NULL)
+      sh <- attr(d, "shrink") %||% "none"
+      shiny_note <- if (sh == "none") "no LFC shrinkage"
+                    else sprintf("LFC shrinkage: %s", sh)
       shiny::div(class = "demo-banner",
-                 sprintf("\u2713 %d genes in results table", nrow(d)))
+                 sprintf("\u2713 %d genes in results table (%s; ",
+                         nrow(d), shiny_note),
+                 shiny::tags$span("inference from the Wald test", style = "color:#7F8C8D;"),
+                 ")")
     })
 
     list(de_results = shiny::reactive(de_r()))

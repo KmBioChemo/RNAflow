@@ -12,8 +12,13 @@ module_trait_cor(MEs, traits)
 \item{traits}{numeric trait matrix from \code{\link[=build_traits]{build_traits()}}}
 }
 \value{
-a list: \code{cor} (modules x traits), \code{p} (same shape), \code{n} (samples)
+a list: \code{cor} (modules x traits), \code{p} (raw p-values), \code{padj}
+(Benjamini-Hochberg across the whole matrix), \code{n} (samples)
 }
 \description{
 Module-trait correlation
+}
+\details{
+Many correlations are tested at once, so \code{padj} applies BH
+correction across all module x trait cells; prefer it over raw \code{p}.
 }

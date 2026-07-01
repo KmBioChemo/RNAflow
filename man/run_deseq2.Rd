@@ -27,7 +27,8 @@ should be the last term.}
 \item{contrast}{a length-3 character vector: c(variable, level_treated,
 level_reference). Example: \code{c("condition", "Treatment", "Control")}.}
 
-\item{shrink}{logical, apply LFC shrinkage (recommended for visualization)}
+\item{shrink}{logical, apply LFC shrinkage to the effect-size estimate
+(recommended for ranking / visualization). Inference is unaffected.}
 
 \item{shrink_type}{shrinkage estimator: "apeglm" (default), "ashr", or "normal"}
 
@@ -37,7 +38,10 @@ level_reference). Example: \code{c("condition", "Treatment", "Control")}.}
 }
 \value{
 a tidy data.frame with columns: gene, baseMean, log2FoldChange,
-lfcSE, stat, pvalue, padj
+lfcSE, stat, pvalue, padj. Inference columns (\code{stat}, \code{pvalue}, \code{padj})
+always come from the unshrunken Wald test; when \code{shrink = TRUE} only
+\code{log2FoldChange} and \code{lfcSE} are the shrunken estimates. The estimator
+actually used is recorded in \code{attr(result, "shrink")}.
 }
 \description{
 Constructs a DESeqDataSet from counts and metadata, runs DESeq(), and

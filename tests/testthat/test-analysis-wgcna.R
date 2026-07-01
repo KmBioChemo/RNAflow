@@ -68,7 +68,7 @@ test_that("run_wgcna detects modules and downstream helpers work", {
   expect_false(is.unsorted(rev(hubs$kME)))     # kME descending
 })
 
-test_that("module_trait_cor returns aligned correlation and p matrices", {
+test_that("module_trait_cor returns aligned correlation, p and BH-adjusted p", {
   skip_if_not_installed("WGCNA")
   d <- wgcna_datexpr(sim_norm(), n_genes = 150)
   wg <- suppressWarnings(run_wgcna(d, power = 6, min_module_size = 20))
@@ -77,7 +77,17 @@ test_that("module_trait_cor returns aligned correlation and p matrices", {
   tr <- build_traits(meta, rownames(d))
   mt <- module_trait_cor(wg$MEs, tr)
   expect_equal(dim(mt$cor), dim(mt$p))
+  expect_equal(dim(mt$padj), dim(mt$p))          # FDR matrix present
+  expect_true(all(mt$padj >= mt$p - 1e-9))        # BH >= raw p
   expect_equal(nrow(mt$cor), ncol(wg$MEs))
   expect_equal(mt$n, nrow(d))
   expect_true(all(mt$cor >= -1 & mt$cor <= 1))
+})
+
+test_that("wgcna_default_power follows WGCNA's sample-size recommendations", {
+  expect_equal(wgcna_default_power(12, "signed"), 18)
+  expect_equal(wgcna_default_power(25, "signed"), 16)
+  expect_equal(wgcna_default_power(35, "signed"), 14)
+  expect_equal(wgcna_default_power(50, "signed"), 12)
+  expect_equal(wgcna_default_power(12, "unsigned"), 9)
 })
