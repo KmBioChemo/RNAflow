@@ -22,4 +22,10 @@ module_trait_cor(MEs, traits)
 
 ## Value
 
-a list: `cor` (modules x traits), `p` (same shape), `n` (samples)
+a list: `cor` (modules x traits), `p` (raw p-values), `padj`
+(Benjamini-Hochberg across the whole matrix), `n` (samples)
+
+## Details
+
+Many correlations are tested at once, so `padj` applies BH correction
+across all module x trait cells; prefer it over raw `p`.

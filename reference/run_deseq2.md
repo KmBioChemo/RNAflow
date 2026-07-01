@@ -42,7 +42,8 @@ run_deseq2(
 
 - shrink:
 
-  logical, apply LFC shrinkage (recommended for visualization)
+  logical, apply LFC shrinkage to the effect-size estimate (recommended
+  for ranking / visualization). Inference is unaffected.
 
 - shrink_type:
 
@@ -59,7 +60,10 @@ run_deseq2(
 ## Value
 
 a tidy data.frame with columns: gene, baseMean, log2FoldChange, lfcSE,
-stat, pvalue, padj
+stat, pvalue, padj. Inference columns (`stat`, `pvalue`, `padj`) always
+come from the unshrunken Wald test; when `shrink = TRUE` only
+`log2FoldChange` and `lfcSE` are the shrunken estimates. The estimator
+actually used is recorded in `attr(result, "shrink")`.
 
 ## Examples
 

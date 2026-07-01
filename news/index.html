@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,24 @@
       <small>Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.7.0" id="rnaflow-070-2026-07-01">RNAflow 0.7.0 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-070-2026-07-01"></a></h2>
+<div class="section level3">
+<h3 id="methodological-fixes-scientific-audit-0-7-0">Methodological fixes (scientific audit)<a class="anchor" aria-label="anchor" href="#methodological-fixes-scientific-audit-0-7-0"></a></h3>
+<ul><li>
+<strong>Inference vs. shrinkage separation (fixes a GSEA crash).</strong> <code><a href="../reference/run_deseq2.html">run_deseq2()</a></code> now always takes <code>stat</code> / <code>pvalue</code> / <code>padj</code> from the unshrunken Wald test and overlays only the shrunken <code>log2FoldChange</code> / <code>lfcSE</code>. Previously, apeglm shrinkage (the default) dropped the <code>stat</code> column, so the default GSEA ranking (<code>rank_by = "stat"</code>) errored. The estimator actually used is recorded in <code>attr(result, "shrink")</code> and shown in the DE tab.</li>
+<li>
+<strong>Covariate / batch adjustment in the app.</strong> The DE tab now has an optional “Adjust for” selector; the variable of interest stays the last design term so contrasts are unchanged, while covariates (e.g. batch) enter the model.</li>
+<li>
+<strong>Multiple-testing correction for module-trait correlations.</strong> <code><a href="../reference/module_trait_cor.html">module_trait_cor()</a></code> now returns BH-adjusted <code>padj</code>; <code><a href="../reference/fig_module_trait.html">fig_module_trait()</a></code> shows correlation with FDR significance stars.</li>
+<li>
+<strong>Transparent shrinkage fallback.</strong> When apeglm cannot be used for a given contrast (its coefficient is not in the model), the switch to <code>normal</code> shrinkage is now reported rather than silent.</li>
+<li>
+<strong>WGCNA soft-power fallback.</strong> When the scale-free fit does not reach the target (common at small sample sizes), <code><a href="../reference/wgcna_pick_power.html">wgcna_pick_power()</a></code> falls back to WGCNA’s sample-size-based default and flags it on the plot.</li>
+<li>
+<strong>Reproducibility.</strong> The R-script export records each contrast’s covariates; the HTML report now embeds full <code><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo()</a></code>. Both clarify that downstream (enrichment/WGCNA) steps use default parameters.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.2" id="rnaflow-062-2026-07-01">RNAflow 0.6.2 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-062-2026-07-01"></a></h2>
 <div class="section level3">

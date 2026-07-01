@@ -11,7 +11,7 @@ LFC shrinkage (apeglm by default)."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +85,8 @@ level_reference). Example: <code>c("condition", "Treatment", "Control")</code>.<
 
 
 <dt id="arg-shrink">shrink<a class="anchor" aria-label="anchor" href="#arg-shrink"></a></dt>
-<dd><p>logical, apply LFC shrinkage (recommended for visualization)</p></dd>
+<dd><p>logical, apply LFC shrinkage to the effect-size estimate
+(recommended for ranking / visualization). Inference is unaffected.</p></dd>
 
 
 <dt id="arg-shrink-type">shrink_type<a class="anchor" aria-label="anchor" href="#arg-shrink-type"></a></dt>
@@ -103,7 +104,10 @@ level_reference). Example: <code>c("condition", "Treatment", "Control")</code>.<
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>a tidy data.frame with columns: gene, baseMean, log2FoldChange,
-lfcSE, stat, pvalue, padj</p>
+lfcSE, stat, pvalue, padj. Inference columns (<code>stat</code>, <code>pvalue</code>, <code>padj</code>)
+always come from the unshrunken Wald test; when <code>shrink = TRUE</code> only
+<code>log2FoldChange</code> and <code>lfcSE</code> are the shrunken estimates. The estimator
+actually used is recorded in <code>attr(result, "shrink")</code>.</p>
     </div>
 
     <div class="section level2">
