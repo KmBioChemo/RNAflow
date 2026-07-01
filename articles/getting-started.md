@@ -3,7 +3,20 @@
 ## Overview
 
 RNAflow is an end-to-end bulk RNA-seq analysis platform. This vignette
-walks through the typical workflow using a small simulated dataset.
+walks through the typical workflow.
+
+To follow along with real data, the package bundles the published
+**airway** dataset (dexamethasone vs. control across 4 human cell
+lines):
+
+``` r
+
+counts <- read_counts(system.file("extdata", "demo_airway_counts.csv",
+                                  package = "RNAflow"))
+meta   <- read_metadata(system.file("extdata", "demo_airway_metadata.csv",
+                                    package = "RNAflow"),
+                        counts_samples = colnames(counts))
+```
 
 ## Launching the app
 

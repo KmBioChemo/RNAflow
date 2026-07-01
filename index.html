@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -156,6 +156,19 @@ sample2,Control,A
 sample3,Treatment,B
 ...</code></pre>
 </div>
+</div>
+<div class="section level2">
+<h2 id="demo-datasets">Demo datasets<a class="anchor" aria-label="anchor" href="#demo-datasets"></a>
+</h2>
+<p>Bundled in <code>inst/extdata/</code> (see <code>dev/make_demo_*.R</code> for how they are built):</p>
+<ul>
+<li>
+<strong><code>demo_airway_*.csv</code></strong> — a real, published human dataset (<a href="https://bioconductor.org/packages/airway/" class="external-link">airway</a>, Himes et al. 2014): airway smooth muscle cells treated with <strong>dexamethasone</strong> vs. control across <strong>4 cell lines</strong>. Organism = human; use <code>condition</code> as the design variable and adjust for <code>cell</code>. Good for demonstrating DE, covariate adjustment, and enrichment on genuine biology.</li>
+<li>
+<strong><code>demo_multi_*.csv</code></strong> — a <strong>simulated</strong> mouse factorial set (genotype × treatment, 6 groups) with a planted signal, for multi-contrast comparison and WGCNA. Organism = mouse; design variable <code>group</code>.</li>
+<li>
+<strong><code>demo_counts.csv</code> / <code>demo_metadata.csv</code></strong> — a minimal simulated 2-group set.</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="roadmap">Roadmap<a class="anchor" aria-label="anchor" href="#roadmap"></a>

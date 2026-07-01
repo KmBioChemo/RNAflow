@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,19 @@
       <small>Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.7.3" id="rnaflow-073-2026-07-01">RNAflow 0.7.3 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-073-2026-07-01"></a></h2>
+<div class="section level3">
+<h3 id="real-published-demo-dataset-airway-0-7-3">Real published demo dataset (airway)<a class="anchor" aria-label="anchor" href="#real-published-demo-dataset-airway-0-7-3"></a></h3>
+<ul><li>Added <strong><code>demo_airway_*.csv</code></strong>: the published <code>airway</code> dataset (Himes et al.
+<ol start="2014" style="list-style-type: decimal"><li>– human airway smooth muscle cells, dexamethasone vs. control across 4 cell lines (8 samples, ~17k genes, gene symbols). It complements the simulated demos and exercises real biology, covariate adjustment (<code>cell</code>), and enrichment (glucocorticoid response). Built by <code>dev/make_demo_airway.R</code> (Ensembl -&gt; symbol mapping, duplicate collapse, low-count filter).</li>
+</ol></li>
+<li>Tests validate all three bundled demo datasets load and validate cleanly.</li>
+<li>README, vignette and the app’s “Getting started” card document the demos.</li>
+<li>
+<code>airway</code> is only used by the (build-ignored) generator script, so it is not a package dependency.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.2" id="rnaflow-072-2026-07-01">RNAflow 0.7.2 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-072-2026-07-01"></a></h2>
 <div class="section level3">

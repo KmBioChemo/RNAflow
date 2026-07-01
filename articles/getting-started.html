@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,13 +69,21 @@
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
 <p>RNAflow is an end-to-end bulk RNA-seq analysis platform. This
-vignette walks through the typical workflow using a small simulated
-dataset.</p>
+vignette walks through the typical workflow.</p>
+<p>To follow along with real data, the package bundles the published
+<strong>airway</strong> dataset (dexamethasone vs. control across 4
+human cell lines):</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_counts.html">read_counts</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"demo_airway_counts.csv"</span>,</span>
+<span>                                  package <span class="op">=</span> <span class="st">"RNAflow"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">meta</span>   <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_metadata.html">read_metadata</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"demo_airway_metadata.csv"</span>,</span>
+<span>                                    package <span class="op">=</span> <span class="st">"RNAflow"</span><span class="op">)</span>,</span>
+<span>                        counts_samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="launching-the-app">Launching the app<a class="anchor" aria-label="anchor" href="#launching-the-app"></a>
 </h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/KmBioChemo/RNAflow" class="external-link">RNAflow</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/run_app.html">run_app</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>The app opens in your browser. The Data tab is the entry point —
@@ -88,7 +96,7 @@ upload a counts matrix and sample metadata, then run DESeq2.</p>
 <div class="section level3">
 <h3 id="step-1-read-and-validate-inputs">Step 1 — Read and validate inputs<a class="anchor" aria-label="anchor" href="#step-1-read-and-validate-inputs"></a>
 </h3>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_counts.html">read_counts</a></span><span class="op">(</span><span class="st">"path/to/counts.csv"</span><span class="op">)</span></span>
 <span><span class="va">meta</span>   <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_metadata.html">read_metadata</a></span><span class="op">(</span><span class="st">"path/to/metadata.csv"</span>,</span>
 <span>                       counts_samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -100,7 +108,7 @@ etc.).</p>
 <div class="section level3">
 <h3 id="step-2-differential-expression">Step 2 — Differential expression<a class="anchor" aria-label="anchor" href="#step-2-differential-expression"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_deseq2.html">run_deseq2</a></span><span class="op">(</span></span>
 <span>  <span class="va">counts</span>, <span class="va">meta</span>,</span>
 <span>  design   <span class="op">=</span> <span class="op">~</span> <span class="va">condition</span>,</span>
@@ -112,7 +120,7 @@ etc.).</p>
 <div class="section level3">
 <h3 id="step-3-visualize">Step 3 — Visualize<a class="anchor" aria-label="anchor" href="#step-3-visualize"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Static, publication-ready</span></span>
 <span><span class="va">p_pub</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fig_volcano.html">fig_volcano</a></span><span class="op">(</span><span class="va">res</span>, lfc_thr <span class="op">=</span> <span class="fl">1</span>, padj_thr <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>                     n_label <span class="op">=</span> <span class="fl">30</span>, mode <span class="op">=</span> <span class="st">"publication"</span><span class="op">)</span></span>
@@ -125,7 +133,7 @@ etc.).</p>
 <h3 id="step-4-heatmap-and-pca">Step 4 — Heatmap and PCA<a class="anchor" aria-label="anchor" href="#step-4-heatmap-and-pca"></a>
 </h3>
 <p>For heatmap and PCA you also need a normalized counts matrix:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vst</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/normalize_counts.html">normalize_counts</a></span><span class="op">(</span><span class="va">counts</span>, <span class="va">meta</span>, method <span class="op">=</span> <span class="st">"vst"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fig_heatmap.html">fig_heatmap</a></span><span class="op">(</span></span>
@@ -140,7 +148,7 @@ etc.).</p>
 <div class="section level3">
 <h3 id="step-5-functional-enrichment-gsea-ora">Step 5 – Functional enrichment (GSEA + ORA)<a class="anchor" aria-label="anchor" href="#step-5-functional-enrichment-gsea-ora"></a>
 </h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># GSEA against MSigDB Hallmark (organism: "human", "mouse", or "rat")</span></span>
 <span><span class="va">gene_sets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_gene_sets.html">get_gene_sets</a></span><span class="op">(</span><span class="st">"mouse"</span>, collection <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span></span>
 <span><span class="va">gsea</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_gsea.html">run_gsea</a></span><span class="op">(</span><span class="va">res</span>, <span class="va">gene_sets</span>, rank_by <span class="op">=</span> <span class="st">"stat"</span><span class="op">)</span></span>
@@ -154,7 +162,7 @@ etc.).</p>
 <div class="section level3">
 <h3 id="step-6-co-expression-network-wgcna">Step 6 – Co-expression network (WGCNA)<a class="anchor" aria-label="anchor" href="#step-6-co-expression-network-wgcna"></a>
 </h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">datExpr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wgcna_datexpr.html">wgcna_datexpr</a></span><span class="op">(</span><span class="va">vst</span>, n_genes <span class="op">=</span> <span class="fl">3000</span><span class="op">)</span></span>
 <span><span class="va">sft</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wgcna_pick_power.html">wgcna_pick_power</a></span><span class="op">(</span><span class="va">datExpr</span><span class="op">)</span>             <span class="co"># scale-free soft threshold</span></span>
 <span><span class="va">wg</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_wgcna.html">run_wgcna</a></span><span class="op">(</span><span class="va">datExpr</span>, power <span class="op">=</span> <span class="va">sft</span><span class="op">$</span><span class="va">suggested</span><span class="op">)</span></span>
@@ -169,7 +177,7 @@ etc.).</p>
 </h2>
 <p>Save your full analysis state to a <code>.rnaflow.rds</code> file, or
 export a reproducible script / self-contained HTML report:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/empty_project.html">empty_project</a></span><span class="op">(</span><span class="st">"my_study"</span><span class="op">)</span></span>
 <span><span class="va">p</span><span class="op">$</span><span class="va">counts</span>     <span class="op">&lt;-</span> <span class="va">counts</span></span>
 <span><span class="va">p</span><span class="op">$</span><span class="va">metadata</span>   <span class="op">&lt;-</span> <span class="va">meta</span></span>
