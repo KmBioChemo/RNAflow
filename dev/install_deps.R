@@ -17,6 +17,11 @@ if (!file.exists("DESCRIPTION")) {
        call. = FALSE)
 }
 
+# Some Bioconductor annotation packages are large (e.g. reactome.db is ~455 MB)
+# and blow past R's default 60/300 s download timeout, failing with a cryptic
+# "download had non-zero exit status". Give downloads plenty of headroom.
+options(timeout = max(3600, getOption("timeout")))
+
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager", repos = "https://cloud.r-project.org")
 }

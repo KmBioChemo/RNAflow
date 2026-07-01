@@ -12,9 +12,15 @@ _"Lis dev/HANDOFF.md, NEWS.md et le git log, puis on continue."_
 
 ## Current state (keep this updated)
 
-- **Version 0.11.1**, all pushed to `origin/main`. `git log --oneline` is the record.
-- **341 tests pass / 0 fail** (`devtools::test()`). Only 3 `skip_on_cran`.
+- **Version 0.11.2**, `git log --oneline` is the record.
+- **354 tests pass / 0 fail / 0 skip** (`devtools::test()`) once decoupleR +
+  OmnipathR are installed.
 - App launches with `RNAflow::run_app()`.
+- **Windows dev box upgraded to R 4.4.3 / Bioconductor 3.20** (from R 4.3.2 /
+  Bioc 3.18) on 2026-07-02, to get a modern OmnipathR that works with current
+  strict-join dplyr -- see the OmniPath gotcha below. rtools44 was already
+  installed and is reused; R 4.3.2 is still on disk but off the system PATH.
+  **The Mac still needs the same R/Bioc bump** to run the Activity tab.
 
 ## What's built (tabs)
 
@@ -35,11 +41,22 @@ decoupleR Activity tab; crosstalk Explore tab. See `NEWS.md` for details.
 
 ## Gotchas to remember
 
-- **OmniPath outages** break the Activity tab's **TF** network (CollecTRI /
-  DoRothEA) via a broken offline static-table fallback (`unnest_evidences`:
-  "argument est de longueur nulle"). PROGENy (pathways) is unaffected. Not our
-  bug — it recovers when the OmniPath server is back up. `get_tf_network()`
-  already surfaces a clear message.
+- **Activity tab / OmnipathR (the original "OmniPath outage" gotcha was
+  mis-diagnosed).** `decoupleR` delegates its CollecTRI / PROGENy downloads to
+  **OmnipathR**, which it only *Suggests* — so if OmnipathR is missing *both*
+  TF and pathway activity fail. Worse, on a fresh install where bleeding-edge
+  CRAN dplyr (>= 1.1, strict joins) meets an old Bioc-pinned OmnipathR (3.10.1
+  on Bioc 3.18 / R 4.3.2), OmnipathR's internal organisms-table `full_join`
+  errors ("Can't join `ncbi_tax_id` ... incompatible types"). The fix is a
+  modern OmnipathR, i.e. a modern R/Bioc (done on Windows: R 4.4.3 / Bioc 3.20
+  -> OmnipathR 3.14.0). *After* that, PROGENy pathway activity works and
+  recovers the expected steroid signal; the **TF (CollecTRI)** network can still
+  hit a *genuine* transient OmniPath issue — the live query fails, it falls back
+  to a broken static table ("argument est de longueur nulle"), and recovers when
+  the server is back. Diagnose by calling `decoupleR::get_progeny()` /
+  `get_collectri()` raw (no tryCatch) to see the true error. `get_tf_network()`
+  / `get_pathway_network()` now check for OmnipathR and append the underlying
+  error instead of always blaming a server.
 - **AI feature:** no official Anthropic R SDK → uses `httr2` (POST /v1/messages,
   model `claude-opus-4-8`, adaptive thinking). API key is **session-only**
   (password field) or `ANTHROPIC_API_KEY` env var — **never committed**.

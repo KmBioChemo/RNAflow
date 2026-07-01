@@ -1,3 +1,24 @@
+# RNAflow 0.11.2 (2026-07-02)
+
+## Activity inference: honest errors + declared OmnipathR dependency
+
+- **Real root cause of the "broken Activity tab" surfaced.** `decoupleR`
+  delegates its CollecTRI / PROGENy network downloads to **OmnipathR**, but only
+  *Suggests* it -- so a `decoupleR`-only install (as produced by the old
+  `install_deps.R`) left both TF and pathway activity failing. The failure was
+  further masked: the `tryCatch` in `get_tf_network()` /
+  `get_pathway_network()` rewrote *every* error as "OmniPath temporarily
+  unavailable", hiding a missing package or a client-side version clash (old
+  OmnipathR vs. modern strict-join dplyr).
+- **`get_tf_network()` / `get_pathway_network()` now check for OmnipathR
+  explicitly** (with an install hint) and **append the underlying error** to
+  their message instead of blaming a server outage unconditionally.
+- **`OmnipathR` added to `Suggests`** so the dependency is declared and
+  installed by `dev/install_deps.R`.
+- **`dev/install_deps.R` raises the download timeout to 3600 s** so large
+  Bioconductor annotation packages (e.g. `reactome.db`, ~455 MB) fetch reliably
+  on a fresh machine.
+
 # RNAflow 0.11.1 (2026-07-01)
 
 ## Robust activity-network fetching

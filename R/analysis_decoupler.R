@@ -49,14 +49,20 @@ get_tf_network <- function(organism) {
     stop("Package 'decoupleR' is required for activity inference. ",
          "Install with: BiocManager::install('decoupleR')", call. = FALSE)
   }
+  if (!requireNamespace("OmnipathR", quietly = TRUE)) {
+    stop("Package 'OmnipathR' is required to fetch the CollecTRI network ",
+         "(decoupleR delegates the download to it). ",
+         "Install with: BiocManager::install('OmnipathR')", call. = FALSE)
+  }
   net <- tryCatch(
     as.data.frame(decoupleR::get_collectri(
       organism = decoupler_organism(organism), split_complexes = FALSE)),
     error = function(e) stop(
-      "Could not fetch the CollecTRI transcription-factor network. The ",
-      "OmniPath web service is likely temporarily unavailable (its offline ",
-      "fallback is broken upstream). Pathway activity (PROGENy) still works -- ",
-      "please retry TF activity later.", call. = FALSE))
+      "Could not fetch the CollecTRI transcription-factor network. This is ",
+      "usually a temporary OmniPath server issue (its offline static-table ",
+      "fallback is broken upstream); pathway activity (PROGENy) is unaffected, ",
+      "so retry TF activity later. Underlying error: ",
+      conditionMessage(e), call. = FALSE))
   if (!is.data.frame(net) || nrow(net) == 0) {
     stop("The CollecTRI network came back empty (OmniPath may be down). ",
          "Try again later, or use pathway activity.", call. = FALSE)
@@ -75,13 +81,18 @@ get_pathway_network <- function(organism, top = 500) {
     stop("Package 'decoupleR' is required for activity inference. ",
          "Install with: BiocManager::install('decoupleR')", call. = FALSE)
   }
+  if (!requireNamespace("OmnipathR", quietly = TRUE)) {
+    stop("Package 'OmnipathR' is required to fetch the PROGENy network ",
+         "(decoupleR delegates the download to it). ",
+         "Install with: BiocManager::install('OmnipathR')", call. = FALSE)
+  }
   net <- tryCatch(
     as.data.frame(decoupleR::get_progeny(
       organism = decoupler_organism(organism), top = top)),
     error = function(e) stop(
       "Could not fetch the PROGENy pathway network. The OmniPath web service ",
-      "may be temporarily unavailable -- please try again later.",
-      call. = FALSE))
+      "may be temporarily unavailable -- please try again later. ",
+      "Underlying error: ", conditionMessage(e), call. = FALSE))
   if (!is.data.frame(net) || nrow(net) == 0) {
     stop("The PROGENy network came back empty (OmniPath may be down). ",
          "Try again later.", call. = FALSE)
