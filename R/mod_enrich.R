@@ -284,5 +284,9 @@ mod_enrich_server <- function(id, de_reactive, organism_reactive,
                     input$enr_w, input$enr_h, as.integer(input$enr_dpi))
       }
     )
+
+    # Expose the latest enrichment result (list(method, table, ...)) so other
+    # tabs (e.g. AI interpretation) can read it.
+    result
   })
 }

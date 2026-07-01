@@ -98,6 +98,13 @@ reference:
   - enrich_modules
   - fig_module_enrichment
 
+- title: AI interpretation
+  desc: Build a prompt from a contrast and ask the Claude API to interpret it.
+  contents:
+  - build_interpret_prompt
+  - call_claude
+  - interpret_results
+
 - title: Projects & reproducibility
   desc: Save/load sessions, export a Methods script and an HTML report.
   contents:
