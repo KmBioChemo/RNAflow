@@ -98,6 +98,12 @@ reference:
   - enrich_modules
   - fig_module_enrichment
 
+- title: Linked explorer
+  desc: crosstalk-linked interactive volcano + table.
+  contents:
+  - linked_volcano_df
+  - fig_linked_volcano
+
 - title: Activity inference
   desc: Transcription-factor (CollecTRI) and pathway (PROGENy) activity via decoupleR.
   contents:

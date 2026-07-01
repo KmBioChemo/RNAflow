@@ -95,6 +95,7 @@ app_ui <- function() {
       )
     ),
     bslib::nav_panel("Volcano", mod_volcano_ui("volcano")),
+    bslib::nav_panel("Explore", mod_linked_ui("linked")),
     bslib::nav_panel("Heatmap", mod_heatmap_ui("heatmap")),
     bslib::nav_panel("PCA",     mod_pca_ui("pca")),
     bslib::nav_panel("QC",      mod_qc_ui("qc")),
@@ -199,6 +200,7 @@ app_server <- function(input, output, session) {
   })
 
   mod_volcano_server("volcano", de_combined)
+  mod_linked_server("linked", de_combined)
   mod_heatmap_server("heatmap", de_combined, counts_norm, data_mod$metadata,
                      active_contrast_params)
   mod_pca_server("pca", counts_norm, data_mod$metadata, active_contrast_params)
