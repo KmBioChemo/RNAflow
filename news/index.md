@@ -1,5 +1,26 @@
 # Changelog
 
+## RNAflow 0.6.0 (2026-07-01)
+
+### Signature “omics” visualizations (Nature-style)
+
+- **Enrichment map** (`fig_enrich_map`): enriched pathways drawn as a
+  network, linked by shared genes (Jaccard), nodes colored by NES (GSEA)
+  or -log10(FDR) (ORA) and sized by set size. Built on ggraph / igraph.
+- **GSEA ridgeline** (`fig_gsea_ridge`): stacked density ridges of the
+  gene ranking metric per top pathway, colored by NES. Built on
+  ggridges.
+- **WGCNA module network** (`fig_module_network`): a module’s
+  co-expression network with hub genes at the center, sized/colored by
+  module membership (kME). Built on ggraph.
+- **Enhanced volcano**: optional `glow` halo on significant genes.
+- **Palette system** (`fig_palettes`): a Nature-style qualitative
+  palette plus perceptually-uniform continuous scales (via scico,
+  viridis fallback) used across the new figures.
+- Wired into the **Enrichment** (map + ridgeline), **Network** (module
+  network) and **Volcano** (glow) tabs.
+- New Suggests: ggraph, igraph, tidygraph, ggridges, scico.
+
 ## RNAflow 0.5.1 (2026-07-01)
 
 ### Quality pass — clean `R CMD check`

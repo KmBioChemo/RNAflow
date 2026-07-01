@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,24 @@
       <small>Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.0" id="rnaflow-060-2026-07-01">RNAflow 0.6.0 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-060-2026-07-01"></a></h2>
+<div class="section level3">
+<h3 id="signature-omics-visualizations-nature-style-0-6-0">Signature “omics” visualizations (Nature-style)<a class="anchor" aria-label="anchor" href="#signature-omics-visualizations-nature-style-0-6-0"></a></h3>
+<ul><li>
+<strong>Enrichment map</strong> (<code>fig_enrich_map</code>): enriched pathways drawn as a network, linked by shared genes (Jaccard), nodes colored by NES (GSEA) or -log10(FDR) (ORA) and sized by set size. Built on ggraph / igraph.</li>
+<li>
+<strong>GSEA ridgeline</strong> (<code>fig_gsea_ridge</code>): stacked density ridges of the gene ranking metric per top pathway, colored by NES. Built on ggridges.</li>
+<li>
+<strong>WGCNA module network</strong> (<code>fig_module_network</code>): a module’s co-expression network with hub genes at the center, sized/colored by module membership (kME). Built on ggraph.</li>
+<li>
+<strong>Enhanced volcano</strong>: optional <code>glow</code> halo on significant genes.</li>
+<li>
+<strong>Palette system</strong> (<code>fig_palettes</code>): a Nature-style qualitative palette plus perceptually-uniform continuous scales (via scico, viridis fallback) used across the new figures.</li>
+<li>Wired into the <strong>Enrichment</strong> (map + ridgeline), <strong>Network</strong> (module network) and <strong>Volcano</strong> (glow) tabs.</li>
+<li>New Suggests: ggraph, igraph, tidygraph, ggridges, scico.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.1" id="rnaflow-051-2026-07-01">RNAflow 0.5.1 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-051-2026-07-01"></a></h2>
 <div class="section level3">

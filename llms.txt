@@ -252,6 +252,10 @@ GSEA (fgsea / MSigDB) and ORA (clusterProfiler; GO / KEGG / Reactome).
   : Enrichment lollipop bar
 - [`fig_gsea_curve()`](https://KmBioChemo.github.io/RNAflow/reference/fig_gsea_curve.md)
   : GSEA running-enrichment curve
+- [`fig_enrich_map()`](https://KmBioChemo.github.io/RNAflow/reference/fig_enrich_map.md)
+  : Enrichment map (pathway network)
+- [`fig_gsea_ridge()`](https://KmBioChemo.github.io/RNAflow/reference/fig_gsea_ridge.md)
+  : GSEA ridgeline plot
 
 ## Co-expression networks (WGCNA)
 
@@ -279,6 +283,8 @@ GSEA (fgsea / MSigDB) and ORA (clusterProfiler; GO / KEGG / Reactome).
   : Module size bar chart
 - [`fig_eigengene()`](https://KmBioChemo.github.io/RNAflow/reference/fig_eigengene.md)
   : Module eigengene profile
+- [`fig_module_network()`](https://KmBioChemo.github.io/RNAflow/reference/fig_module_network.md)
+  : Module co-expression network
 
 ## Projects & reproducibility
 

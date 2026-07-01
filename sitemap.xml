@@ -36,6 +36,7 @@
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/draw_compare.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/embed_fig.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/empty_project.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/enrich_network_data.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/enrich_plot_df.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/export_code.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_compare.html</loc></url>
@@ -43,12 +44,17 @@
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_enrich.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_enrich_bar.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_enrich_dot.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_enrich_map.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_enrich_net.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_export.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_gsea_curve.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_gsea_ridge.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_heatmap.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_lfc_heatmap.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_module_network.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_module_sizes.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_module_trait.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_palettes.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_pca.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_soft_threshold.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_theme.html</loc></url>
@@ -58,6 +64,7 @@
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_volcano_grid.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_volcano_interactive.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_wgcna.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_wgcna_net.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/generate_r_script.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/get_gene_sets.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/get_orgdb.html</loc></url>
@@ -86,6 +93,7 @@
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/module_summary.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/module_trait_cor.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/normalize_counts.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/omics_ramp.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/organism_info.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/pipe.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/prep_volcano_data.html</loc></url>
@@ -97,6 +105,7 @@
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/read_metadata.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/report.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/rnaflow-internal.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/rnaflow_colors.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/rnaflow_recent_dir.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/run_app.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/run_deseq2.html</loc></url>
@@ -108,6 +117,9 @@
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/save_ggplot.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/save_pheatmap.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/save_project.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/scale_color_rnaflow.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/scale_fill_omics_c.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/scale_fill_omics_div.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/session_manifest.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/supported_organisms.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/symbols_to_entrez.html</loc></url>
