@@ -67,13 +67,22 @@ app_ui <- function() {
               shiny::p("Already have DE results from elsewhere? Skip to the third upload box."),
               shiny::tags$hr(),
               shiny::p(shiny::tags$small(
-                shiny::strong("Demo data: "),
-                "a simple 2-group set (", shiny::tags$code("demo_counts.csv"),
-                ") and a factorial set with 6 groups for multi-contrast testing (",
-                shiny::tags$code("demo_multi_counts.csv"),
-                ") live in the package's ", shiny::tags$code("inst/extdata/"), " folder. ",
-                "For the factorial set, use ", shiny::tags$code("group"),
-                " as the design variable and accumulate several contrasts, then open the Compare tab."
+                shiny::strong("Demo data"), " (in the package's ",
+                shiny::tags$code("inst/extdata/"), " folder):",
+                shiny::tags$ul(
+                  shiny::tags$li(shiny::tags$code("demo_airway_counts.csv"),
+                    " -- a real, published human dataset (airway, ",
+                    "dexamethasone vs. control across 4 cell lines). Organism = ",
+                    shiny::strong("Human"), "; design ",
+                    shiny::tags$code("condition"), ", adjust for ",
+                    shiny::tags$code("cell"), "."),
+                  shiny::tags$li(shiny::tags$code("demo_multi_counts.csv"),
+                    " -- a simulated mouse factorial set (6 groups) for ",
+                    "multi-contrast / WGCNA testing. Organism = ",
+                    shiny::strong("Mouse"), "; design ",
+                    shiny::tags$code("group"), "."),
+                  shiny::tags$li(shiny::tags$code("demo_counts.csv"),
+                    " -- a minimal 2-group simulated set."))
               )),
               shiny::tags$hr(),
               shiny::p(shiny::tags$small(shiny::tags$em(

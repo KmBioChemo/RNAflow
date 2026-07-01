@@ -111,6 +111,14 @@ sample3,Treatment,B
 ...
 ```
 
+## Demo datasets
+
+Bundled in `inst/extdata/` (see `dev/make_demo_*.R` for how they are built):
+
+- **`demo_airway_*.csv`** — a real, published human dataset ([airway](https://bioconductor.org/packages/airway/), Himes et al. 2014): airway smooth muscle cells treated with **dexamethasone** vs. control across **4 cell lines**. Organism = human; use `condition` as the design variable and adjust for `cell`. Good for demonstrating DE, covariate adjustment, and enrichment on genuine biology.
+- **`demo_multi_*.csv`** — a **simulated** mouse factorial set (genotype × treatment, 6 groups) with a planted signal, for multi-contrast comparison and WGCNA. Organism = mouse; design variable `group`.
+- **`demo_counts.csv` / `demo_metadata.csv`** — a minimal simulated 2-group set.
+
 ## Roadmap
 
 - **Phase 1** ✅ — Modular package, DESeq2, volcano, heatmap, PCA, publication mode, validation, tests

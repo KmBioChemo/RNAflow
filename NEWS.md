@@ -1,3 +1,18 @@
+# RNAflow 0.7.3 (2026-07-01)
+
+## Real published demo dataset (airway)
+
+- Added **`demo_airway_*.csv`**: the published `airway` dataset (Himes et al.
+  2014) -- human airway smooth muscle cells, dexamethasone vs. control across
+  4 cell lines (8 samples, ~17k genes, gene symbols). It complements the
+  simulated demos and exercises real biology, covariate adjustment (`cell`),
+  and enrichment (glucocorticoid response). Built by `dev/make_demo_airway.R`
+  (Ensembl -> symbol mapping, duplicate collapse, low-count filter).
+- Tests validate all three bundled demo datasets load and validate cleanly.
+- README, vignette and the app's "Getting started" card document the demos.
+- `airway` is only used by the (build-ignored) generator script, so it is not
+  a package dependency.
+
 # RNAflow 0.7.2 (2026-07-01)
 
 ## Audit polish
