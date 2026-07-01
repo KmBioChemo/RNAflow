@@ -1,0 +1,197 @@
+# Changelog
+
+## RNAflow 0.5.1 (2026-07-01)
+
+### Quality pass — clean `R CMD check`
+
+The package now passes `R CMD check` with 0 errors / 0 warnings (the
+only NOTE is an environment “unable to verify current time” artifact).
+
+- **Documentation**: generated the full `man/` (123 Rd pages) via
+  roxygen2; roxygen now owns `NAMESPACE`.
+- **Portability**: replaced all non-ASCII characters in R code with
+  ASCII equivalents.
+- **Dependencies**: added the actually-used `magrittr`, `htmlwidgets`
+  (Imports) and `AnnotationDbi`, `withr`, `apeglm`, `ashr` (Suggests);
+  removed 8 unused Imports (golem, config, purrr, tibble, tidyr, readr,
+  shinyjs, S4Vectors); pruned unused Suggests.
+- **Fixes**: `importFrom(utils, head, tail)`; corrected a broken Rd
+  cross-reference; `.Rbuildignore` for `dev/`, `.claude/`, `LICENSE.md`;
+  fixed the GitHub owner in URLs (`KmBioChemo/RNAflow`); cleaned the
+  author record.
+
+## RNAflow 0.5.0 (2026-07-01)
+
+### Phase 5 — Reproducibility (roadmap complete)
+
+- **Reproducible R script export**
+  ([`generate_r_script()`](https://KmBioChemo.github.io/RNAflow/reference/generate_r_script.md)):
+  turns a session into a runnable, commented .R script that reproduces
+  the whole pipeline (load → DESeq2 per contrast → figures → GSEA/ORA →
+  WGCNA → sessionInfo) with RNAflow’s public API — ready for a Methods
+  section. The output is guaranteed to parse.
+- **Self-contained HTML report**
+  ([`build_report_html()`](https://KmBioChemo.github.io/RNAflow/reference/build_report_html.md)):
+  a single-file report with parameters, a DE summary table, per-contrast
+  volcanoes and the cross-contrast signature heatmap embedded as base64,
+  the reproducible script, and the package manifest. Built with
+  `htmltools` — no pandoc / Quarto toolchain required.
+- **Report tab** (`mod_report`): download the .R script or the HTML
+  report, preview the script, and view session package versions.
+- [`assemble_project()`](https://KmBioChemo.github.io/RNAflow/reference/assemble_project.md)
+  helper shared by the project-manager and report tabs.
+- Note: in place of a full `renv` lockfile (renv not present), the
+  report embeds a package-version manifest capturing the analysis
+  environment.
+
+## RNAflow 0.4.0 (2026-06-30)
+
+### Phase 4 — WGCNA co-expression networks
+
+- **Network tab** (`mod_wgcna`): a guided workflow — pick the
+  soft-threshold power, detect modules, then explore module-trait
+  correlations, module sizes, eigengene profiles, hub genes, and
+  per-module GO enrichment.
+- **Pure layer** (`analysis_wgcna.R`):
+  [`wgcna_datexpr()`](https://KmBioChemo.github.io/RNAflow/reference/wgcna_datexpr.md)
+  (top-variance gene selection + transpose),
+  [`wgcna_pick_power()`](https://KmBioChemo.github.io/RNAflow/reference/wgcna_pick_power.md)
+  (scale-free fit),
+  [`run_wgcna()`](https://KmBioChemo.github.io/RNAflow/reference/run_wgcna.md)
+  (blockwise modules + eigengenes),
+  [`build_traits()`](https://KmBioChemo.github.io/RNAflow/reference/build_traits.md),
+  [`module_trait_cor()`](https://KmBioChemo.github.io/RNAflow/reference/module_trait_cor.md),
+  [`hub_genes()`](https://KmBioChemo.github.io/RNAflow/reference/hub_genes.md)
+  (signed kME),
+  [`module_gene_list()`](https://KmBioChemo.github.io/RNAflow/reference/module_gene_list.md),
+  [`module_summary()`](https://KmBioChemo.github.io/RNAflow/reference/module_summary.md).
+  A
+  [`with_wgcna_cor()`](https://KmBioChemo.github.io/RNAflow/reference/with_wgcna_cor.md)
+  helper works around WGCNA’s `cor` masking so the package works without
+  attaching WGCNA.
+- **Figures** (`fig_wgcna.R`):
+  [`fig_soft_threshold()`](https://KmBioChemo.github.io/RNAflow/reference/fig_soft_threshold.md),
+  [`fig_module_trait()`](https://KmBioChemo.github.io/RNAflow/reference/fig_module_trait.md)
+  (correlation heatmap),
+  [`fig_module_sizes()`](https://KmBioChemo.github.io/RNAflow/reference/fig_module_sizes.md),
+  [`fig_eigengene()`](https://KmBioChemo.github.io/RNAflow/reference/fig_eigengene.md).
+- **Module enrichment reuses phase 3**: hub modules feed
+  [`run_ora()`](https://KmBioChemo.github.io/RNAflow/reference/run_ora.md)
+  for GO Biological Process terms.
+- On the demo, modules recover the planted biology — an LPS/inflammation
+  module (hub genes Tlr2, Cxcl2, Icam1, Ifih1) tracking treatment, a
+  genotype module, and the batch effect isolated into grey.
+- Added `WGCNA` (BiocManager) to the environment.
+
+## RNAflow 0.3.1 (2026-06-30)
+
+### Enrichment UX
+
+- The Enrichment tab now detects an **organism / species mismatch**: if
+  almost none of the DE gene symbols map to the selected organism’s
+  annotation, it shows a clear message pointing to the Organism setting
+  on the Data tab instead of silently returning zero enriched terms.
+
+## RNAflow 0.3.0 (2026-06-30)
+
+### Phase 3 — Functional enrichment
+
+- **GSEA**
+  ([`run_gsea()`](https://KmBioChemo.github.io/RNAflow/reference/run_gsea.md),
+  via `fgsea`) against MSigDB collections
+  ([`get_gene_sets()`](https://KmBioChemo.github.io/RNAflow/reference/get_gene_sets.md),
+  via `msigdbr`): Hallmark, Reactome / KEGG (C2), GO BP/MF/CC (C5). Gene
+  ranking by Wald statistic, signed -log10(p), or log2FC
+  ([`rank_genes()`](https://KmBioChemo.github.io/RNAflow/reference/rank_genes.md)).
+- **ORA**
+  ([`run_ora()`](https://KmBioChemo.github.io/RNAflow/reference/run_ora.md),
+  via `clusterProfiler` / `ReactomePA`) against GO, KEGG and Reactome,
+  with automatic symbol→ENTREZ conversion.
+- **Per-organism annotation** (`utils_annotation.R`): human / mouse /
+  rat → org.Hs/Mm/Rn.eg.db, MSigDB species, KEGG / Reactome organism
+  codes.
+- **Figures** (`fig_enrich.R`): enrichment dotplot, -log10(FDR) bar, and
+  the GSEA running-enrichment curve — all theme-aware with publication
+  mode.
+- **Enrichment tab** (`mod_enrich`): runs GSEA / ORA on the active
+  contrast, with results table and figure export.
+- **Richer demo**: `dev/make_demo_multi.R` now seeds the planted DE
+  modules from real MSigDB Hallmark sets (TNFA/NF-κB, inflammatory &
+  interferon responses, OXPHOS, E2F), so the whole pipeline — DE →
+  multi-contrast → enrichment — tells one coherent inflammation/rescue
+  story.
+
+## RNAflow 0.2.0 (2026-06-30)
+
+### Phase 2 — Project manager + multi-contrast
+
+- **Named contrast store.** Every DESeq2 run is now saved as a named
+  contrast (`"<var>: <treated> vs <reference>"`); an active-contrast
+  selector in the navbar drives the Volcano / Heatmap / PCA tabs.
+  Uploaded pre-computed DE tables are mirrored into the store too.
+- **Compare tab.** New multi-contrast views over the store:
+  - Venn diagram
+    ([`fig_venn()`](https://KmBioChemo.github.io/RNAflow/reference/fig_venn.md),
+    via `eulerr`) for 2-4 contrasts
+  - UpSet plot
+    ([`fig_upset()`](https://KmBioChemo.github.io/RNAflow/reference/fig_upset.md),
+    via `ComplexHeatmap`) for any number
+  - Side-by-side volcano grid
+    ([`fig_volcano_grid()`](https://KmBioChemo.github.io/RNAflow/reference/fig_volcano_grid.md))
+  - log2FoldChange signature heatmap
+    ([`fig_lfc_heatmap()`](https://KmBioChemo.github.io/RNAflow/reference/fig_lfc_heatmap.md))
+    with shared significance thresholds, direction filter, and figure
+    export.
+- **Project manager tab.** Save the full session (counts, metadata,
+  organism, all contrasts) to a `.rnaflow.rds` file, reload one, and
+  re-open recent projects from a per-user cache.
+- **New pure functions** (testable, no Shiny):
+  [`contrast_sig_genes()`](https://KmBioChemo.github.io/RNAflow/reference/contrast_sig_genes.md),
+  [`contrast_sig_sets()`](https://KmBioChemo.github.io/RNAflow/reference/contrast_sig_sets.md),
+  [`contrast_lfc_matrix()`](https://KmBioChemo.github.io/RNAflow/reference/contrast_lfc_matrix.md),
+  plus the `fig_compare` family and the
+  [`save_compare()`](https://KmBioChemo.github.io/RNAflow/reference/save_compare.md)
+  exporter.
+- Added `eulerr` (Suggests) and `grid` (Imports) dependencies.
+
+## RNAflow 0.1.2 (2026-06-30)
+
+### Bug fixes
+
+- Eliminate `Error in &&: 'length = 2000' in coercion to 'logical(1)'`
+  in the Volcano tab by replacing fragile multi-clause `&&` chains
+  around axis-limit checks (`x_min`, `x_max`, `y_max`) with new helpers
+  [`is_pos_scalar()`](https://KmBioChemo.github.io/RNAflow/reference/is_pos_scalar.md)
+  and
+  [`is_num_scalar()`](https://KmBioChemo.github.io/RNAflow/reference/is_num_scalar.md).
+  Guarantees the input is a finite scalar before any comparison.
+- Harden `%||%` to handle NULL, empty, NA, and non-finite numerics
+  uniformly; leave longer vectors alone.
+
+## RNAflow 0.1.1 (2026-06-30)
+
+### Bug fixes
+
+- Fix `'length = N' in coercion to 'logical(1)'` warnings in the Volcano
+  tab (R 4.3+ strict mode). NAs in `padj` / `log2FoldChange` are now
+  handled explicitly in regulation classification, both in
+  [`prep_volcano_data()`](https://KmBioChemo.github.io/RNAflow/reference/prep_volcano_data.md)
+  and in the volcano module’s stats / DE table outputs.
+- Graceful fallback when `apeglm` is not installed:
+  [`run_deseq2()`](https://KmBioChemo.github.io/RNAflow/reference/run_deseq2.md)
+  now falls back to `"normal"` shrinkage with an informative message
+  instead of throwing.
+
+## RNAflow 0.1.0 (2026-06-30)
+
+Initial package-structured release. Refactor of the original `app.R`
+single-file Shiny app into a modular R package:
+
+- Pure utility / figure / analysis layer (testable without Shiny)
+- 5 Shiny modules (data, DE, volcano, heatmap, PCA)
+- Strict input validation with explicit error messages
+- DESeq2 integration (auto-contrast, LFC shrinkage)
+- Exploration ↔︎ Publication figure modes
+- Project save/load (`.rnaflow.rds`)
+- `testthat` test suite
+- Demo dataset (2000 genes × 12 samples)
