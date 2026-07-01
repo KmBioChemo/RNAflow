@@ -52,6 +52,17 @@ Volcano, heatmap and PCA, with exploration / publication modes.
 - [`compute_pca()`](https://KmBioChemo.github.io/RNAflow/reference/compute_pca.md)
   : Compute PCA scores
 
+## QC & diagnostics
+
+- [`fig_pval_hist()`](https://KmBioChemo.github.io/RNAflow/reference/fig_pval_hist.md)
+  : P-value histogram
+- [`fig_ma()`](https://KmBioChemo.github.io/RNAflow/reference/fig_ma.md)
+  : MA plot
+- [`fig_sample_cor()`](https://KmBioChemo.github.io/RNAflow/reference/fig_sample_cor.md)
+  : Sample-sample correlation heatmap
+- [`fig_lib_sizes()`](https://KmBioChemo.github.io/RNAflow/reference/fig_lib_sizes.md)
+  : Library-size bar chart
+
 ## Themes & figure export
 
 - [`fig_theme()`](https://KmBioChemo.github.io/RNAflow/reference/fig_theme.md)
@@ -152,6 +163,8 @@ Save/load sessions, export a Methods script and an HTML report.
   : Load a project from disk
 - [`generate_r_script()`](https://KmBioChemo.github.io/RNAflow/reference/generate_r_script.md)
   : Generate a reproducible R script for an analysis
+- [`generate_methods_text()`](https://KmBioChemo.github.io/RNAflow/reference/generate_methods_text.md)
+  : Generate a Methods paragraph for an analysis
 - [`build_report_html()`](https://KmBioChemo.github.io/RNAflow/reference/build_report_html.md)
   : Build a standalone HTML report for an analysis session
 
@@ -180,6 +193,9 @@ UI + server pairs, one per feature.
 - [`mod_project_ui()`](https://KmBioChemo.github.io/RNAflow/reference/mod_project.md)
   [`mod_project_server()`](https://KmBioChemo.github.io/RNAflow/reference/mod_project.md)
   : Project manager module
+- [`mod_qc_ui()`](https://KmBioChemo.github.io/RNAflow/reference/mod_qc.md)
+  [`mod_qc_server()`](https://KmBioChemo.github.io/RNAflow/reference/mod_qc.md)
+  : QC / diagnostics module
 - [`mod_report_ui()`](https://KmBioChemo.github.io/RNAflow/reference/mod_report.md)
   [`mod_report_server()`](https://KmBioChemo.github.io/RNAflow/reference/mod_report.md)
   : Reproducibility / report module

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,18 @@
       <small>Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.8.0" id="rnaflow-080-2026-07-01">RNAflow 0.8.0 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-080-2026-07-01"></a></h2>
+<div class="section level3">
+<h3 id="qc-diagnostics-gene-id-auto-mapping-methods-generator-0-8-0">QC diagnostics, gene-ID auto-mapping, Methods generator<a class="anchor" aria-label="anchor" href="#qc-diagnostics-gene-id-auto-mapping-methods-generator-0-8-0"></a></h3>
+<ul><li>
+<strong>QC / Diagnostics tab</strong> (<code>mod_qc</code>, <code>fig_qc.R</code>): p-value histogram (model calibration), MA plot, sample-sample correlation heatmap, and library-size bar chart – standard checks to run before interpreting results.</li>
+<li>
+<strong>Automatic gene-ID conversion.</strong> The Enrichment tab now detects Ensembl or ENTREZ identifiers and maps them to gene symbols (<code><a href="../reference/map_de_to_symbols.html">map_de_to_symbols()</a></code>, <code><a href="../reference/guess_id_type.html">guess_id_type()</a></code>), collapsing duplicates, so enrichment works regardless of the input ID type.</li>
+<li>
+<strong>Methods paragraph generator</strong> (<code><a href="../reference/generate_methods_text.html">generate_methods_text()</a></code>): a prose summary of the analysis naming the tools, their versions, and the exact parameters used – downloadable from the Report tab, ready to adapt for a manuscript.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.3" id="rnaflow-073-2026-07-01">RNAflow 0.7.3 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-073-2026-07-01"></a></h2>
 <div class="section level3">

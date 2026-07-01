@@ -6,9 +6,10 @@
 **RNAflow** is a modular Shiny application built as a proper R package
 for end-to-end bulk RNA-seq analysis. It takes raw count matrices and
 sample metadata as input and provides differential expression (DESeq2),
-multi-contrast comparisons, functional enrichment (GSEA / ORA),
-co-expression network analysis (WGCNA), publication-ready figures, and
-reproducible R-script / HTML report export.
+QC diagnostics, multi-contrast comparisons, functional enrichment (GSEA
+/ ORA), co-expression network analysis (WGCNA), publication-ready
+figures, and reproducible R-script / HTML report / Methods-paragraph
+export.
 
 Supported organisms: **human**, **mouse**, **rat**.
 
