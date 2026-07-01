@@ -26,10 +26,14 @@ NULL
 #' @param min_count minimum row sum to keep a gene (default 10)
 #' @param alpha FDR threshold passed to `results()` for independent filtering
 #' @return a tidy data.frame with columns: gene, baseMean, log2FoldChange,
-#'   lfcSE, stat, pvalue, padj. Inference columns (`stat`, `pvalue`, `padj`)
-#'   always come from the unshrunken Wald test; when `shrink = TRUE` only
-#'   `log2FoldChange` and `lfcSE` are the shrunken estimates. The estimator
-#'   actually used is recorded in `attr(result, "shrink")`.
+#'   lfcSE, stat, pvalue, padj. The estimator actually used is recorded in
+#'   `attr(result, "shrink")`.
+#' @details Shrinkage adjusts only the effect-size estimates
+#'   (`log2FoldChange`, `lfcSE`), improving ranking and visualization.
+#'   Inference is unaffected: `stat`, `pvalue` and `padj` always come from the
+#'   unshrunken Wald test. Consequently the default GSEA ranking
+#'   (`rank_genes(by = "stat")`) uses the unshrunken Wald statistic even when
+#'   `shrink = TRUE`.
 #' @export
 #' @examples
 #' \dontrun{
@@ -61,18 +65,27 @@ run_deseq2 <- function(counts, metadata,
   rownames(meta) <- meta[[samp_col]]
   meta[[samp_col]] <- NULL
 
-  # Coerce design variables to factor
+  # Design variables: coerce categorical columns (character / logical /
+  # factor) to factor, but keep numeric covariates numeric so they enter the
+  # model as continuous adjustments. The variable of interest (the contrast
+  # variable) is always treated as a factor.
   design_vars <- all.vars(design)
   missing_vars <- setdiff(design_vars, colnames(meta))
   if (length(missing_vars) > 0) {
     stop("Design variables not found in metadata: ",
          paste(missing_vars, collapse = ", "), call. = FALSE)
   }
-  for (v in design_vars) meta[[v]] <- as.factor(meta[[v]])
+  target <- if (!is.null(contrast)) contrast[1] else tail(design_vars, 1)
+  for (v in design_vars) {
+    col <- meta[[v]]
+    if (identical(v, target) || is.character(col) || is.logical(col) ||
+        is.factor(col)) {
+      meta[[v]] <- as.factor(col)
+    }
+  }
 
   # Auto-pick contrast if not provided: last term of design, levels[2] vs levels[1]
   if (is.null(contrast)) {
-    target <- tail(design_vars, 1)
     lv <- levels(meta[[target]])
     if (length(lv) < 2) {
       stop("Variable '", target, "' has fewer than 2 levels. ",

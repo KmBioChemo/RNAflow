@@ -38,15 +38,21 @@ level_reference). Example: \code{c("condition", "Treatment", "Control")}.}
 }
 \value{
 a tidy data.frame with columns: gene, baseMean, log2FoldChange,
-lfcSE, stat, pvalue, padj. Inference columns (\code{stat}, \code{pvalue}, \code{padj})
-always come from the unshrunken Wald test; when \code{shrink = TRUE} only
-\code{log2FoldChange} and \code{lfcSE} are the shrunken estimates. The estimator
-actually used is recorded in \code{attr(result, "shrink")}.
+lfcSE, stat, pvalue, padj. The estimator actually used is recorded in
+\code{attr(result, "shrink")}.
 }
 \description{
 Constructs a DESeqDataSet from counts and metadata, runs DESeq(), and
 extracts results for a user-specified contrast. Optionally applies
 LFC shrinkage (apeglm by default).
+}
+\details{
+Shrinkage adjusts only the effect-size estimates
+(\code{log2FoldChange}, \code{lfcSE}), improving ranking and visualization.
+Inference is unaffected: \code{stat}, \code{pvalue} and \code{padj} always come from the
+unshrunken Wald test. Consequently the default GSEA ranking
+(\code{rank_genes(by = "stat")}) uses the unshrunken Wald statistic even when
+\code{shrink = TRUE}.
 }
 \examples{
 \dontrun{

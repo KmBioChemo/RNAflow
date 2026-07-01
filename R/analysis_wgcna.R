@@ -141,8 +141,10 @@ run_wgcna <- function(datExpr, power, network_type = "signed",
     stop("Package 'WGCNA' is required. ",
          "Install with: BiocManager::install('WGCNA')", call. = FALSE)
   }
+  # Keep the TOM type consistent with the chosen network type
+  tom_type <- if (identical(network_type, "unsigned")) "unsigned" else "signed"
   net <- with_wgcna_cor(WGCNA::blockwiseModules(
-    datExpr, power = power, networkType = network_type, TOMType = "signed",
+    datExpr, power = power, networkType = network_type, TOMType = tom_type,
     minModuleSize = min_module_size, mergeCutHeight = merge_cut_height,
     deepSplit = deep_split, numericLabels = TRUE,
     maxBlockSize = ncol(datExpr) + 1, pamRespectsDendro = FALSE,
