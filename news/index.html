@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,14 @@
       <small>Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.11.1" id="rnaflow-0111-2026-07-01">RNAflow 0.11.1 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-0111-2026-07-01"></a></h2>
+<div class="section level3">
+<h3 id="robust-activity-network-fetching-0-11-1">Robust activity-network fetching<a class="anchor" aria-label="anchor" href="#robust-activity-network-fetching-0-11-1"></a></h3>
+<ul><li>
+<code><a href="../reference/get_tf_network.html">get_tf_network()</a></code> / <code><a href="../reference/get_pathway_network.html">get_pathway_network()</a></code> now catch OmniPath fetch failures (and empty results) and raise a clear, actionable message (“OmniPath temporarily unavailable – retry later / use pathway activity”) instead of a cryptic upstream tidyselect error. Validated end-to-end: PROGENy pathway activity on the airway demo recovers the expected steroid / anti-inflammatory signal (Androgen up; NFkB / TNFa / JAK-STAT down).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.11.0" id="rnaflow-0110-2026-07-01">RNAflow 0.11.0 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-0110-2026-07-01"></a></h2>
 <div class="section level3">

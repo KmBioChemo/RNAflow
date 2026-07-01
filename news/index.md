@@ -1,5 +1,19 @@
 # Changelog
 
+## RNAflow 0.11.1 (2026-07-01)
+
+### Robust activity-network fetching
+
+- [`get_tf_network()`](https://KmBioChemo.github.io/RNAflow/reference/get_tf_network.md)
+  /
+  [`get_pathway_network()`](https://KmBioChemo.github.io/RNAflow/reference/get_pathway_network.md)
+  now catch OmniPath fetch failures (and empty results) and raise a
+  clear, actionable message (“OmniPath temporarily unavailable – retry
+  later / use pathway activity”) instead of a cryptic upstream
+  tidyselect error. Validated end-to-end: PROGENy pathway activity on
+  the airway demo recovers the expected steroid / anti-inflammatory
+  signal (Androgen up; NFkB / TNFa / JAK-STAT down).
+
 ## RNAflow 0.11.0 (2026-07-01)
 
 ### Linked interactive explorer (crosstalk)
