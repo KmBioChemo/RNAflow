@@ -11,6 +11,7 @@
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/RNAflow-package.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/SAFE8.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/VIRIDIS_STOPS.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/ai_interpret.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/analysis_compare.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/analysis_de.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/analysis_enrich.html</loc></url>
@@ -19,9 +20,11 @@
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/app_ui.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/assemble_project.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/build_cols.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/build_interpret_prompt.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/build_report_html.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/build_traits.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/cache_recent_project.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/call_claude.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/check_contrasts.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/check_sets.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/clean_term.html</loc></url>
@@ -39,6 +42,7 @@
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/enrich_modules.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/enrich_network_data.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/enrich_plot_df.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/estimate_cost.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/export_code.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_compare.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/fig_eigengene.html</loc></url>
@@ -79,6 +83,7 @@
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/guess_id_type.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/hub_genes.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/index.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/interpret_results.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/io_utils.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/is_hex6.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/is_num_scalar.html</loc></url>
@@ -90,6 +95,7 @@
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/make_palette.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/map_de_to_symbols.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/methods_text.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/mod_ai.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/mod_compare.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/mod_data.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/mod_de.html</loc></url>
@@ -135,6 +141,8 @@
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/scale_fill_omics_c.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/scale_fill_omics_div.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/session_manifest.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/summarize_de_for_ai.html</loc></url>
+<url><loc>https://KmBioChemo.github.io/RNAflow/reference/summarize_enrich_for_ai.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/supported_organisms.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/symbols_to_entrez.html</loc></url>
 <url><loc>https://KmBioChemo.github.io/RNAflow/reference/theme_exploration.html</loc></url>

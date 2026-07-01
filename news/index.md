@@ -1,5 +1,33 @@
 # Changelog
 
+## RNAflow 0.9.0 (2026-07-01)
+
+### AI-assisted biological interpretation
+
+- **New “AI” tab** (`mod_ai`, `ai_interpret.R`). Sends a compact summary
+  of the active contrast – the top up/down gene names with their
+  fold-changes and FDRs, plus the latest enrichment terms – to
+  Anthropic’s Claude API and renders the returned biological narrative
+  (summary, up/down programs, pathway interpretation, caveats &
+  follow-up). The count matrix and sample metadata are never
+  transmitted.
+- **Pure, testable core.**
+  [`build_interpret_prompt()`](https://KmBioChemo.github.io/RNAflow/reference/build_interpret_prompt.md),
+  [`summarize_de_for_ai()`](https://KmBioChemo.github.io/RNAflow/reference/summarize_de_for_ai.md),
+  [`summarize_enrich_for_ai()`](https://KmBioChemo.github.io/RNAflow/reference/summarize_enrich_for_ai.md)
+  and
+  [`estimate_cost()`](https://KmBioChemo.github.io/RNAflow/reference/estimate_cost.md)
+  build the prompt and cost estimate with no network access;
+  [`call_claude()`](https://KmBioChemo.github.io/RNAflow/reference/call_claude.md)
+  is the only function that touches the API (thin `httr2` wrapper,
+  guarded by `requireNamespace`).
+- **Key handling.** The Anthropic API key is read from a session-only
+  password field or the `ANTHROPIC_API_KEY` environment variable – never
+  written to disk or logged. The feature degrades gracefully when no key
+  is present.
+- **Model choice.** Claude Opus 4.8 (default), Sonnet 5, or Haiku 4.5,
+  with a live token/cost estimate. `httr2` added to `Suggests`.
+
 ## RNAflow 0.8.1 (2026-07-01)
 
 ### “Restrict to active contrast” on Heatmap and PCA

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -509,6 +509,36 @@
         </dt>
         <dd>Module x pathway enrichment dotplot</dd>
       </dl></div><div class="section level2">
+      <h2 id="ai-interpretation">AI interpretation<a class="anchor" aria-label="anchor" href="#ai-interpretation"></a></h2>
+
+      <div class="section-desc"><p>Build a prompt from a contrast and ask the Claude API to interpret it.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="build_interpret_prompt.html">build_interpret_prompt()</a></code>
+
+        </dt>
+        <dd>Build the interpretation prompt from a contrast (+ optional enrichment)</dd>
+
+        <dt>
+
+          <code><a href="call_claude.html">call_claude()</a></code>
+
+        </dt>
+        <dd>Call the Anthropic Claude Messages API</dd>
+
+        <dt>
+
+          <code><a href="interpret_results.html">interpret_results()</a></code>
+
+        </dt>
+        <dd>Interpret a DE contrast (+ enrichment) with Claude</dd>
+      </dl></div><div class="section level2">
       <h2 id="projects-reproducibility">Projects &amp; reproducibility<a class="anchor" aria-label="anchor" href="#projects-reproducibility"></a></h2>
 
       <div class="section-desc"><p>Save/load sessions, export a Methods script and an HTML report.</p></div>
@@ -563,6 +593,13 @@
 
 
       <dl><dt>
+
+          <code><a href="mod_ai.html">mod_ai_ui()</a></code> <code><a href="mod_ai.html">mod_ai_server()</a></code>
+
+        </dt>
+        <dd>AI interpretation module</dd>
+
+        <dt>
 
           <code><a href="mod_compare.html">mod_compare_ui()</a></code> <code><a href="mod_compare.html">mod_compare_server()</a></code>
 

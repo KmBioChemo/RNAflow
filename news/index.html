@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,20 @@
       <small>Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.9.0" id="rnaflow-090-2026-07-01">RNAflow 0.9.0 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-090-2026-07-01"></a></h2>
+<div class="section level3">
+<h3 id="ai-assisted-biological-interpretation-0-9-0">AI-assisted biological interpretation<a class="anchor" aria-label="anchor" href="#ai-assisted-biological-interpretation-0-9-0"></a></h3>
+<ul><li>
+<strong>New “AI” tab</strong> (<code>mod_ai</code>, <code>ai_interpret.R</code>). Sends a compact summary of the active contrast – the top up/down gene names with their fold-changes and FDRs, plus the latest enrichment terms – to Anthropic’s Claude API and renders the returned biological narrative (summary, up/down programs, pathway interpretation, caveats &amp; follow-up). The count matrix and sample metadata are never transmitted.</li>
+<li>
+<strong>Pure, testable core.</strong> <code><a href="../reference/build_interpret_prompt.html">build_interpret_prompt()</a></code>, <code><a href="../reference/summarize_de_for_ai.html">summarize_de_for_ai()</a></code>, <code><a href="../reference/summarize_enrich_for_ai.html">summarize_enrich_for_ai()</a></code> and <code><a href="../reference/estimate_cost.html">estimate_cost()</a></code> build the prompt and cost estimate with no network access; <code><a href="../reference/call_claude.html">call_claude()</a></code> is the only function that touches the API (thin <code>httr2</code> wrapper, guarded by <code>requireNamespace</code>).</li>
+<li>
+<strong>Key handling.</strong> The Anthropic API key is read from a session-only password field or the <code>ANTHROPIC_API_KEY</code> environment variable – never written to disk or logged. The feature degrades gracefully when no key is present.</li>
+<li>
+<strong>Model choice.</strong> Claude Opus 4.8 (default), Sonnet 5, or Haiku 4.5, with a live token/cost estimate. <code>httr2</code> added to <code>Suggests</code>.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.8.1" id="rnaflow-081-2026-07-01">RNAflow 0.8.1 (2026-07-01)<a class="anchor" aria-label="anchor" href="#rnaflow-081-2026-07-01"></a></h2>
 <div class="section level3">

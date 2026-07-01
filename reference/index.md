@@ -153,6 +153,18 @@ GSEA (fgsea / MSigDB) and ORA (clusterProfiler; GO / KEGG / Reactome).
 - [`fig_module_enrichment()`](https://KmBioChemo.github.io/RNAflow/reference/fig_module_enrichment.md)
   : Module x pathway enrichment dotplot
 
+## AI interpretation
+
+Build a prompt from a contrast and ask the Claude API to interpret it.
+
+- [`build_interpret_prompt()`](https://KmBioChemo.github.io/RNAflow/reference/build_interpret_prompt.md)
+  : Build the interpretation prompt from a contrast (+ optional
+  enrichment)
+- [`call_claude()`](https://KmBioChemo.github.io/RNAflow/reference/call_claude.md)
+  : Call the Anthropic Claude Messages API
+- [`interpret_results()`](https://KmBioChemo.github.io/RNAflow/reference/interpret_results.md)
+  : Interpret a DE contrast (+ enrichment) with Claude
+
 ## Projects & reproducibility
 
 Save/load sessions, export a Methods script and an HTML report.
@@ -172,6 +184,9 @@ Save/load sessions, export a Methods script and an HTML report.
 
 UI + server pairs, one per feature.
 
+- [`mod_ai_ui()`](https://KmBioChemo.github.io/RNAflow/reference/mod_ai.md)
+  [`mod_ai_server()`](https://KmBioChemo.github.io/RNAflow/reference/mod_ai.md)
+  : AI interpretation module
 - [`mod_compare_ui()`](https://KmBioChemo.github.io/RNAflow/reference/mod_compare.md)
   [`mod_compare_server()`](https://KmBioChemo.github.io/RNAflow/reference/mod_compare.md)
   : Multi-contrast comparison module
