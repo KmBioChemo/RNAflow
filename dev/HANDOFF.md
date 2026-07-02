@@ -45,17 +45,9 @@ decoupleR Activity tab; crosstalk Explore tab. See `NEWS.md` for details.
 - visNetwork interactive enrichment networks
 - raincloud / beeswarm / alluvial / circos figures
 - (AI, decoupleR, crosstalk linked dashboard — DONE)
-
-## Known minor issues (low priority, from the 0.11.4 review)
-
-- KEGG ORA leaves `geneID` as ENTREZ (GO/Reactome use `readable = TRUE`); the
-  enrichment map/network then shows numeric IDs for KEGG. Cosmetic.
-- `read_counts()` sets rownames before `validate_counts()`, so duplicate/empty
-  gene IDs raise a base-R error instead of the friendly validator message.
-- `cache_recent_project()` sanitises the name to a filename, so two names that
-  sanitise identically overwrite each other in the recent-projects cache only.
-- decoupleR with `organism = "rat"` may report an unsupported-organism failure
-  as a generic "OmniPath down" message (depends on the installed OmnipathR).
+- (the four low-priority review items — KEGG readable, read_counts dup-ID
+  message, recent-cache name collision, decoupleR organism errors — DONE in
+  0.11.4)
 
 ## Gotchas to remember
 

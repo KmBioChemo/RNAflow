@@ -169,9 +169,21 @@ run_ora <- function(genes, organism, db = c("GO", "KEGG", "Reactome"),
       gene = entrez, OrgDb = get_orgdb(organism), keyType = "ENTREZID",
       ont = ont, universe = bg, pvalueCutoff = padj_cutoff,
       minGSSize = min_size, maxGSSize = max_size, readable = TRUE),
-    KEGG = clusterProfiler::enrichKEGG(
-      gene = entrez, organism = info$kegg, universe = bg,
-      pvalueCutoff = padj_cutoff, minGSSize = min_size, maxGSSize = max_size),
+    KEGG = {
+      kk <- clusterProfiler::enrichKEGG(
+        gene = entrez, organism = info$kegg, universe = bg,
+        pvalueCutoff = padj_cutoff, minGSSize = min_size, maxGSSize = max_size)
+      # enrichKEGG has no `readable` argument (unlike enrichGO / enrichPathway),
+      # so its geneID column stays numeric ENTREZ. Convert to symbols so the
+      # enrichment map / gene displays are consistent across databases.
+      if (!is.null(kk) && nrow(as.data.frame(kk)) > 0) {
+        kk <- tryCatch(
+          clusterProfiler::setReadable(kk, OrgDb = get_orgdb(organism),
+                                       keyType = "ENTREZID"),
+          error = function(e) kk)
+      }
+      kk
+    },
     Reactome = {
       if (!requireNamespace("ReactomePA", quietly = TRUE)) {
         stop("Package 'ReactomePA' is required for Reactome ORA. ",

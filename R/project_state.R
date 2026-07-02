@@ -157,10 +157,19 @@ rnaflow_recent_dir <- function() {
 #' @param name optional display name used to build the cached filename
 #' @return the cached file path (invisibly)
 #' @keywords internal
+# Small stable non-cryptographic hash (base R only) so distinct project names
+# that sanitise to the same string don't collide in the recent cache, while the
+# same name still maps to one file (idempotent re-caching).
+name_hash <- function(s) {
+  h <- 0
+  for (ch in utf8ToInt(enc2utf8(s))) h <- (h * 33 + ch) %% 2147483647
+  sprintf("%09.0f", h)
+}
+
 cache_recent_project <- function(path, name = NULL) {
   if (!file.exists(path)) return(invisible(NULL))
   base <- if (!is.null(name) && nzchar(name)) {
-    gsub("[^A-Za-z0-9_-]+", "_", name)
+    paste0(gsub("[^A-Za-z0-9_-]+", "_", name), "-", name_hash(name))
   } else {
     sub("\\.rnaflow\\.rds$", "", basename(path))
   }

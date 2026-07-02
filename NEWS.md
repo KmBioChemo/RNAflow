@@ -29,6 +29,18 @@
   with the canonical structure.
 - **Interactive volcano.** Legend position "None" now actually hides the legend
   (was only parked off-canvas).
+- **KEGG ORA.** `enrichKEGG` results now get `setReadable()` so the `geneID`
+  column is gene symbols, consistent with GO / Reactome (which use
+  `readable = TRUE`).
+- **read_counts.** Duplicate / empty gene IDs now raise the friendly validator
+  message instead of a cryptic base-R "duplicate 'row.names'" error (the
+  rownames were assigned before validation).
+- **Recent-projects cache.** `cache_recent_project()` appends a stable name
+  hash to the filename so two display names that sanitise identically no longer
+  overwrite each other's cache entry.
+- **Activity errors.** The CollecTRI / PROGENy fetch errors now name the
+  organism and acknowledge that a failure can be an unsupported organism in the
+  installed decoupleR / OmnipathR, not only an OmniPath outage.
 - **Tests.** 364 pass / 0 fail / 0 skip on R 4.5.2 / Bioconductor 3.22 (Activity
   tests run for real -- decoupleR + OmnipathR available).
 

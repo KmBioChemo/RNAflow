@@ -40,7 +40,22 @@ read_counts <- function(path, ext = NULL, validate = TRUE,
     stop("File must contain at least 2 columns ",
          "(gene ID + at least 1 sample).", call. = FALSE)
   }
-  rownames(df) <- as.character(df[[1]])
+  # Catch duplicate / empty gene IDs here with the same friendly wording as
+  # validate_counts(): assigning them as rownames below would otherwise throw a
+  # cryptic base-R error ("duplicate 'row.names' are not allowed").
+  ids <- as.character(df[[1]])
+  if (anyDuplicated(ids)) {
+    dups <- ids[duplicated(ids)]
+    stop("Duplicated gene IDs found: ",
+         paste(utils::head(dups, 3), collapse = ", "),
+         if (length(dups) > 3) paste0(" (and ", length(dups) - 3, " more)") else "",
+         call. = FALSE)
+  }
+  if (any(is.na(ids) | !nzchar(trimws(ids)))) {
+    stop("Some gene IDs (first column) are empty or missing. Every row needs ",
+         "a unique gene identifier.", call. = FALSE)
+  }
+  rownames(df) <- ids
   df[[1]] <- NULL
   m <- as.matrix(df)
   storage.mode(m) <- "numeric"

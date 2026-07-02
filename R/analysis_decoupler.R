@@ -58,11 +58,12 @@ get_tf_network <- function(organism) {
     as.data.frame(decoupleR::get_collectri(
       organism = decoupler_organism(organism), split_complexes = FALSE)),
     error = function(e) stop(
-      "Could not fetch the CollecTRI transcription-factor network. This is ",
-      "usually a temporary OmniPath server issue (its offline static-table ",
-      "fallback is broken upstream); pathway activity (PROGENy) is unaffected, ",
-      "so retry TF activity later. Underlying error: ",
-      conditionMessage(e), call. = FALSE))
+      "Could not fetch the CollecTRI transcription-factor network for organism '",
+      decoupler_organism(organism), "'. This is often a temporary OmniPath ",
+      "server issue (its offline static-table fallback is broken upstream), but ",
+      "can also mean this organism is unavailable in the installed ",
+      "decoupleR / OmnipathR. Pathway activity (PROGENy) is unaffected. ",
+      "Underlying error: ", conditionMessage(e), call. = FALSE))
   if (!is.data.frame(net) || nrow(net) == 0) {
     stop("The CollecTRI network came back empty (OmniPath may be down). ",
          "Try again later, or use pathway activity.", call. = FALSE)
@@ -90,9 +91,11 @@ get_pathway_network <- function(organism, top = 500) {
     as.data.frame(decoupleR::get_progeny(
       organism = decoupler_organism(organism), top = top)),
     error = function(e) stop(
-      "Could not fetch the PROGENy pathway network. The OmniPath web service ",
-      "may be temporarily unavailable -- please try again later. ",
-      "Underlying error: ", conditionMessage(e), call. = FALSE))
+      "Could not fetch the PROGENy pathway network for organism '",
+      decoupler_organism(organism), "'. The OmniPath web service may be ",
+      "temporarily unavailable, or this organism may not be available in the ",
+      "installed decoupleR / OmnipathR. Underlying error: ",
+      conditionMessage(e), call. = FALSE))
   if (!is.data.frame(net) || nrow(net) == 0) {
     stop("The PROGENy network came back empty (OmniPath may be down). ",
          "Try again later.", call. = FALSE)
