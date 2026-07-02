@@ -11,3 +11,8 @@
 ^inst/extdata/Book1_deduplicated\.xlsx$
 ^inst/extdata/Book2\.xlsx$
 ^omnipathr-log
+^Dockerfile$
+^\.dockerignore$
+^renv\.lock$
+^renv$
+^\.Rprofile$

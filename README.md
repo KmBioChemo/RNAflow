@@ -61,6 +61,22 @@ library(RNAflow)
 run_app()
 ```
 
+### Run with Docker (reproducible)
+
+The bundled `Dockerfile` pins the exact platform RNAflow is built against
+(R 4.5 / Bioconductor 3.22), so the heavy Bioconductor dependency stack
+resolves identically on any machine — the recommended way to share, deploy, or
+reproduce an environment.
+
+```bash
+docker build -t rnaflow .
+docker run --rm -p 8080:8080 rnaflow
+# open http://localhost:8080
+```
+
+For byte-for-byte package pinning on top of the container, generate an optional
+`renv.lock` with `Rscript dev/make_renv_lock.R` (see that file for details).
+
 ### Programmatic API
 
 You can also use RNAflow's core functions outside the app, for scripted pipelines:
