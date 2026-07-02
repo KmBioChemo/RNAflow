@@ -43,7 +43,8 @@ linked_volcano_df <- function(de, padj_thr = 0.05, lfc_thr = 1) {
 fig_linked_volcano <- function(shared, col_up = "#C0392B",
                                col_down = "#2980B9", col_ns = "#B0B7BF") {
   if (!requireNamespace("plotly", quietly = TRUE)) {
-    stop("Package 'plotly' is required for the linked volcano.", call. = FALSE)
+    stop("Package 'plotly' is required for the linked volcano. ",
+         "Install with: install.packages('plotly')", call. = FALSE)
   }
   p <- plotly::plot_ly(
     shared, x = ~log2FoldChange, y = ~negLog10P, type = "scatter",

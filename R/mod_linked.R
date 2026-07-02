@@ -74,7 +74,7 @@ mod_linked_server <- function(id, de_reactive) {
       if (is.null(de_reactive())) {
         shiny::div(class = "demo-banner",
                    style = "background:#FDEBD0;border-color:#F5B041;color:#7E5109;",
-                   "⚠ No active contrast. Run DESeq2 first.")
+                   "\u26A0 No active contrast. Run DESeq2 first.")
       } else NULL
     })
 

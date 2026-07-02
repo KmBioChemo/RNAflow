@@ -54,8 +54,12 @@ mod_activity_ui <- function(id) {
 #' @rdname mod_activity
 #' @param de_reactive reactive returning the active contrast DE data.frame
 #' @param organism_reactive reactive returning the organism keyword
+#' @param settings_store optional `reactiveVal` holding a settings list; the
+#'   last activity run is recorded under `$activity` (type, method, ranking,
+#'   organism, and the result table) so a saved project keeps it
 #' @export
-mod_activity_server <- function(id, de_reactive, organism_reactive) {
+mod_activity_server <- function(id, de_reactive, organism_reactive,
+                                settings_store = NULL) {
   shiny::moduleServer(id, function(input, output, session) {
 
     shiny::observeEvent(input$n_sld,
@@ -104,6 +108,13 @@ mod_activity_server <- function(id, de_reactive, organism_reactive) {
           tab <- run_activity(de, net, method = meth, mor_col = mcol,
                               by = input$rank_by)
           result(list(type = input$type, table = tab))
+          if (!is.null(settings_store)) {
+            s <- settings_store()
+            s$activity <- list(type = input$type, method = meth,
+                               rank_by = input$rank_by, organism = org,
+                               table = tab)
+            settings_store(s)
+          }
           shiny::showNotification(
             sprintf("Activity inferred: %d %s.", nrow(tab),
                     if (input$type == "tf") "regulators" else "pathways"),

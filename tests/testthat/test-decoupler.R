@@ -54,6 +54,32 @@ test_that("run_activity scores a synthetic regulon network (ulm)", {
   expect_gt(sc[["TF_UP"]], sc[["TF_DN"]])
 })
 
+test_that("run_activity scores a synthetic pathway network (mlm)", {
+  skip_if_not_installed("decoupleR")
+  # PROGENy-style network with a 'weight' column, scored with the multivariate
+  # model -- no OmniPath / internet needed. The multivariate fit needs
+  # non-collinear footprints, so weights vary and 4 background genes (H9-H12)
+  # sit outside both pathways.
+  de12 <- data.frame(
+    gene = paste0("H", 1:12),
+    log2FoldChange = c(3, 2.5, 2, 1.5, -1.5, -2, -2.5, -3, 0.2, -0.1, 0.1, 0),
+    stat = c(9, 7, 6, 4, -4, -6, -7, -9, 0.5, -0.3, 0.4, 0),
+    pvalue = 10^(-c(9, 7, 6, 4, 4, 6, 7, 9, 1, 1, 1, 1)),
+    padj = 10^(-c(8, 6, 5, 3, 3, 5, 6, 8, 1, 1, 1, 1)),
+    stringsAsFactors = FALSE)
+  net <- data.frame(
+    source = c(rep("PW_UP", 4), rep("PW_DN", 4)),
+    target = c("H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8"),
+    weight = c(2, 1.5, 1, 0.5, 2, 1.5, 1, 0.5),
+    stringsAsFactors = FALSE)
+  out <- run_activity(de12, net, method = "mlm", mor_col = "weight",
+                      min_size = 3)
+  expect_s3_class(out, "data.frame")
+  expect_true(all(c("source", "score", "p_value", "padj") %in% colnames(out)))
+  sc <- stats::setNames(out$score, out$source)
+  expect_gt(sc[["PW_UP"]], sc[["PW_DN"]])   # up-footprint activated, down repressed
+})
+
 test_that("fig_activity_bar returns a ggplot for a synthetic activity table", {
   act <- data.frame(
     source = paste0("TF", 1:6),

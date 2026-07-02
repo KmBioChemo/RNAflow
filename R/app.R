@@ -210,7 +210,7 @@ app_server <- function(input, output, session) {
                                      settings_rv)
   mod_wgcna_server("wgcna", counts_norm, data_mod$metadata, data_mod$organism,
                    settings_rv)
-  mod_activity_server("activity", de_combined, data_mod$organism)
+  mod_activity_server("activity", de_combined, data_mod$organism, settings_rv)
   mod_ai_server("ai", de_combined, enrich_result, data_mod$organism,
                 active_contrast_params, settings_rv)
   mod_project_server("project", data_mod, contrasts_rv, settings_rv)

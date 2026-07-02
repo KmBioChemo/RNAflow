@@ -2,8 +2,36 @@ test_that("empty_project returns canonical structure", {
   p <- empty_project("test")
   expect_equal(p$name, "test")
   expect_true(all(c("counts", "metadata", "de_results", "de_params",
-                    "figures", "enrichment", "wgcna", "notes") %in% names(p)))
+                    "figures", "enrichment", "wgcna", "activity",
+                    "ai_interpretation", "notes") %in% names(p)))
   expect_s3_class(p$created_at, "POSIXct")
+})
+
+test_that("assemble_project carries activity and AI settings", {
+  s <- list(
+    activity = list(type = "pathway", table = data.frame(source = "MAPK")),
+    ai_interpretation = list(text = "hi", model = "claude-opus-4-8"))
+  p <- assemble_project("demo", organism = "human", settings = s)
+  expect_equal(p$activity$type, "pathway")
+  expect_equal(p$ai_interpretation$model, "claude-opus-4-8")
+  # No settings -> empty defaults, not an error
+  p2 <- assemble_project("demo2", organism = "human")
+  expect_equal(p2$activity, list())
+  expect_null(p2$ai_interpretation)
+})
+
+test_that("old projects without new slots still load and render", {
+  # A project saved before the activity / ai_interpretation slots existed.
+  old <- empty_project("legacy")
+  old$activity <- NULL; old$ai_interpretation <- NULL
+  old$organism <- "mouse"
+  tf <- tempfile()
+  q <- load_project(save_project(old, tf))
+  expect_equal(q$name, "legacy")
+  # build_report_html must not error on the missing slots
+  f <- tempfile(fileext = ".html")
+  expect_silent(build_report_html(q, f))
+  expect_true(file.exists(f))
 })
 
 test_that("save_project and load_project roundtrip", {

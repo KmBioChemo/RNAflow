@@ -18,7 +18,8 @@ NULL
 session_manifest <- function() {
   pkgs <- c("RNAflow", "DESeq2", "SummarizedExperiment", "ggplot2", "fgsea",
             "clusterProfiler", "msigdbr", "ReactomePA", "WGCNA", "eulerr",
-            "ComplexHeatmap", "pheatmap")
+            "ComplexHeatmap", "pheatmap", "plotly", "crosstalk", "httr2",
+            "decoupleR", "OmnipathR")
   rows <- lapply(pkgs, function(p) {
     v <- tryCatch(as.character(utils::packageVersion(p)),
                   error = function(e) NA_character_)
@@ -139,13 +140,20 @@ build_report_html <- function(project, file, title = "RNAflow analysis report",
     ai_html <- tryCatch(
       htmltools::HTML(as.character(shiny::markdown(ai$text))),
       error = function(e) h$pre(h$code(ai$text)))
+    prov <- sprintf("Generated with %s via the Anthropic Claude API%s%s.",
+                    ai$model %||% "an LLM",
+                    if (!is.null(ai$generated)) paste0(" on ", ai$generated) else "",
+                    if (!is.null(ai$input_tokens) && !is.na(ai$input_tokens))
+                      sprintf(" (%s in / %s out tokens%s)",
+                              ai$input_tokens, ai$output_tokens,
+                              if (!is.null(ai$cost_usd) && !is.na(ai$cost_usd))
+                                sprintf(", ~$%.4f", ai$cost_usd) else "")
+                    else "")
     ai_section <- section(
       h$h2("AI interpretation"),
       h$p(class = "muted",
-          sprintf(paste0("Generated with %s via the Anthropic Claude API. ",
-                         "AI-generated text can be wrong -- treat it as a ",
-                         "hypothesis-generating draft, not a conclusion."),
-                  ai$model %||% "an LLM")),
+          prov, " AI-generated text can be wrong -- treat it as a ",
+          "hypothesis-generating draft, not a conclusion."),
       h$div(style = "background:#f8fbfa;border:1px solid #e1efe9;border-radius:6px;padding:2px 16px;",
             ai_html))
   }
@@ -176,10 +184,11 @@ build_report_html <- function(project, file, title = "RNAflow analysis report",
     ai_section,
     section(h$h2("Reproducible R script"),
             h$p(class = "muted",
-                "A template that reproduces the pipeline with RNAflow (with the ",
+                "A script that reproduces the pipeline with RNAflow (with the ",
                 "package installed). DE calls reflect each saved contrast; ",
-                "downstream steps use default parameters -- adjust to match ",
-                "the settings you used."),
+                "enrichment and network steps use the settings recorded during ",
+                "the session when available, and documented example defaults ",
+                "otherwise."),
             h$pre(h$code(script))),
     section(h$h2("Session"),
             h$p(h$span(class = "badge", paste0("RNAflow ", ver)),

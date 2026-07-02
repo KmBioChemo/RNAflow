@@ -1,3 +1,27 @@
+# RNAflow 0.11.3 (2026-07-02)
+
+## Consolidation pass (stabilization, no new features)
+
+- **Project state.** Added an `activity` slot to `empty_project()` /
+  `assemble_project()`; the Activity tab now records its run (type, method,
+  ranking, organism, result table) into the shared settings, alongside the AI
+  interpretation, so a saved project keeps them. Older `.rnaflow.rds` files
+  without the new slots still load and render (tested).
+- **AI provenance.** A saved interpretation now records model, timestamp,
+  `top_n`, `n_terms`, `use_enrich`, token usage and estimated cost (never the
+  API key). The report's AI section shows this provenance and keeps the
+  "hypothesis-generating, may be wrong" caveat.
+- **Report/script consistency.** `session_manifest()` now lists plotly,
+  crosstalk, httr2, decoupleR and OmnipathR. Corrected the report's outdated
+  wording that claimed downstream steps always use default parameters -- it now
+  states that recorded settings are used when available.
+- **Dependency messages.** Filled in missing "install with ..." hints for the
+  plotly, fgsea (curve) and WGCNA guards so every optional-dependency error
+  says exactly what to install.
+- **Tests.** Added an OmniPath-free `run_activity()` multivariate (mlm) test on
+  a synthetic pathway network, plus project-state tests for the new slots and
+  backward compatibility (351 tests pass; full `R CMD check` clean).
+
 # RNAflow 0.11.2 (2026-07-02)
 
 ## Activity inference: honest errors + declared OmnipathR dependency

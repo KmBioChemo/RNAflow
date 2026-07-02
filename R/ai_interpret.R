@@ -185,7 +185,7 @@ estimate_cost <- function(input_tokens, output_tokens, model) {
 #' @param prompt the user prompt (character)
 #' @param api_key Anthropic API key (defaults to the `ANTHROPIC_API_KEY`
 #'   environment variable)
-#' @param model API model id (see [AI_MODELS])
+#' @param model API model id (see the AI_MODELS object)
 #' @param system optional system prompt
 #' @param max_tokens output token cap
 #' @param timeout request timeout in seconds

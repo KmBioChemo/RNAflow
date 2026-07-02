@@ -12,10 +12,15 @@ _"Lis dev/HANDOFF.md, NEWS.md et le git log, puis on continue."_
 
 ## Current state (keep this updated)
 
-- **Version 0.11.2**, `git log --oneline` is the record.
-- **354 tests pass / 0 fail / 0 skip** (`devtools::test()`) once decoupleR +
-  OmnipathR are installed.
-- App launches with `RNAflow::run_app()`.
+- **Version 0.11.3** (consolidation/stabilization pass), `git log --oneline`
+  is the record.
+- **351 tests pass / 0 fail** (`devtools::test()`); the only skips are
+  `skip_on_cran`. decoupleR + OmnipathR must be installed for the Activity
+  tests to run for real.
+- App launches with `RNAflow::run_app()`. Full `R CMD check` clean.
+- **Activity results + AI interpretation are saved in the project** (settings ->
+  `assemble_project()` -> `$activity` / `$ai_interpretation`). Older `.rnaflow.rds`
+  files without these slots still load (backward compatible).
 - **Windows dev box upgraded to R 4.4.3 / Bioconductor 3.20** (from R 4.3.2 /
   Bioc 3.18) on 2026-07-02, to get a modern OmnipathR that works with current
   strict-join dplyr -- see the OmniPath gotcha below. rtools44 was already

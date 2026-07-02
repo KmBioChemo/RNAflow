@@ -208,7 +208,8 @@ build_traits <- function(metadata, samples) {
 #' @export
 module_trait_cor <- function(MEs, traits) {
   if (!requireNamespace("WGCNA", quietly = TRUE)) {
-    stop("Package 'WGCNA' is required.", call. = FALSE)
+    stop("Package 'WGCNA' is required. ",
+         "Install with: BiocManager::install('WGCNA')", call. = FALSE)
   }
   common <- intersect(rownames(MEs), rownames(traits))
   if (length(common) < 3) {
@@ -235,7 +236,8 @@ module_trait_cor <- function(MEs, traits) {
 #' @export
 hub_genes <- function(wg, module, n = 20) {
   if (!requireNamespace("WGCNA", quietly = TRUE)) {
-    stop("Package 'WGCNA' is required.", call. = FALSE)
+    stop("Package 'WGCNA' is required. ",
+         "Install with: BiocManager::install('WGCNA')", call. = FALSE)
   }
   if (!module %in% wg$modules) {
     stop("Module '", module, "' not found.", call. = FALSE)

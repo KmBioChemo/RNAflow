@@ -19,7 +19,7 @@ call_claude(
 \item{api_key}{Anthropic API key (defaults to the \code{ANTHROPIC_API_KEY}
 environment variable)}
 
-\item{model}{API model id (see \link{AI_MODELS})}
+\item{model}{API model id (see the AI_MODELS object)}
 
 \item{system}{optional system prompt}
 

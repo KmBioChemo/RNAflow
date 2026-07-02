@@ -50,7 +50,7 @@ mod_ai_ui <- function(id) {
     ),
     shiny::div(
       class = "demo-banner", style = "margin-bottom:8px;",
-      "ℹ This sends a compact summary of your active contrast (top gene ",
+      "\u2139 This sends a compact summary of your active contrast (top gene ",
       "names, fold-changes, and enrichment terms) to Anthropic's Claude API. ",
       "Your count matrix and sample metadata never leave your machine. ",
       "AI-generated text can be wrong -- treat it as a hypothesis-generating ",
@@ -135,7 +135,18 @@ mod_ai_server <- function(id, de_reactive, enrich_reactive = NULL,
           result(res)
           if (!is.null(settings_store)) {
             s <- settings_store()
-            s$ai_interpretation <- list(text = res$text, model = res$model)
+            # Store provenance alongside the text so a saved project / report
+            # records how the interpretation was produced. The API key is
+            # never included.
+            s$ai_interpretation <- list(
+              text = res$text, model = res$model,
+              generated = format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+              top_n = as.integer(input$topn_num %||% 30),
+              n_terms = as.integer(input$nterm_num %||% 15),
+              use_enrich = isTRUE(input$use_enrich) && !is.null(enr),
+              input_tokens = res$input_tokens,
+              output_tokens = res$output_tokens,
+              cost_usd = res$cost_usd)
             settings_store(s)
           }
         }, error = function(e) {
@@ -171,7 +182,7 @@ mod_ai_server <- function(id, de_reactive, enrich_reactive = NULL,
       cost <- if (is.na(res$cost_usd)) "n/a" else sprintf("$%.4f", res$cost_usd)
       trunc_note <- if (isTRUE(res$truncated)) {
         shiny::span(style = "color:#C0392B;",
-                    " ⚠ response hit the token limit and may be cut off.")
+                    " \u26A0 response hit the token limit and may be cut off.")
       } else NULL
       shiny::tags$p(
         class = "text-muted", style = "font-size:12px;margin-top:8px;",

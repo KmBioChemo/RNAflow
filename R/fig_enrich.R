@@ -155,7 +155,8 @@ fig_gsea_curve <- function(res, pathway_genes, rank_by = "stat",
                            mode = c("exploration", "publication")) {
   mode <- match.arg(mode)
   if (!requireNamespace("fgsea", quietly = TRUE)) {
-    stop("Package 'fgsea' is required for the enrichment curve.", call. = FALSE)
+    stop("Package 'fgsea' is required for the enrichment curve. ",
+         "Install with: BiocManager::install('fgsea')", call. = FALSE)
   }
   ranks <- rank_genes(res, by = rank_by)
   genes <- intersect(as.character(pathway_genes), names(ranks))

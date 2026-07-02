@@ -8,7 +8,7 @@
 \usage{
 mod_activity_ui(id)
 
-mod_activity_server(id, de_reactive, organism_reactive)
+mod_activity_server(id, de_reactive, organism_reactive, settings_store = NULL)
 }
 \arguments{
 \item{id}{namespace ID}
@@ -16,6 +16,10 @@ mod_activity_server(id, de_reactive, organism_reactive)
 \item{de_reactive}{reactive returning the active contrast DE data.frame}
 
 \item{organism_reactive}{reactive returning the organism keyword}
+
+\item{settings_store}{optional \code{reactiveVal} holding a settings list; the
+last activity run is recorded under \verb{$activity} (type, method, ranking,
+organism, and the result table) so a saved project keeps it}
 }
 \description{
 Shiny module wrapping the pure \link{analysis_decoupler} layer. Infers
