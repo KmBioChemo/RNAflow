@@ -184,8 +184,14 @@ build_traits <- function(metadata, samples) {
   for (a in ann) {
     f <- factor(as.character(md[[a]]))
     if (nlevels(f) < 2) next
-    mm <- stats::model.matrix(~ 0 + f)
-    colnames(mm) <- paste0(a, ": ", levels(f))
+    # Build indicator columns manually rather than via model.matrix(): its
+    # default na.action drops NA rows, which desynchronises column lengths
+    # across annotations with different missing-value patterns. Here NA traits
+    # stay NA (WGCNA's cor(use = "p") tolerates them) and every column keeps
+    # one row per sample.
+    lv <- levels(f)
+    mm <- vapply(lv, function(l) as.integer(f == l), integer(length(f)))
+    colnames(mm) <- paste0(a, ": ", lv)
     for (j in seq_len(ncol(mm))) cols[[colnames(mm)[j]]] <- mm[, j]
   }
   if (length(cols) == 0) {

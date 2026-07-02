@@ -1,3 +1,37 @@
+# RNAflow 0.11.4 (2026-07-02)
+
+## Bug-fix pass (multi-agent code review, no new features)
+
+- **AI tab (Haiku 4.5).** `call_claude()` sent `thinking = {type: "adaptive"}`
+  for every model, but adaptive thinking is a Claude 4.6+ feature -- Haiku 4.5
+  (offered as the "cheapest" option) rejected it with HTTP 400, so that model
+  was unusable. The thinking config is now model-aware (adaptive for 4.6+;
+  `{type: "enabled", budget_tokens}` for older models).
+- **DESeq2.** `run_deseq2()` now fails fast with a clear message when a counts
+  sample has no metadata row, instead of a cryptic base-R "missing values in
+  'row.names'" crash (validation previously only warned).
+- **WGCNA module-trait.** `build_traits()` no longer crashes on metadata with
+  `NA` annotation values -- indicator columns are built manually so every
+  column keeps one row per sample (NA traits stay NA, which `cor(use = "p")`
+  tolerates).
+- **WGCNA module enrichment.** `enrich_modules()` now converts Ensembl/ENTREZ
+  IDs to symbols (new `ids_to_symbols()` helper) before ORA, matching the DE
+  tab; previously module enrichment silently returned nothing for non-symbol
+  projects.
+- **Enrichment dotplot.** Guarded `-log10(padj)` with `+ 1e-300` so a term with
+  an underflowed `padj == 0` is no longer silently dropped from the dotplot
+  (the bar and module plots already did this).
+- **PCA.** `compute_pca()` now centers only (`scale. = FALSE`), matching
+  `DESeq2::plotPCA` and the bulk RNA-seq convention, so the selected
+  high-variance genes drive the projection.
+- **Project load.** `load_project()` backfills any slots added in newer
+  versions from `empty_project()`, so projects saved by older releases load
+  with the canonical structure.
+- **Interactive volcano.** Legend position "None" now actually hides the legend
+  (was only parked off-canvas).
+- **Tests.** 364 pass / 0 fail / 0 skip on R 4.5.2 / Bioconductor 3.22 (Activity
+  tests run for real -- decoupleR + OmnipathR available).
+
 # RNAflow 0.11.3 (2026-07-02)
 
 ## Consolidation pass (stabilization, no new features)

@@ -21,6 +21,26 @@ AI_MODELS <- c(
   "Claude Haiku 4.5 (cheapest)" = "claude-haiku-4-5"
 )
 
+# Models that support adaptive thinking (Claude 4.6+). Pre-4.6 models such as
+# Haiku 4.5 reject `thinking = {type: "adaptive"}` with an HTTP 400 and must use
+# the older `{type: "enabled", budget_tokens: N}` form instead (with
+# budget_tokens < max_tokens). Keep this in sync with AI_MODELS.
+AI_ADAPTIVE_THINKING <- c(
+  "claude-opus-4-8", "claude-opus-4-7", "claude-opus-4-6",
+  "claude-sonnet-5", "claude-sonnet-4-6", "claude-fable-5"
+)
+
+# Build the model-appropriate `thinking` request field. Adaptive thinking for
+# 4.6+ models; a fixed budget (< max_tokens) for older models like Haiku 4.5.
+claude_thinking_config <- function(model, max_tokens) {
+  if (model %in% AI_ADAPTIVE_THINKING) {
+    list(type = "adaptive")
+  } else {
+    budget <- max(1024L, as.integer(max_tokens) %/% 2L)
+    list(type = "enabled", budget_tokens = budget)
+  }
+}
+
 # USD per 1M tokens (input, output) for cost estimation.
 MODEL_PRICING <- list(
   "claude-opus-4-8"   = c(in_ = 5,  out = 25),
@@ -207,7 +227,7 @@ call_claude <- function(prompt, api_key = Sys.getenv("ANTHROPIC_API_KEY"),
   body <- list(
     model = model,
     max_tokens = as.integer(max_tokens),
-    thinking = list(type = "adaptive"),
+    thinking = claude_thinking_config(model, max_tokens),
     messages = list(list(role = "user", content = prompt))
   )
   if (!is.null(system) && nzchar(system)) body$system <- system

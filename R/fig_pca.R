@@ -29,7 +29,10 @@ compute_pca <- function(counts_mat, n_top = 500) {
   n_use <- min(as.integer(n_top), nrow(mat))
   top   <- order(matrixStats::rowVars(as.matrix(mat), na.rm = TRUE),
                  decreasing = TRUE)[seq_len(n_use)]
-  pca   <- stats::prcomp(t(mat[top, , drop = FALSE]), scale. = TRUE, center = TRUE)
+  # Center only (no unit-variance scaling), matching DESeq2::plotPCA and the
+  # bulk RNA-seq convention: on VST/rlog data the high-variance genes selected
+  # above should dominate the projection, which scale. = TRUE would undo.
+  pca   <- stats::prcomp(t(mat[top, , drop = FALSE]), scale. = FALSE, center = TRUE)
   imp   <- summary(pca)$importance
   pct   <- round(100 * imp[2, seq_len(ncol(pca$x))], 1)
 

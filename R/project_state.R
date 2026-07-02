@@ -64,6 +64,11 @@ load_project <- function(path) {
   if (!is.list(obj) || !"rnaflow_version" %in% names(obj)) {
     stop("File does not look like a valid RNAflow project.", call. = FALSE)
   }
+  # Backfill any slots added in newer versions so projects saved by older
+  # RNAflow releases load with the canonical structure (missing fields take
+  # their empty-project defaults rather than being absent).
+  defaults <- empty_project(obj$name %||% "untitled")
+  for (k in setdiff(names(defaults), names(obj))) obj[[k]] <- defaults[[k]]
   obj
 }
 

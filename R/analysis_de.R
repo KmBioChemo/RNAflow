@@ -61,7 +61,15 @@ run_deseq2 <- function(counts, metadata,
 
   # Align metadata to counts column order
   samp_col <- colnames(metadata)[1]
-  meta <- metadata[match(colnames(counts), metadata[[samp_col]]), , drop = FALSE]
+  idx <- match(colnames(counts), metadata[[samp_col]])
+  if (anyNA(idx)) {
+    missing <- colnames(counts)[is.na(idx)]
+    stop("DESeq2 requires metadata for every counts sample. Missing: ",
+         paste(missing, collapse = ", "),
+         ". Add these to the metadata (first column) or drop them from counts.",
+         call. = FALSE)
+  }
+  meta <- metadata[idx, , drop = FALSE]
   rownames(meta) <- meta[[samp_col]]
   meta[[samp_col]] <- NULL
 

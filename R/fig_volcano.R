@@ -237,6 +237,7 @@ fig_volcano_interactive <- function(res,
              y0 = -log10(padj_thr), y1 = -log10(padj_thr),
              line = list(color = col_cut, dash = "dash", width = 1.2))
       ),
+      showlegend = leg_pos != "None",
       legend = c(lpos, list(bgcolor = "rgba(255,255,255,0.9)",
                             bordercolor = "#ddd", borderwidth = 1,
                             font = list(size = 11))),

@@ -111,6 +111,37 @@ guess_id_type <- function(ids) {
   else                                   "symbol"
 }
 
+#' Convert a bare vector of gene identifiers to gene symbols
+#'
+#' Like [map_de_to_symbols()] but for a plain character vector (e.g. WGCNA
+#' module genes or the co-expression universe). If the IDs look like Ensembl or
+#' ENTREZ, map them to symbols via the organism's OrgDb (stripping Ensembl
+#' version suffixes); symbol input is returned as an identity map. Unmapped IDs
+#' are dropped.
+#'
+#' @param ids character vector of gene identifiers
+#' @param organism one of "human", "mouse", "rat"
+#' @return a named character vector (names = input IDs, values = symbols),
+#'   containing only the IDs that mapped
+#' @keywords internal
+ids_to_symbols <- function(ids, organism) {
+  raw <- as.character(ids)
+  type <- guess_id_type(raw)
+  if (type == "symbol" || !requireNamespace("AnnotationDbi", quietly = TRUE)) {
+    return(stats::setNames(raw, raw))
+  }
+  orgdb <- get_orgdb(organism)
+  keytype <- if (type == "ensembl") "ENSEMBL" else "ENTREZID"
+  keys <- if (type == "ensembl") sub("\\..*$", "", raw) else raw
+  sym <- tryCatch(
+    suppressMessages(suppressWarnings(AnnotationDbi::mapIds(
+      orgdb, keys = keys, column = "SYMBOL", keytype = keytype,
+      multiVals = "first"))),
+    error = function(e) rep(NA_character_, length(keys)))
+  out <- stats::setNames(unname(sym), raw)
+  out[!is.na(out) & nzchar(out)]
+}
+
 #' Convert a DE table's gene identifiers to gene symbols
 #'
 #' If the `gene` column looks like Ensembl or ENTREZ IDs, map it to symbols

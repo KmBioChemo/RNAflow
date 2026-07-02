@@ -28,7 +28,16 @@ enrich_modules <- function(wg, organism, db = c("GO", "KEGG", "Reactome"),
   ont <- match.arg(ont)
   gl <- module_gene_list(wg, exclude_grey = TRUE)
   if (length(gl) == 0) stop("No non-grey modules to enrich.", call. = FALSE)
-  universe <- colnames(wg$datExpr)
+  # run_ora() looks genes up via the SYMBOL keytype, but datExpr columns keep
+  # the raw uploaded IDs. Convert both the universe and each module's genes to
+  # symbols first (no-op for symbol projects), matching the DE-enrichment path,
+  # so Ensembl/ENTREZ projects don't silently return zero enriched terms.
+  id_map <- ids_to_symbols(colnames(wg$datExpr), organism)
+  universe <- unique(unname(id_map))
+  gl <- lapply(gl, function(g) {
+    s <- id_map[as.character(g)]
+    unique(s[!is.na(s)])
+  })
 
   parts <- list()
   for (m in names(gl)) {

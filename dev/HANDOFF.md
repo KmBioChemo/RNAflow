@@ -12,11 +12,10 @@ _"Lis dev/HANDOFF.md, NEWS.md et le git log, puis on continue."_
 
 ## Current state (keep this updated)
 
-- **Version 0.11.3** (consolidation/stabilization pass), `git log --oneline`
-  is the record.
-- **351 tests pass / 0 fail** (`devtools::test()`); the only skips are
-  `skip_on_cran`. decoupleR + OmnipathR must be installed for the Activity
-  tests to run for real.
+- **Version 0.11.4** (bug-fix pass from a multi-agent code review; see
+  `NEWS.md`), `git log --oneline` is the record.
+- **364 tests pass / 0 fail / 0 skip** (`devtools::test()`). decoupleR +
+  OmnipathR must be installed for the Activity tests to run for real.
 - App launches with `RNAflow::run_app()`. Full `R CMD check` clean.
 - **Activity results + AI interpretation are saved in the project** (settings ->
   `assemble_project()` -> `$activity` / `$ai_interpretation`). Older `.rnaflow.rds`
@@ -25,7 +24,10 @@ _"Lis dev/HANDOFF.md, NEWS.md et le git log, puis on continue."_
   Bioc 3.18) on 2026-07-02, to get a modern OmnipathR that works with current
   strict-join dplyr -- see the OmniPath gotcha below. rtools44 was already
   installed and is reused; R 4.3.2 is still on disk but off the system PATH.
-  **The Mac still needs the same R/Bioc bump** to run the Activity tab.
+- **Mac is on R 4.5.2 / Bioconductor 3.22** (verified 2026-07-02) -- newer than
+  the Windows box, so OmnipathR is current and the Activity tab works here with
+  no R/Bioc bump needed. (The earlier "Mac still needs the bump" note was
+  stale.)
 
 ## What's built (tabs)
 
@@ -43,6 +45,17 @@ decoupleR Activity tab; crosstalk Explore tab. See `NEWS.md` for details.
 - visNetwork interactive enrichment networks
 - raincloud / beeswarm / alluvial / circos figures
 - (AI, decoupleR, crosstalk linked dashboard — DONE)
+
+## Known minor issues (low priority, from the 0.11.4 review)
+
+- KEGG ORA leaves `geneID` as ENTREZ (GO/Reactome use `readable = TRUE`); the
+  enrichment map/network then shows numeric IDs for KEGG. Cosmetic.
+- `read_counts()` sets rownames before `validate_counts()`, so duplicate/empty
+  gene IDs raise a base-R error instead of the friendly validator message.
+- `cache_recent_project()` sanitises the name to a filename, so two names that
+  sanitise identically overwrite each other in the recent-projects cache only.
+- decoupleR with `organism = "rat"` may report an unsupported-organism failure
+  as a generic "OmniPath down" message (depends on the installed OmnipathR).
 
 ## Gotchas to remember
 
@@ -79,7 +92,7 @@ decoupleR Activity tab; crosstalk Explore tab. See `NEWS.md` for details.
 ```r
 source("dev/install_deps.R")   # one-time per machine (needs Rtools on Windows)
 devtools::load_all()           # load
-devtools::test()               # 341 pass / 0 fail
+devtools::test()               # 364 pass / 0 fail
 devtools::document()           # after any roxygen change
 RNAflow::run_app()             # launch
 ```

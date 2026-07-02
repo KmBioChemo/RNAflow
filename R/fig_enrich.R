@@ -88,7 +88,7 @@ fig_enrich_dot <- function(df, n = 20,
                    y = .data$lbl, yend = .data$lbl),
       color = "#CCCCCC", linewidth = 0.4) +
     ggplot2::geom_point(ggplot2::aes(size = .data$count,
-                                     color = -log10(.data$padj))) +
+                                     color = -log10(.data$padj + 1e-300))) +
     ggplot2::scale_color_viridis_c(option = "C", end = 0.9,
                                    name = expression(-log[10] ~ FDR)) +
     ggplot2::scale_size_continuous(name = "Set size", range = c(2, 7)) +
