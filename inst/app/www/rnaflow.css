@@ -1,0 +1,361 @@
+/* ==========================================================================
+   RNAflow — global design system
+   A restrained, premium biomedical/data-science look. Light background, calm
+   teal accent, soft cards, consistent typography and spacing. Everything is
+   driven by the tokens in :root so the whole app stays coherent.
+   ========================================================================== */
+
+:root {
+  /* Brand / accent */
+  --rf-accent:        #1D9E75;
+  --rf-accent-dark:   #157a5b;
+  --rf-accent-soft:   #eafaf3;
+  --rf-accent-ring:   rgba(29, 158, 117, 0.25);
+
+  /* Neutrals */
+  --rf-bg:            #f5f7f6;   /* app canvas */
+  --rf-surface:       #ffffff;   /* cards / panels */
+  --rf-surface-2:     #f8faf9;   /* subtle fills */
+  --rf-border:        #e6ebe9;   /* hairline borders */
+  --rf-border-strong: #d6ddda;
+
+  /* Text */
+  --rf-ink:           #1f2d3a;   /* headings */
+  --rf-body:          #46545f;   /* body text */
+  --rf-muted:         #7c8a94;   /* captions / microcopy */
+
+  /* Status */
+  --rf-info-bg:   #eef6fb;  --rf-info-bd:   #cfe4f2;  --rf-info-fg:   #1b4a66;
+  --rf-warn-bg:   #fdf6ec;  --rf-warn-bd:   #f3e1c0;  --rf-warn-fg:   #7a561a;
+  --rf-error-bg:  #fdeeee;  --rf-error-bd:  #f3cccc;  --rf-error-fg:  #8a2b2b;
+  --rf-ok-bg:     #ecf8f2;  --rf-ok-bd:     #c6e8d6;  --rf-ok-fg:     #10603f;
+
+  /* Shape & rhythm */
+  --rf-radius:    10px;
+  --rf-radius-sm: 7px;
+  --rf-shadow:    0 1px 2px rgba(16,40,34,.04), 0 2px 8px rgba(16,40,34,.05);
+  --rf-shadow-sm: 0 1px 2px rgba(16,40,34,.05);
+
+  --rf-font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+             Helvetica, Arial, sans-serif;
+  --rf-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+             "Liberation Mono", monospace;
+}
+
+/* ------------------------------------------------------------------ base --- */
+body {
+  font-family: var(--rf-font);
+  color: var(--rf-body);
+  background: var(--rf-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3, h4, h5, h6 { color: var(--rf-ink); font-weight: 650; letter-spacing: -0.01em; }
+a { color: var(--rf-accent-dark); text-decoration: none; }
+a:hover { color: var(--rf-accent); text-decoration: underline; }
+hr { border-top: 1px solid var(--rf-border); opacity: 1; margin: 10px 0; }
+
+/* ---------------------------------------------------------------- navbar --- */
+.navbar {
+  background: var(--rf-surface) !important;
+  border-bottom: 1px solid var(--rf-border);
+  box-shadow: var(--rf-shadow-sm);
+  padding-top: .35rem; padding-bottom: .35rem;
+}
+.navbar .navbar-brand { padding-top: 0; padding-bottom: 0; }
+.navbar .nav-link {
+  color: var(--rf-body) !important;
+  font-size: 0.86rem; font-weight: 550;
+  padding: .35rem .7rem !important;
+  border-radius: var(--rf-radius-sm);
+  transition: background .12s ease, color .12s ease;
+}
+.navbar .nav-link:hover { background: var(--rf-surface-2); color: var(--rf-ink) !important; }
+.navbar .nav-link.active,
+.navbar .nav-link[aria-selected="true"] {
+  color: var(--rf-accent-dark) !important;
+  background: var(--rf-accent-soft);
+  font-weight: 650;
+}
+
+/* Brand wordmark */
+.rnaflow-brand {
+  font-weight: 800; letter-spacing: -0.02em; font-size: 1.12rem;
+  background: linear-gradient(120deg, var(--rf-ink) 0%, var(--rf-accent) 90%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Active-contrast selector in the navbar */
+.rnaflow-active {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--rf-surface-2);
+  border: 1px solid var(--rf-border);
+  border-radius: 999px;
+  padding: 2px 6px 2px 12px;
+  min-width: 260px;
+}
+.rnaflow-active .rf-active-label {
+  color: var(--rf-muted); font-size: .72rem; font-weight: 650;
+  text-transform: uppercase; letter-spacing: .4px; white-space: nowrap;
+}
+.rnaflow-active .shiny-input-container { margin-bottom: 0 !important; }
+.rnaflow-active .form-select { border-radius: 999px !important; }
+
+/* --------------------------------------------------------------- layout --- */
+.bslib-page-navbar > .navbar + .container-fluid,
+.tab-content { background: var(--rf-bg); }
+
+/* ---------------------------------------------------------------- cards --- */
+.card, .bslib-card {
+  background: var(--rf-surface);
+  border: 1px solid var(--rf-border) !important;
+  border-radius: var(--rf-radius) !important;
+  box-shadow: var(--rf-shadow);
+}
+.card-header {
+  background: var(--rf-surface) !important;
+  border-bottom: 1px solid var(--rf-border) !important;
+  color: var(--rf-ink) !important;
+  font-size: 0.9rem !important; font-weight: 650 !important;
+  letter-spacing: -0.005em;
+  padding: 10px 14px !important;
+}
+.card-body { padding: 12px 14px !important; color: var(--rf-body); }
+
+/* -------------------------------------------------------------- sidebar --- */
+.bslib-sidebar-layout > .sidebar {
+  background: var(--rf-surface-2) !important;
+  border-right: 1px solid var(--rf-border) !important;
+}
+.bslib-sidebar-layout .sidebar,
+.bslib-sidebar-layout .sidebar * { font-size: 0.8rem; }
+.bslib-sidebar-layout > .main { padding: 6px 4px; }
+
+/* --------------------------------------------------------- form controls --- */
+label, .form-label, .control-label, .form-check-label {
+  font-size: 0.8rem !important; color: var(--rf-body);
+  font-weight: 550; margin-bottom: 2px !important;
+}
+.form-control, .form-select,
+input[type=number], input[type=text], input[type=color] {
+  font-size: 0.8rem !important;
+  min-height: 30px; height: 30px !important;
+  padding: 3px 8px !important;
+  border: 1px solid var(--rf-border-strong) !important;
+  border-radius: var(--rf-radius-sm) !important;
+  color: var(--rf-ink);
+  background: var(--rf-surface);
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--rf-accent) !important;
+  box-shadow: 0 0 0 3px var(--rf-accent-ring) !important;
+}
+.selectize-input, .selectize-input input,
+.selectize-dropdown, .selectize-dropdown-content,
+.selectize-dropdown .option { font-size: 0.8rem !important; }
+.selectize-input {
+  border: 1px solid var(--rf-border-strong) !important;
+  border-radius: var(--rf-radius-sm) !important;
+  min-height: 30px !important; padding: 3px 8px !important;
+}
+.selectize-input.focus {
+  border-color: var(--rf-accent) !important;
+  box-shadow: 0 0 0 3px var(--rf-accent-ring) !important;
+}
+select, select option { font-size: 0.8rem !important; }
+.shiny-input-container { margin-bottom: 8px !important; }
+
+/* Sliders (ionRangeSlider) */
+.irs--shiny .irs-single, .irs--shiny .irs-min, .irs--shiny .irs-max,
+.irs--shiny .irs-grid-text { font-size: 0.68rem !important; color: var(--rf-muted); }
+.irs--shiny .irs-single { background: var(--rf-accent) !important; }
+.irs--shiny .irs-single:before { border-top-color: var(--rf-accent) !important; }
+.irs--shiny .irs-bar { height: 4px !important; background: var(--rf-accent) !important; }
+.irs--shiny .irs-line { height: 4px !important; top: 27px !important; background: var(--rf-border); }
+.irs--shiny .irs-handle {
+  width: 14px !important; height: 14px !important; top: 22px !important;
+  border: 2px solid var(--rf-accent) !important; background: #fff !important;
+  box-shadow: var(--rf-shadow-sm) !important;
+}
+
+/* Checkboxes / radios */
+.form-check { margin-bottom: 3px !important; }
+.form-check-input { margin-top: 3px !important; }
+.form-check-input:checked {
+  background-color: var(--rf-accent) !important;
+  border-color: var(--rf-accent) !important;
+}
+.form-check-input:focus {
+  border-color: var(--rf-accent) !important;
+  box-shadow: 0 0 0 3px var(--rf-accent-ring) !important;
+}
+
+/* -------------------------------------------------------------- buttons --- */
+.btn {
+  font-size: 0.82rem; font-weight: 600;
+  border-radius: var(--rf-radius-sm);
+  padding: .35rem .8rem;
+  transition: background .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.btn-primary, .btn-success {
+  background: var(--rf-accent) !important;
+  border-color: var(--rf-accent) !important;
+  color: #fff !important;
+  box-shadow: var(--rf-shadow-sm);
+}
+.btn-primary:hover, .btn-success:hover,
+.btn-primary:focus, .btn-success:focus {
+  background: var(--rf-accent-dark) !important;
+  border-color: var(--rf-accent-dark) !important;
+}
+.btn-default, .btn-outline-secondary, .btn-secondary {
+  background: var(--rf-surface) !important;
+  border: 1px solid var(--rf-border-strong) !important;
+  color: var(--rf-body) !important;
+}
+.btn-default:hover, .btn-outline-secondary:hover, .btn-secondary:hover {
+  background: var(--rf-surface-2) !important; color: var(--rf-ink) !important;
+}
+.btn:focus-visible { box-shadow: 0 0 0 3px var(--rf-accent-ring) !important; }
+.btn-sm { padding: .25rem .6rem; font-size: 0.76rem; }
+/* Download buttons read as primary actions by default */
+.shiny-download-link.btn { color: #fff; }
+.tpl-btn { font-size: 0.75rem !important; padding: 3px 10px !important; }
+
+/* --------------------------------------------------------------- accordion */
+.accordion-button {
+  font-size: 0.82rem !important; font-weight: 600 !important;
+  color: var(--rf-ink) !important; padding: 8px 11px !important;
+  background: var(--rf-surface) !important;
+}
+.accordion-button:not(.collapsed) {
+  background: var(--rf-accent-soft) !important; color: var(--rf-accent-dark) !important;
+  box-shadow: none !important;
+}
+.accordion-button:focus { box-shadow: 0 0 0 3px var(--rf-accent-ring) !important; }
+.accordion-body { padding: 8px 10px !important; }
+.accordion-item { border-color: var(--rf-border) !important; }
+/* "Advanced settings" secondary accordion — visually recessive */
+.adv-acc .accordion-button {
+  background: var(--rf-surface-2) !important; color: var(--rf-muted) !important;
+  font-size: 0.76rem !important; padding: 6px 10px !important;
+}
+.adv-acc .accordion-body { background: var(--rf-surface-2) !important; padding: 8px 9px !important; }
+
+/* -------------------------------------------------------- section titles --- */
+.s-title {
+  font-size: 0.72rem; font-weight: 700; color: var(--rf-muted);
+  border-bottom: 1px solid var(--rf-border);
+  padding-bottom: 3px; margin: 12px 0 6px 0; display: block;
+  text-transform: uppercase; letter-spacing: 0.6px;
+}
+.s-title:first-child { margin-top: 2px; }
+
+/* Per-tab page header + microcopy */
+.rnaflow-page-header { margin: 2px 2px 10px 2px; }
+.rnaflow-page-header .rf-h { font-size: 1.02rem; font-weight: 700; color: var(--rf-ink); }
+.rnaflow-page-header .rf-sub { font-size: 0.82rem; color: var(--rf-muted); margin-top: 1px; }
+.rf-microcopy { font-size: 0.78rem; color: var(--rf-muted); margin: 2px 0 8px; }
+
+/* ------------------------------------------------------------- banners ---- */
+.rnaflow-banner, .demo-banner {
+  display: flex; align-items: flex-start; gap: 8px;
+  border: 1px solid var(--rf-info-bd);
+  background: var(--rf-info-bg); color: var(--rf-info-fg);
+  border-radius: var(--rf-radius-sm);
+  padding: 8px 12px; font-size: 0.8rem; line-height: 1.45;
+  margin-bottom: 10px;
+}
+.rnaflow-banner .rf-ic, .demo-banner .rf-ic { flex-shrink: 0; opacity: .85; margin-top: 1px; }
+.rnaflow-banner.rf-warning { background: var(--rf-warn-bg); border-color: var(--rf-warn-bd); color: var(--rf-warn-fg); }
+.rnaflow-banner.rf-danger  { background: var(--rf-error-bg); border-color: var(--rf-error-bd); color: var(--rf-error-fg); }
+.rnaflow-banner.rf-success { background: var(--rf-ok-bg); border-color: var(--rf-ok-bd); color: var(--rf-ok-fg); }
+
+/* Shiny validation / notification polish */
+.shiny-notification {
+  border: 1px solid var(--rf-border); border-radius: var(--rf-radius-sm);
+  box-shadow: var(--rf-shadow); font-size: 0.82rem;
+}
+.shiny-output-error-validation {
+  color: var(--rf-warn-fg); background: var(--rf-warn-bg);
+  border: 1px solid var(--rf-warn-bd); border-radius: var(--rf-radius-sm);
+  padding: 10px 12px; font-size: 0.82rem;
+}
+
+/* --------------------------------------------------------- empty states --- */
+.rnaflow-empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; gap: 6px;
+  min-height: 200px; padding: 28px 24px;
+  border: 1px dashed var(--rf-border-strong);
+  border-radius: var(--rf-radius);
+  background: var(--rf-surface-2);
+  color: var(--rf-muted);
+}
+.rnaflow-empty .rf-empty-ic { font-size: 1.6rem; color: var(--rf-accent); opacity: .8; }
+.rnaflow-empty .rf-empty-title { font-size: 0.95rem; font-weight: 650; color: var(--rf-ink); }
+.rnaflow-empty .rf-empty-msg { font-size: 0.82rem; max-width: 460px; line-height: 1.5; }
+
+/* ----------------------------------------------------------- stat tiles --- */
+.stat-badge, .rnaflow-tile {
+  color: #fff; border-radius: var(--rf-radius-sm);
+  padding: 8px 12px; text-align: center; min-width: 78px;
+  box-shadow: var(--rf-shadow-sm);
+}
+.stat-n   { font-size: 1.35rem; font-weight: 750; line-height: 1.05; }
+.stat-lbl { font-size: 0.68rem; opacity: 0.92; letter-spacing: .3px; }
+
+/* -------------------------------------------------------------- tables ---- */
+table.dataTable td, table.dataTable th,
+.dataTables_wrapper, .dataTables_wrapper *,
+.dataTables_info, .dataTables_length,
+.dataTables_filter, .dataTables_paginate,
+.dataTables_paginate .paginate_button,
+.dataTables_length select, .dataTables_filter input { font-size: 0.79rem !important; }
+
+table.dataTable thead th {
+  background: var(--rf-surface-2); color: var(--rf-ink);
+  font-weight: 650; border-bottom: 2px solid var(--rf-border-strong) !important;
+  text-transform: none; letter-spacing: 0;
+}
+table.dataTable tbody td { border-top: 1px solid var(--rf-border) !important; color: var(--rf-body); }
+table.dataTable.stripe tbody tr:nth-child(odd),
+table.dataTable.display tbody tr:nth-child(odd) { background: var(--rf-surface-2); }
+table.dataTable.hover tbody tr:hover,
+table.dataTable.display tbody tr:hover { background: var(--rf-accent-soft) !important; }
+table.dataTable.compact td, table.dataTable.compact th { padding: 4px 9px !important; }
+.dataTables_wrapper .dataTables_filter input {
+  border: 1px solid var(--rf-border-strong); border-radius: var(--rf-radius-sm);
+  padding: 3px 8px;
+}
+.dataTables_paginate .paginate_button { padding: 2px 8px !important; border-radius: 6px !important; }
+.dataTables_paginate .paginate_button.current {
+  background: var(--rf-accent) !important; border-color: var(--rf-accent) !important;
+  color: #fff !important;
+}
+
+/* ---------------------------------------------------- interactive plots --- */
+.plotly.html-widget, .html-widget.plotly {
+  border: 1px solid var(--rf-border); border-radius: var(--rf-radius);
+  background: var(--rf-surface); box-shadow: var(--rf-shadow-sm);
+}
+.shiny-plot-output img { border-radius: var(--rf-radius-sm); }
+
+/* Loading spinners inherit the accent */
+.load-container .loader,
+.shiny-spinner-output-container svg circle { stroke: var(--rf-accent) !important; }
+
+/* ---------------------------------------------------------------- misc ---- */
+code, kbd { font-family: var(--rf-mono); font-size: 0.86em; }
+:not(pre) > code {
+  background: var(--rf-surface-2); border: 1px solid var(--rf-border);
+  border-radius: 5px; padding: 1px 5px; color: var(--rf-accent-dark);
+}
+::selection { background: var(--rf-accent-ring); }
+
+/* Getting-started lists (Data tab) */
+.rf-steps { margin: 2px 0 4px; padding-left: 20px; }
+.rf-steps li { margin-bottom: 5px; font-size: 0.82rem; line-height: 1.45; }
+.rf-demo-list { margin: 2px 0 8px; padding-left: 18px; }
+.rf-demo-list li { margin-bottom: 5px; font-size: 0.78rem; color: var(--rf-body); line-height: 1.45; }

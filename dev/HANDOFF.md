@@ -12,10 +12,16 @@ _"Lis dev/HANDOFF.md, NEWS.md et le git log, puis on continue."_
 
 ## Current state (keep this updated)
 
-- **Version 0.11.4** (bug-fix pass from a multi-agent code review; see
-  `NEWS.md`), `git log --oneline` is the record.
-- **364 tests pass / 0 fail / 0 skip** (`devtools::test()`). decoupleR +
+- **Version 0.12.0** (professional UI / visual overhaul; then 0.11.4 bug-fix
+  pass; see `NEWS.md`), `git log --oneline` is the record.
+- **378 tests pass / 0 fail / 0 skip** (`devtools::test()`). decoupleR +
   OmnipathR must be installed for the Activity tests to run for real.
+- **UI design system.** Global look lives in `inst/app/www/rnaflow.css`
+  (token-based) + `R/ui_components.R` (banners / empty states / page headers /
+  stat tiles) + `R/fig_theme.R` (ggplot themes). The stylesheet is served via
+  `R/zzz.R` (`addResourcePath("rnaflow", ...)`) -- **never hard-code a
+  `www/` `href`; use `rnaflow/<file>`**. Report styling is a separate embedded
+  CSS string in `R/report.R` (self-contained, no pandoc).
 - App launches with `RNAflow::run_app()`. Full `R CMD check` clean.
 - **Activity results + AI interpretation are saved in the project** (settings ->
   `assemble_project()` -> `$activity` / `$ai_interpretation`). Older `.rnaflow.rds`
@@ -84,7 +90,7 @@ decoupleR Activity tab; crosstalk Explore tab. See `NEWS.md` for details.
 ```r
 source("dev/install_deps.R")   # one-time per machine (needs Rtools on Windows)
 devtools::load_all()           # load
-devtools::test()               # 364 pass / 0 fail
+devtools::test()               # 378 pass / 0 fail
 devtools::document()           # after any roxygen change
 RNAflow::run_app()             # launch
 ```

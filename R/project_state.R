@@ -148,15 +148,6 @@ rnaflow_recent_dir <- function() {
   dir
 }
 
-#' Cache a project file in the recent-projects directory
-#'
-#' Copies a saved/loaded `.rnaflow.rds` into the recent directory so it can
-#' be re-opened from the launch panel later.
-#'
-#' @param path path to an existing project file
-#' @param name optional display name used to build the cached filename
-#' @return the cached file path (invisibly)
-#' @keywords internal
 # Small stable non-cryptographic hash (base R only) so distinct project names
 # that sanitise to the same string don't collide in the recent cache, while the
 # same name still maps to one file (idempotent re-caching).
@@ -166,6 +157,15 @@ name_hash <- function(s) {
   sprintf("%09.0f", h)
 }
 
+#' Cache a project file in the recent-projects directory
+#'
+#' Copies a saved/loaded `.rnaflow.rds` into the recent directory so it can
+#' be re-opened from the launch panel later.
+#'
+#' @param path path to an existing project file
+#' @param name optional display name used to build the cached filename
+#' @return the cached file path (invisibly)
+#' @keywords internal
 cache_recent_project <- function(path, name = NULL) {
   if (!file.exists(path)) return(invisible(NULL))
   base <- if (!is.null(name) && nzchar(name)) {

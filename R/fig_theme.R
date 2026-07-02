@@ -21,8 +21,11 @@ theme_publication <- function(base_size = 8) {
     ggplot2::theme(
       plot.title       = ggplot2::element_text(face = "bold", size = base_size + 2,
                                                hjust = 0, margin = ggplot2::margin(b = 4)),
+      plot.title.position = "plot",
       plot.subtitle    = ggplot2::element_text(size = base_size - 1, color = "grey30",
                                                hjust = 0, margin = ggplot2::margin(b = 6)),
+      plot.caption     = ggplot2::element_text(size = base_size - 2, color = "grey45",
+                                               hjust = 1, margin = ggplot2::margin(t = 6)),
       axis.title       = ggplot2::element_text(size = base_size + 1, color = "black"),
       axis.text        = ggplot2::element_text(size = base_size, color = "black"),
       axis.line        = ggplot2::element_line(color = "black", linewidth = 0.4),
@@ -32,6 +35,10 @@ theme_publication <- function(base_size = 8) {
       legend.title     = ggplot2::element_text(size = base_size),
       legend.key.size  = ggplot2::unit(0.4, "lines"),
       legend.background = ggplot2::element_rect(fill = NA, color = NA),
+      strip.background = ggplot2::element_rect(fill = "grey95", color = NA),
+      strip.text       = ggplot2::element_text(face = "bold", size = base_size,
+                                               color = "grey20",
+                                               margin = ggplot2::margin(3, 3, 3, 3)),
       panel.grid       = ggplot2::element_blank(),
       panel.border     = ggplot2::element_blank(),
       plot.margin      = ggplot2::margin(6, 8, 6, 6)
@@ -47,19 +54,32 @@ theme_publication <- function(base_size = 8) {
 #' @return a ggplot2 theme object
 #' @export
 theme_exploration <- function(base_size = 13) {
+  ink <- "#1f2d3a"; muted <- "#7c8a94"
   ggplot2::theme_classic(base_size = base_size) +
     ggplot2::theme(
-      plot.title    = ggplot2::element_text(face = "bold", size = base_size + 1, hjust = 0),
-      plot.subtitle = ggplot2::element_text(size = base_size - 4, color = "#555",
+      plot.title    = ggplot2::element_text(face = "bold", size = base_size + 1,
+                                            hjust = 0, color = ink),
+      plot.title.position = "plot",
+      plot.subtitle = ggplot2::element_text(size = base_size - 4, color = muted,
                                             hjust = 0, margin = ggplot2::margin(b = 8)),
-      axis.title    = ggplot2::element_text(size = base_size - 1),
-      axis.text     = ggplot2::element_text(size = base_size - 2, color = "black"),
-      axis.line     = ggplot2::element_line(color = "black", linewidth = 0.5),
-      axis.ticks    = ggplot2::element_line(color = "black", linewidth = 0.4),
-      legend.text   = ggplot2::element_text(size = base_size - 3),
+      plot.caption  = ggplot2::element_text(size = base_size - 5, color = muted,
+                                            hjust = 1, margin = ggplot2::margin(t = 6)),
+      axis.title    = ggplot2::element_text(size = base_size - 1, color = "#46545f"),
+      axis.text     = ggplot2::element_text(size = base_size - 2, color = "#46545f"),
+      axis.line     = ggplot2::element_line(color = "#c9d1ce", linewidth = 0.5),
+      axis.ticks    = ggplot2::element_line(color = "#c9d1ce", linewidth = 0.4),
+      legend.text   = ggplot2::element_text(size = base_size - 3, color = "#46545f"),
+      legend.title  = ggplot2::element_text(size = base_size - 2, color = ink),
       legend.key.size = ggplot2::unit(0.55, "lines"),
       legend.background = ggplot2::element_rect(fill = scales::alpha("white", 0.8), color = NA),
-      panel.grid    = ggplot2::element_blank(),
+      # Subtle horizontal guides only -- keeps plots readable without clutter.
+      panel.grid.major.y = ggplot2::element_line(color = "#eef1f0", linewidth = 0.5),
+      panel.grid.minor   = ggplot2::element_blank(),
+      panel.grid.major.x = ggplot2::element_blank(),
+      strip.background = ggplot2::element_rect(fill = "#f2f5f4", color = NA),
+      strip.text       = ggplot2::element_text(face = "bold", size = base_size - 3,
+                                               color = ink,
+                                               margin = ggplot2::margin(3, 3, 3, 3)),
       plot.margin   = ggplot2::margin(12, 18, 12, 12)
     )
 }

@@ -73,18 +73,43 @@ build_report_html <- function(project, file, title = "RNAflow analysis report",
   section <- function(...) h$div(class = "section", ...)
 
   css <- "
-    body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      color:#2C3E50;max-width:900px;margin:24px auto;padding:0 18px;line-height:1.5;}
-    h1{color:#1D9E75;border-bottom:2px solid #1D9E75;padding-bottom:6px;}
-    h2{color:#2C3E50;margin-top:28px;border-bottom:1px solid #e9ecef;padding-bottom:4px;}
-    table{border-collapse:collapse;width:100%;margin:8px 0;font-size:14px;}
-    th,td{border:1px solid #dee2e6;padding:5px 9px;text-align:left;}
-    th{background:#f2f7f5;}
-    pre{background:#f6f8fa;border:1px solid #e1e4e8;border-radius:6px;padding:12px;
-      overflow-x:auto;font-size:12.5px;}
-    .muted{color:#7F8C8D;font-size:13px;}
-    .badge{display:inline-block;background:#eafaf3;color:#0f7a54;border-radius:4px;
-      padding:1px 7px;margin-right:6px;font-size:13px;}
+    :root{--rf-accent:#1D9E75;--rf-accent-dark:#157a5b;--rf-ink:#1f2d3a;
+      --rf-body:#46545f;--rf-muted:#7c8a94;--rf-border:#e6ebe9;--rf-surface-2:#f8faf9;}
+    *{box-sizing:border-box;}
+    body{font-family:'Inter',-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      color:var(--rf-body);max-width:920px;margin:0 auto;padding:0 22px 56px;
+      line-height:1.55;background:#fff;-webkit-font-smoothing:antialiased;}
+    h1,h2,h3{color:var(--rf-ink);letter-spacing:-0.01em;}
+    h2{font-size:1.28rem;margin-top:34px;padding-bottom:6px;
+      border-bottom:1px solid var(--rf-border);}
+    h3{font-size:1.02rem;color:#34495e;}
+    a{color:var(--rf-accent-dark);text-decoration:none;}
+    .report-header{margin:30px 0 8px;padding:22px 24px;border-radius:14px;color:#fff;
+      background:linear-gradient(120deg,#1f2d3a 0%,#1D9E75 100%);
+      box-shadow:0 6px 20px rgba(16,40,34,.12);}
+    .report-header .rh-title{font-size:1.6rem;font-weight:800;letter-spacing:-0.02em;}
+    .report-header .rh-sub{font-size:.92rem;opacity:.9;margin-top:4px;}
+    .cards{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0 6px;}
+    .card{flex:1 1 150px;background:var(--rf-surface-2);border:1px solid var(--rf-border);
+      border-radius:12px;padding:14px 16px;}
+    .card .c-val{font-size:1.5rem;font-weight:750;color:var(--rf-ink);line-height:1.1;}
+    .card .c-lbl{font-size:.72rem;font-weight:650;text-transform:uppercase;
+      letter-spacing:.5px;color:var(--rf-muted);margin-top:4px;}
+    table{border-collapse:collapse;width:100%;margin:10px 0;font-size:.86rem;}
+    th,td{border:none;border-bottom:1px solid var(--rf-border);padding:7px 11px;text-align:left;}
+    thead th{background:var(--rf-surface-2);color:var(--rf-ink);font-weight:650;
+      border-bottom:2px solid #d6ddda;}
+    tbody tr:nth-child(even){background:#fbfcfc;}
+    pre{background:#0f172a;color:#e2e8f0;border:1px solid #0b1220;border-radius:10px;
+      padding:14px 16px;overflow-x:auto;font-size:12.5px;line-height:1.5;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+    pre code{color:inherit;background:none;}
+    .caption{color:var(--rf-muted);font-size:.8rem;margin:2px 0 16px;text-align:center;}
+    .muted{color:var(--rf-muted);font-size:.85rem;}
+    .badge{display:inline-block;background:#eafaf3;color:#0f7a54;border-radius:6px;
+      padding:2px 9px;margin-right:6px;font-size:.8rem;font-weight:600;}
+    .section{margin-top:8px;}
+    .figure-block{margin:14px 0;}
   "
 
   # ---- Overview table ----
@@ -98,6 +123,18 @@ build_report_html <- function(project, file, title = "RNAflow analysis report",
               else "not stored")),
     h$tr(h$th("Saved contrasts"), h$td(length(store)))
   )
+
+  # ---- Overview cards (headline numbers) ----
+  n_ann <- if (!is.null(meta)) max(0, ncol(meta) - 1) else 0
+  gxs   <- if (!is.null(counts)) sprintf("%d &times; %d", nrow(counts), ncol(counts))
+           else "&mdash;"
+  o_card <- function(val, lbl) h$div(class = "card",
+    h$div(class = "c-val", htmltools::HTML(val)), h$div(class = "c-lbl", lbl))
+  overview_cards <- h$div(class = "cards",
+    o_card(tools::toTitleCase(organism), "Organism"),
+    o_card(gxs, "Genes &times; samples"),
+    o_card(as.character(length(store)), "Contrasts"),
+    o_card(as.character(n_ann), "Annotations"))
 
   # ---- Contrasts summary table ----
   contrast_tbl <- NULL
@@ -118,8 +155,11 @@ build_report_html <- function(project, file, title = "RNAflow analysis report",
                                 n_label = 15, title = lbl),
                     error = function(e) NULL)
       if (is.null(p)) return(NULL)
-      h$div(h$h3(lbl, style = "font-size:15px;color:#34495e;"),
-            embed_fig(p, 6, 4))
+      h$div(class = "figure-block",
+            h$h3(lbl, style = "font-size:15px;color:#34495e;"),
+            embed_fig(p, 6, 4),
+            h$div(class = "caption",
+                  sprintf("Volcano plot -- %s (padj < 0.05, |log2FC| > 1).", lbl)))
     })
   }
 
@@ -129,8 +169,12 @@ build_report_html <- function(project, file, title = "RNAflow analysis report",
     contrasts <- contrast_store_results(store)
     hm <- tryCatch(fig_lfc_heatmap(contrasts, gene_src = "sig_union",
                                    n_genes = 40), error = function(e) NULL)
-    if (!is.null(hm)) compare <- section(h$h2("Cross-contrast signature"),
-                                         embed_fig(hm, 6, 6))
+    if (!is.null(hm)) compare <- section(
+      h$h2("Cross-contrast signature"),
+      h$div(class = "figure-block", embed_fig(hm, 6, 6),
+            h$div(class = "caption",
+                  "log2 fold-change across contrasts for the union of ",
+                  "significant genes (top 40).")))
   }
 
   # ---- AI interpretation (optional) ----
@@ -170,12 +214,15 @@ build_report_html <- function(project, file, title = "RNAflow analysis report",
 
   doc <- htmltools::tagList(
     h$head(h$style(htmltools::HTML(css)), h$title(title)),
-    h$h1(title),
-    h$p(class = "muted",
-        sprintf("Generated by RNAflow v%s%s", ver,
-                if (!is.null(generated)) paste0(" - ", generated) else "")),
+    h$div(
+      class = "report-header",
+      h$div(class = "rh-title", title),
+      h$div(class = "rh-sub",
+            sprintf("Generated by RNAflow v%s%s", ver,
+                    if (!is.null(generated)) paste0(" - ", generated) else ""))
+    ),
 
-    section(h$h2("Overview"), overview),
+    section(h$h2("Overview"), overview_cards, overview),
     if (!is.null(contrast_tbl))
       section(h$h2("Differential expression"),
               h$p(class = "muted", "Thresholds: padj < 0.05, |log2FC| > 1."),

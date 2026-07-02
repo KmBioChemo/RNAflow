@@ -42,10 +42,11 @@ app_ui <- function() {
       )
     ),
     theme = bslib::bs_theme(version = 5, bootswatch = "flatly",
-                            primary = "#1D9E75"),
+                            primary = "#1D9E75", success = "#1D9E75"),
     header = shiny::tagList(
       shiny::tags$head(
-        shiny::tags$link(rel = "stylesheet", type = "text/css", href = "styles.css")
+        shiny::tags$link(rel = "stylesheet", type = "text/css",
+                         href = "rnaflow/rnaflow.css")
       )
     ),
     fillable = TRUE,
@@ -59,36 +60,44 @@ app_ui <- function() {
           bslib::card(
             bslib::card_header("Getting started"),
             bslib::card_body(
-              shiny::p("Upload a ", shiny::strong("counts matrix"),
-                       " (genes x samples) and ",
-                       shiny::strong("sample metadata"),
-                       " (column 1 = sample ID matching counts colnames)."),
-              shiny::p("Then run DESeq2 with your design variable."),
-              shiny::p("Already have DE results from elsewhere? Skip to the third upload box."),
-              shiny::tags$hr(),
-              shiny::p(shiny::tags$small(
-                shiny::strong("Demo data"), " (in the package's ",
-                shiny::tags$code("inst/extdata/"), " folder):",
-                shiny::tags$ul(
-                  shiny::tags$li(shiny::tags$code("demo_airway_counts.csv"),
-                    " -- a real, published human dataset (airway, ",
-                    "dexamethasone vs. control across 4 cell lines). Organism = ",
-                    shiny::strong("Human"), "; design ",
-                    shiny::tags$code("condition"), ", adjust for ",
-                    shiny::tags$code("cell"), "."),
-                  shiny::tags$li(shiny::tags$code("demo_multi_counts.csv"),
-                    " -- a simulated mouse factorial set (6 groups) for ",
-                    "multi-contrast / WGCNA testing. Organism = ",
-                    shiny::strong("Mouse"), "; design ",
-                    shiny::tags$code("group"), "."),
-                  shiny::tags$li(shiny::tags$code("demo_counts.csv"),
-                    " -- a minimal 2-group simulated set."))
-              )),
-              shiny::tags$hr(),
-              shiny::p(shiny::tags$small(shiny::tags$em(
-                "RNAflow validates everything on import. ",
-                "If a file is malformed, you'll see exactly why."
-              )))
+              ui_section_title("Workflow"),
+              shiny::tags$ol(
+                class = "rf-steps",
+                shiny::tags$li("Upload a ", shiny::strong("counts matrix"),
+                               " (genes x samples) and ",
+                               shiny::strong("sample metadata"),
+                               " (column 1 = sample ID, matching the counts columns)."),
+                shiny::tags$li("Run ", shiny::strong("DESeq2"),
+                               " with your design variable."),
+                shiny::tags$li("Explore, enrich, and export -- or load a saved project.")
+              ),
+              shiny::p(class = "rf-microcopy",
+                       "Already have DE results from elsewhere? Skip straight to the ",
+                       "third upload box."),
+              ui_section_title("Demo datasets"),
+              shiny::p(class = "rf-microcopy",
+                       "Bundled in the package's ",
+                       shiny::tags$code("inst/extdata/"), " folder:"),
+              shiny::tags$ul(
+                class = "rf-demo-list",
+                shiny::tags$li(shiny::tags$code("demo_airway_counts.csv"),
+                  " -- real published human data (airway; dexamethasone vs. ",
+                  "control across 4 cell lines). Organism ", shiny::strong("Human"),
+                  "; design ", shiny::tags$code("condition"), ", adjust for ",
+                  shiny::tags$code("cell"), "."),
+                shiny::tags$li(shiny::tags$code("demo_multi_counts.csv"),
+                  " -- simulated mouse factorial set (6 groups) for ",
+                  "multi-contrast / WGCNA testing. Organism ", shiny::strong("Mouse"),
+                  "; design ", shiny::tags$code("group"), "."),
+                shiny::tags$li(shiny::tags$code("demo_counts.csv"),
+                  " -- a minimal 2-group simulated set.")
+              ),
+              shiny::div(
+                class = "rnaflow-banner rf-success",
+                shiny::icon("circle-check", class = "rf-ic"),
+                shiny::span("RNAflow validates every file on import -- if ",
+                            "something is malformed, you'll see exactly why.")
+              )
             )
           )
         )
@@ -109,8 +118,8 @@ app_ui <- function() {
     bslib::nav_spacer(),
     bslib::nav_item(
       shiny::div(
-        style = "display:flex;align-items:center;gap:6px;min-width:260px;",
-        shiny::tags$small(style = "color:#7F8C8D;white-space:nowrap;", "Active:"),
+        class = "rnaflow-active",
+        shiny::span(class = "rf-active-label", "Active contrast"),
         shiny::uiOutput("active_contrast_ui")
       )
     ),

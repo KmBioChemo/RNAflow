@@ -1,3 +1,37 @@
+# RNAflow 0.12.0 (2026-07-02)
+
+## Professional UI / visual overhaul (no new analyses)
+
+A design-system pass to make RNAflow look and feel like a polished scientific
+platform. No biological analyses, tabs, or statistics changed.
+
+- **Assets now actually load.** `inst/app/www` was never registered as a Shiny
+  resource path, so the stylesheet 404'd and *none* of the app styling applied.
+  Added `R/zzz.R` (`.onLoad` -> `addResourcePath("rnaflow", ...)`) and the UI now
+  links `rnaflow/rnaflow.css`.
+- **Design system.** New token-based stylesheet (`inst/app/www/rnaflow.css`):
+  calm teal accent, white/light surfaces, soft cards with hairline borders and
+  subtle shadows, consistent typography, spacing, focus rings, and status
+  colours. Restyled navbar (active-tab highlight), sidebar, form controls,
+  sliders, buttons (clear primary vs secondary), accordions, banners, empty
+  states, stat tiles, DataTables, and interactive-plot containers.
+- **Navbar.** The active-contrast selector is now a clean pill with a labelled
+  caption; brand wordmark refreshed.
+- **Reusable components.** New `R/ui_components.R`: `ui_banner()`,
+  `ui_empty_state()`, `ui_page_header()`, `ui_stat_tile()` -- consistent
+  presentational primitives (pure view helpers, no server logic).
+- **Figure theme.** `theme_exploration()` refined for a publication-grade,
+  consistent look (subtle horizontal guides, softer axes, muted captions,
+  faceted-strip styling); `theme_publication()` gained caption/strip styling.
+  Plotted data and thresholds are unchanged; PNG/PDF/TIFF export is unaffected.
+- **HTML report.** Redesigned self-contained report: gradient header block,
+  overview stat cards, striped tables, dark code blocks, figure captions, and
+  tightened section spacing. Still htmltools-only (no pandoc/Quarto),
+  reproducible script + session info + AI caveats/provenance preserved.
+- **Tests.** New `test-ui-components.R`; 378 pass / 0 fail / 0 skip. App boots
+  headless with the stylesheet served (verified), `pkgdown::check_pkgdown()`
+  clean.
+
 # RNAflow 0.11.4 (2026-07-02)
 
 ## Bug-fix pass (multi-agent code review, no new features)
