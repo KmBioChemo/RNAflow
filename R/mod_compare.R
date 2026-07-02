@@ -13,6 +13,8 @@ NULL
 mod_compare_ui <- function(id) {
   ns <- shiny::NS(id)
   bslib::layout_sidebar(
+    ui_page_header("Compare contrasts",
+                   "Overlap and log2 fold-change across saved DE contrasts."),
     sidebar = bslib::sidebar(
       width = 330,
       ui_section_title("Contrasts to compare"),

@@ -103,10 +103,9 @@ mod_heatmap_server <- function(id, de_reactive, counts_reactive, metadata_reacti
 
     output$msg <- shiny::renderUI({
       if (is.null(counts_reactive())) {
-        shiny::div(class = "demo-banner",
-                   style = "background:#FDEBD0;border-color:#F5B041;color:#7E5109;",
-                   "\u26A0 Heatmap requires a counts matrix. ",
-                   "Upload counts in the Data tab to enable.")
+        ui_banner("Heatmap requires a counts matrix. ",
+                  "Upload counts in the Data tab to enable.",
+                  type = "warning")
       } else NULL
     })
 

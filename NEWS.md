@@ -1,3 +1,29 @@
+# RNAflow 0.13.0 (2026-07-02)
+
+## Reproducibility, distribution, UI finish, integration tests
+
+- **Docker.** New `Dockerfile` (+ `.dockerignore`) pinning R 4.5 /
+  Bioconductor 3.22, layer-caching the heavy dependency stack and serving the
+  app on `0.0.0.0:8080` -- the primary reproducibility guarantee for this
+  Bioconductor-heavy app. `dev/make_renv_lock.R` adds an optional CRAN/Bioc
+  version pin on top. README documents the Docker workflow.
+- **Distribution.** Confirmed the existing CI already ships the app: pkgdown
+  deploys to GitHub Pages on release, R-CMD-check runs on push. (Making the
+  repository public and a hosted live demo are left to the maintainer -- a
+  static shinylive demo is not feasible because the app depends on compiled
+  Bioconductor packages.)
+- **UI finish.** Standardised the remaining ad-hoc inline-styled warning
+  banners to the shared `ui_banner(type = "warning")` helper (PCA, Heatmap,
+  Explore); added `ui_page_header()` with one-line microcopy to the tabs whose
+  one-word label under-describes them (Explore, Compare, QC, Network,
+  Activity).
+- **Integration tests.** New `test-shiny-app.R`: a guarded `shinytest2` smoke
+  test that launches the real app headlessly and asserts the brand, all 13
+  tabs, and the fresh-launch getting-started guidance render. Skips cleanly
+  where Chrome/chromote is unavailable; `shinytest2` added to Suggests.
+- **Tests.** 378 pass / 0 fail / 1 skip (the shinytest2 test, without a
+  browser). `R CMD check` clean; `pkgdown::check_pkgdown()` clean.
+
 # RNAflow 0.12.0 (2026-07-02)
 
 ## Professional UI / visual overhaul (no new analyses)

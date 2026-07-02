@@ -14,6 +14,8 @@ NULL
 mod_activity_ui <- function(id) {
   ns <- shiny::NS(id)
   bslib::layout_sidebar(
+    ui_page_header("Activity inference",
+                   "TF (CollecTRI) and pathway (PROGENy) activity via decoupleR."),
     sidebar = bslib::sidebar(
       width = 340,
       shiny::uiOutput(ns("organism_note")),

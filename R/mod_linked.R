@@ -14,6 +14,8 @@ NULL
 mod_linked_ui <- function(id) {
   ns <- shiny::NS(id)
   bslib::layout_sidebar(
+    ui_page_header("Explore",
+                   "Linked volcano and table -- select genes in either view."),
     sidebar = bslib::sidebar(
       width = 300,
       ui_section_title("Thresholds"),
@@ -72,9 +74,7 @@ mod_linked_server <- function(id, de_reactive) {
 
     output$msg <- shiny::renderUI({
       if (is.null(de_reactive())) {
-        shiny::div(class = "demo-banner",
-                   style = "background:#FDEBD0;border-color:#F5B041;color:#7E5109;",
-                   "\u26A0 No active contrast. Run DESeq2 first.")
+        ui_banner("No active contrast. Run DESeq2 first.", type = "warning")
       } else NULL
     })
 

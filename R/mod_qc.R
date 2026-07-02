@@ -13,6 +13,8 @@ NULL
 mod_qc_ui <- function(id) {
   ns <- shiny::NS(id)
   bslib::layout_sidebar(
+    ui_page_header("Quality control",
+                   "Sample correlations, library sizes, and p-value diagnostics."),
     sidebar = bslib::sidebar(
       width = 300,
       ui_section_title("Diagnostic"),

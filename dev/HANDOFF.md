@@ -12,10 +12,16 @@ _"Lis dev/HANDOFF.md, NEWS.md et le git log, puis on continue."_
 
 ## Current state (keep this updated)
 
-- **Version 0.12.0** (professional UI / visual overhaul; then 0.11.4 bug-fix
-  pass; see `NEWS.md`), `git log --oneline` is the record.
-- **378 tests pass / 0 fail / 0 skip** (`devtools::test()`). decoupleR +
-  OmnipathR must be installed for the Activity tests to run for real.
+- **Version 0.13.0** (reproducibility/distribution + UI finish + integration
+  tests; then 0.12.0 UI overhaul, 0.11.4 bug-fix pass; see `NEWS.md`),
+  `git log --oneline` is the record.
+- **378 pass / 0 fail / 1 skip** (`devtools::test()`). The skip is the
+  `shinytest2` app smoke test (`test-shiny-app.R`), which needs Chrome/chromote
+  -- runs in CI, skips on dev boxes without a browser. decoupleR + OmnipathR
+  must be installed for the Activity tests to run for real.
+- **Reproducibility.** `Dockerfile` pins R 4.5 / Bioc 3.22 (primary guarantee);
+  `dev/make_renv_lock.R` is an optional package-version pin. Both are
+  `.Rbuildignore`d so `R CMD check` stays clean.
 - **UI design system.** Global look lives in `inst/app/www/rnaflow.css`
   (token-based) + `R/ui_components.R` (banners / empty states / page headers /
   stat tiles) + `R/fig_theme.R` (ggplot themes). The stylesheet is served via
@@ -90,7 +96,7 @@ decoupleR Activity tab; crosstalk Explore tab. See `NEWS.md` for details.
 ```r
 source("dev/install_deps.R")   # one-time per machine (needs Rtools on Windows)
 devtools::load_all()           # load
-devtools::test()               # 378 pass / 0 fail
+devtools::test()               # 378 pass / 0 fail / 1 skip
 devtools::document()           # after any roxygen change
 RNAflow::run_app()             # launch
 ```

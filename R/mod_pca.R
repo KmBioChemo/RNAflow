@@ -71,9 +71,7 @@ mod_pca_server <- function(id, counts_reactive, metadata_reactive,
 
     output$msg <- shiny::renderUI({
       if (is.null(counts_reactive())) {
-        shiny::div(class = "demo-banner",
-                   style = "background:#FDEBD0;border-color:#F5B041;color:#7E5109;",
-                   "\u26A0 PCA requires a counts matrix.")
+        ui_banner("PCA requires a counts matrix.", type = "warning")
       } else NULL
     })
 
