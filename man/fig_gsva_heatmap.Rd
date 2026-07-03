@@ -10,7 +10,8 @@ fig_gsva_heatmap(
   group_by = NULL,
   n_top = 40,
   scale_rows = TRUE,
-  title = NULL
+  title = NULL,
+  show_samples = NULL
 )
 }
 \arguments{
@@ -25,6 +26,10 @@ fig_gsva_heatmap(
 \item{scale_rows}{z-score each set across samples (recommended)}
 
 \item{title}{plot title}
+
+\item{show_samples}{show per-sample (column) labels; \code{NULL} (default) shows
+them only for small cohorts (<= 40 samples), since long sample identifiers
+are illegible for large cohorts where the group annotation suffices}
 }
 \value{
 a pheatmap object

@@ -12,7 +12,7 @@ _"Lis dev/HANDOFF.md, NEWS.md et le git log, puis on continue."_
 
 ## Current state (keep this updated)
 
-- **Version 0.16.2** (UI feedback + fixes: PCA label toggle, all-pairwise DESeq2, cleaner dropdowns, 200 MB upload cap; then 0.15.1 complex TCGA pan-cancer demo, 0.15.0 publication-readiness: 2 real demo datasets, community/citation files, reproducible vignette; then 0.14.2 stabilization: Signatures project-state + report/script,
+- **Version 0.16.3** (UI feedback + fixes: PCA label toggle, all-pairwise DESeq2, cleaner dropdowns, 200 MB upload cap; then 0.15.1 complex TCGA pan-cancer demo, 0.15.0 publication-readiness: 2 real demo datasets, community/citation files, reproducible vignette; then 0.14.2 stabilization: Signatures project-state + report/script,
   session manifest, docs/hygiene; then 0.14.1 visual refinements, 0.14.0
   backlog features (UMAP/3D PCA, visNetwork, raincloud/alluvial, GSVA
   Signatures), 0.13.0 repro/UI/tests, 0.12.0 UI overhaul, 0.11.4 bug-fix pass;

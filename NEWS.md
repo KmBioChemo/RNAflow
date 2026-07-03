@@ -1,3 +1,12 @@
+# RNAflow 0.16.3 (2026-07-03)
+
+## Change
+
+- `fig_gsva_heatmap()` gains a `show_samples` argument. Per-sample (column)
+  labels are now hidden by default for large cohorts (> 40 samples), where long
+  sample identifiers were illegible and the group annotation already identifies
+  the columns; small cohorts still show labels.
+
 # RNAflow 0.16.2 (2026-07-03)
 
 ## Fix

@@ -16,10 +16,14 @@ NULL
 #' @param n_top keep the `n_top` most variable sets
 #' @param scale_rows z-score each set across samples (recommended)
 #' @param title plot title
+#' @param show_samples show per-sample (column) labels; `NULL` (default) shows
+#'   them only for small cohorts (<= 40 samples), since long sample identifiers
+#'   are illegible for large cohorts where the group annotation suffices
 #' @return a pheatmap object
 #' @export
 fig_gsva_heatmap <- function(scores, metadata = NULL, group_by = NULL,
-                             n_top = 40, scale_rows = TRUE, title = NULL) {
+                             n_top = 40, scale_rows = TRUE, title = NULL,
+                             show_samples = NULL) {
   if (!requireNamespace("pheatmap", quietly = TRUE)) {
     stop("Package 'pheatmap' is required for the score heatmap.", call. = FALSE)
   }
@@ -50,7 +54,7 @@ fig_gsva_heatmap <- function(scores, metadata = NULL, group_by = NULL,
     scale = if (isTRUE(scale_rows)) "row" else "none",
     annotation_col = ann,
     show_rownames = nrow(m) <= 60,
-    show_colnames = TRUE,
+    show_colnames = show_samples %||% (ncol(m) <= 40),
     color = grDevices::colorRampPalette(
       rev(RColorBrewer::brewer.pal(11, "RdBu")))(100),
     border_color = NA, fontsize = 8, silent = TRUE,

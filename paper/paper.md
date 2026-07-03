@@ -392,8 +392,9 @@ interpretation.
 
 To demonstrate RNAflow across the difficulty spectrum, we analysed the two
 bundled datasets. All results below were produced with RNAflow's public
-functions and are reproduced by the figure scripts in the repository; Figures 1
-and 2 were generated directly from those scripts.
+functions and are reproduced by the figure script in the repository
+(`paper/make_figures.R`); every panel of Figures 1–3 is drawn by RNAflow's own
+figure functions, so they are exactly what a user obtains from the tool.
 
 ### A simple two-group study
 
@@ -419,31 +420,33 @@ genes) obtained through the reprocessed GSE62944 resource [@gse62944; @tcga].
 Here the value of an integrated, multi-group tool becomes apparent, because the
 same loaded dataset drives every downstream analysis in turn.
 
-Principal-component analysis and UMAP both separate the eight cancer types into
-clearly resolved clusters (Figure 1A, B; the first two principal components
-explaining 30.3% and 12.9% of variance), exactly the structure expected from
-tissue-of-origin and driver differences, and an immediate visual confirmation
-that the cohort is correctly assembled. Because the design variable has eight
-levels, the all-pairwise mode produces all 28 pairwise contrasts from a single
-model fit; across these contrasts the number of differentially expressed genes
-ranges from 3,852 to 9,583 (median 6,523; adjusted *p* < 0.05 and
-absolute log2 fold change > 1), and the pairwise DE-count matrix (Figure 2C)
-recapitulates the biological similarity structure — closely related epithelial
-tumours differ by fewer genes than developmentally distant pairs such as a
-glioma and a lung adenocarcinoma, which lie among the most divergent.
+Principal-component analysis separates the eight cancer types into clearly
+resolved clusters (Figure 1A; the first two principal components explaining 30.3%
+and 12.9% of variance), exactly the structure expected from tissue-of-origin and
+driver differences and an immediate visual confirmation that the cohort is
+correctly assembled; UMAP produces the same separation. Because the design
+variable has eight levels, the all-pairwise mode produces all 28 pairwise
+contrasts from a single model fit; across these contrasts the number of
+differentially expressed genes ranges from 3,852 to 9,583 (median 6,523; adjusted
+*p* < 0.05 and absolute log2 fold change > 1), and comparing representative
+contrasts with an UpSet plot (Figure 3) separates a shared, pan-cancer component
+of differential expression from large contrast-specific components.
 
 The same cohort feeds directly into the systems-level modules. WGCNA identified
-11 co-expression modules among the 3,500 most variable genes, and
-correlating module eigengenes with cancer type revealed strong,
-type-specific associations (the strongest being module turquoise, correlated with glioma (LGG) at *r* = 0.96), consistent
-with modules capturing tissue- and lineage-specific expression programmes (Figure
-2B). Per-sample GSVA scoring against the Hallmark collection (50
-signatures across the 120 samples) produced signature profiles that clearly
-distinguish the cancer types — for example the expected proliferation, metabolic,
-and immune-signalling contrasts between them — and are shown summarised by type in
-Figure 2A. Together, Figures 1 and 2 show a single dataset carried from raw counts
-through visualisation, all-pairwise differential expression, co-expression
-modules, and per-sample signatures without leaving the application.
+11 co-expression modules among the 3,500 most variable genes, and correlating
+module eigengenes with cancer type revealed strong, type-specific associations —
+the strongest being the turquoise module with glioma (LGG) at *r* = 0.96, with
+comparably strong module–type pairs for each of the other cancers — consistent
+with modules capturing tissue- and lineage-specific expression programmes
+(Figure 1D). Per-sample GSVA scoring against the Hallmark collection (50
+signatures across the 120 samples) produced signature profiles that cluster the
+tumours by cancer type and expose the expected proliferation, metabolic, and
+immune-signalling contrasts between them (Figure 2). Together, Figures 1–3 show a
+single dataset carried from raw counts through visualisation, differential
+expression, co-expression modules, per-sample signatures, and multi-contrast
+comparison without leaving the application — and every panel is produced by
+RNAflow's own figure functions, so the manuscript figures are exactly what a user
+obtains from the tool.
 
 ### Reproducibility in practice
 
@@ -455,23 +458,36 @@ therefore not only demonstrable interactively but recoverable as code — the
 property that most distinguishes RNAflow from a purely interactive tool, and the
 one most relevant to the reproducibility of the science it supports.
 
-**Figure 1.** *RNAflow applied to two bundled datasets.* **(A)** Principal-
-component analysis and **(B)** UMAP of the 120-sample TCGA pan-cancer subset,
-coloured by cancer type (a colour-vision-deficiency-safe palette); the eight
-types form clearly separated clusters. **(C)** Volcano plot of the airway
-dexamethasone-versus-control contrast (publication mode), highlighting
-glucocorticoid-response genes. **(D)** Gene-set enrichment (MSigDB Hallmark) for
-the same contrast, showing normalised enrichment score, set size, and
-false-discovery rate.
+![](figures/figure1.png){width=100%}
+
+**Figure 1.** *RNAflow analysis of the two bundled datasets, produced with the
+package's own figure functions.* **(A)** Principal-component analysis of the
+120-sample TCGA pan-cancer subset, coloured by cancer type (a
+colour-vision-deficiency-safe palette); the eight types form clearly separated
+clusters. **(B)** Volcano plot (`fig_volcano`, publication mode) of the airway
+dexamethasone-versus-control contrast, highlighting glucocorticoid-response
+genes. **(C)** Gene-set enrichment (`fig_enrich_dot`; MSigDB Hallmark) for the
+same contrast, showing normalised enrichment score, set size, and
+false-discovery rate. **(D)** WGCNA module–trait correlation
+(`fig_module_trait`) between the TCGA co-expression module eigengenes and cancer
+type, annotated with correlation coefficients and significance.
 
 ![](figures/figure2.png){width=100%}
 
-**Figure 2.** *Downstream, systems-level analyses of the TCGA cohort.*
-**(A)** Per-sample GSVA Hallmark signatures summarised as the mean score per
-cancer type (the most variable signatures shown). **(B)** WGCNA module–trait
-correlation between module eigengenes and cancer type. **(C)** Number of
-differentially expressed genes for each of the 28 pairwise contrasts, computed
-from a single model fit.
+**Figure 2.** *Per-sample signatures on the TCGA cohort.* GSVA Hallmark
+signature scores (`fig_gsva_heatmap`) for the 120 tumours (columns, annotated by
+cancer type) across the 40 most variable Hallmark signatures (rows). Both axes
+are hierarchically clustered; the tumours group by cancer type, and the row
+blocks recover coherent biological programmes (proliferation, interferon and
+inflammatory signalling, metabolism).
+
+![](figures/figure3.png){width=100%}
+
+**Figure 3.** *Multi-contrast comparison on the TCGA cohort.* UpSet plot
+(`fig_upset`) of the overlap between the significant-gene sets (adjusted *p* <
+0.05, absolute log2 fold change > 1) of five representative pairwise contrasts,
+separating differential expression shared across contrasts from
+contrast-specific components.
 
 ### Comparison with existing tools
 
@@ -563,7 +579,7 @@ individual laboratories and as a well-structured codebase that others can extend
 ## Declarations
 
 **Availability of data and materials.** RNAflow and the scripts that generate the
-bundled demonstration datasets and Figures 1 and 2 are available at
+bundled demonstration datasets and Figures 1–3 are available at
 <https://github.com/KmBioChemo/RNAflow>. The demonstration datasets are derived
 from public data: the airway dataset [@airway] and the TCGA pan-cancer subset
 obtained through GSE62944 [@gse62944; @tcga].
