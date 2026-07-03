@@ -1,3 +1,20 @@
+# RNAflow 0.15.1 (2026-07-03)
+
+## Complex demo dataset
+
+- Replaced the interim Pickrell subset with a **complex, many-group** second
+  demo: a **TCGA pan-cancer** subset (GSE62944; Rahman *et al.* 2015) of
+  **8 molecularly distinct cancer types × 15 tumors = 120 samples**
+  (BRCA, LUAD, KIRC, LGG, THCA, PRAD, COAD, SKCM; gene symbols). Alongside the
+  simple airway set, this shows the tool's power -- cancer types separate
+  sharply in PCA / UMAP, WGCNA recovers type-specific modules, and the 8-level
+  `cancer_type` factor drives rich multi-contrast comparison and per-sample
+  signatures. Built by `dev/make_demo_tcga.R` from ExperimentHub.
+- Tests, README, and the Data-tab guidance updated accordingly.
+- The TCGA counts file is ~9 MB, so `R CMD check` reports an installed-size
+  NOTE -- acceptable for a GitHub-hosted demo (the package is not bound for
+  CRAN).
+
 # RNAflow 0.15.0 (2026-07-03)
 
 ## Publication readiness & repository hygiene (no new features)

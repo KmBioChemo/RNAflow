@@ -12,7 +12,7 @@ _"Lis dev/HANDOFF.md, NEWS.md et le git log, puis on continue."_
 
 ## Current state (keep this updated)
 
-- **Version 0.15.0** (publication-readiness: 2 real demo datasets, community/citation files, reproducible vignette; then 0.14.2 stabilization: Signatures project-state + report/script,
+- **Version 0.15.1** (complex TCGA pan-cancer demo dataset; then 0.15.0 publication-readiness: 2 real demo datasets, community/citation files, reproducible vignette; then 0.14.2 stabilization: Signatures project-state + report/script,
   session manifest, docs/hygiene; then 0.14.1 visual refinements, 0.14.0
   backlog features (UMAP/3D PCA, visNetwork, raincloud/alluvial, GSVA
   Signatures), 0.13.0 repro/UI/tests, 0.12.0 UI overhaul, 0.11.4 bug-fix pass;
@@ -62,8 +62,10 @@ decoupleR Activity tab; crosstalk Explore tab. See `NEWS.md` for details.
   fit. Plan: **bioRxiv preprint** (free, fast, DOI) + **Zenodo** DOI for the
   software; a free peer-reviewed journal (Bioinformatics Application Note,
   non-OA track) or an OA venue with an institutional/waiver APC later.
-- **Demo data = two real published human datasets** (airway symbols; Pickrell
-  Ensembl), built by `dev/make_demo_airway.R` / `make_demo_pickrell.R`.
+- **Demo data = two real published human datasets**: airway (symbols, simple
+  2-group) and a TCGA pan-cancer subset (GSE62944; symbols, complex 8-cancer-
+  type, 120 samples, ~9 MB), built by `dev/make_demo_airway.R` /
+  `make_demo_tcga.R`.
 - **Community/citation files present**: `CITATION.cff`, `inst/CITATION`,
   `codemeta.json`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, issue templates.
 - **TODO for the manuscript**: affiliation + ORCID (not yet provided);

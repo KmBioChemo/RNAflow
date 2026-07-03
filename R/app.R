@@ -87,11 +87,13 @@ app_ui <- function() {
                   "lines). Organism ", shiny::strong("Human"), "; design ",
                   shiny::tags$code("condition"), ", adjust for ",
                   shiny::tags$code("cell"), ". Gene symbols."),
-                shiny::tags$li(shiny::tags$code("demo_pickrell_counts.csv"),
-                  " -- real published human data (Pickrell et al. 2010, ",
-                  "lymphoblastoid cell lines; a balanced female-vs-male subset). ",
-                  "Organism ", shiny::strong("Human"), "; design ",
-                  shiny::tags$code("sex"), ". Ensembl IDs.")
+                shiny::tags$li(shiny::tags$code("demo_tcga_counts.csv"),
+                  " -- real published human data (TCGA pan-cancer, GSE62944; ",
+                  "8 cancer types x 15 tumors = 120 samples). A complex, ",
+                  "many-group set that showcases PCA/UMAP clustering, ",
+                  "multi-contrast comparison, WGCNA and signatures. Organism ",
+                  shiny::strong("Human"), "; design ",
+                  shiny::tags$code("cancer_type"), ". Gene symbols.")
               ),
               shiny::div(
                 class = "rnaflow-banner rf-success",
