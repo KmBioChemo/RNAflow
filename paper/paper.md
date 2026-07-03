@@ -550,64 +550,67 @@ coherent, reproducible, and properly engineered tool. Table 3 summarises how its
 scope compares with representative interactive RNA-seq applications, and we
 discuss each in turn below.
 
-**Table 3.** Feature comparison with three representative interactive bulk
-RNA-seq tools. **Y** = present; **~** = partial or via a related feature;
+**Table 3.** Feature comparison with three broad interactive bulk RNA-seq tools
+of comparable scope. **Y** = present; **~** = partial or via a related feature;
 **–** = not a focus. Compiled from each tool's primary publication and
 documentation; feature sets evolve.
 
-| Capability | iDEP | DEBrowser | GeneTonic | **RNAflow** |
+| Capability | iDEP | DEBrowser | ExpressAnalyst | **RNAflow** |
 |---|:--:|:--:|:--:|:--:|
-| Differential expression | Y | Y | – | **Y** |
-| QC / diagnostics | Y | Y | – | **Y** |
-| PCA / dimensionality reduction | Y | Y | – | **Y** |
-| Multi-contrast comparison | ~ | ~ | – | **Y** |
-| Functional enrichment (GSEA + ORA) | Y | Y | ~ | **Y** |
-| Co-expression networks | Y | – | – | **Y** |
-| TF / pathway activity inference | ~ | – | – | **Y** |
+| Differential expression | Y | Y | Y | **Y** |
+| QC / diagnostics | Y | Y | Y | **Y** |
+| PCA / dimensionality reduction | Y | Y | Y | **Y** |
+| Multi-contrast comparison | ~ | ~ | ~ | **Y** |
+| Functional enrichment (GSEA + ORA) | Y | Y | Y | **Y** |
+| Co-expression networks | Y | – | ~ | **Y** |
+| TF / pathway activity inference | ~ | – | ~ | **Y** |
 | Per-sample signatures (GSVA / ssGSEA) | – | – | – | **Y** |
 | AI-assisted interpretation | – | – | – | **Y** |
 | Reproducible script / report export | Y | ~ | Y | **Y** |
-| Tested, reusable R / Bioconductor package | – | Y | Y | **Y** |
-| Runs locally / offline | ~ | Y | Y | **Y** |
+| Tested, reusable R / Bioconductor package | – | Y | ~ | **Y** |
+| Runs locally / offline | ~ | Y | ~ | **Y** |
 
-We chose three well-established tools that span the design space and whose scope
-is clearly documented. **iDEP** [@idep] is among the most complete: from a count
-matrix it performs exploratory analysis (hierarchical and k-means clustering,
-PCA), differential expression, GSEA and GO/KEGG pathway analysis, and
-co-expression network analysis across 220 species, and its workflow can be re-run
-from downloadable R code — but it is primarily a hosted web service and is used
-through its interface rather than distributed as a tested, reusable package.
-**DEBrowser** [@debrowser] is a polished Bioconductor/Shiny tool centred on
-interactive differential expression (DESeq2, edgeR, limma) with quality-control
-diagnostics, PCA, heatmaps, and GO/GSEA, but does not target co-expression
-networks, activity inference, or per-sample signatures. **GeneTonic** [@genetonic]
-focuses on the *interpretation* step: it fuses a DESeq2 result and an enrichment
-result into a linked, interactive interface with a reproducible R Markdown report,
-but by design it takes those results as input rather than running the upstream
-pipeline, and does not cover exploration, networks, activity, or signatures. Two
-further tools sit at the extremes of scope: **pcaExplorer** [@pcaexplorer]
-concentrates on principal-component exploration and the functional annotation of
-components, while **ExpressAnalyst** [@expressanalyst] is a broad web platform
-spanning read quantification, differential expression, enrichment,
-interaction-network analysis, and meta-analysis across many species.
+We compare against three broad, well-established interactive tools whose scope is
+comparable to RNAflow's, verified against their primary publications and
+documentation. **iDEP** [@idep] is among the most complete: from a count matrix it
+performs exploratory analysis (hierarchical and k-means clustering, PCA),
+differential expression, GSEA and GO/KEGG pathway analysis, and co-expression
+network analysis across 220 species, and its workflow can be re-run from
+downloadable R code — but it is primarily a hosted web service used through its
+interface rather than distributed as a tested, reusable package. **DEBrowser**
+[@debrowser] is a polished Bioconductor/Shiny tool centred on interactive
+differential expression (DESeq2, edgeR, limma) with quality-control diagnostics,
+PCA, heatmaps, and GO/GSEA; it does not target co-expression networks, activity
+inference, or per-sample signatures. **ExpressAnalyst** [@expressanalyst] is a
+broad web platform spanning read quantification, differential expression,
+functional enrichment, interaction- and regulatory-network analysis, and
+cross-species meta-analysis, with a companion ExpressAnalystR package and a
+downloadable R command history for reproducibility; its network emphasis is on
+interaction networks rather than WGCNA co-expression, and it does not provide
+per-sample GSVA signatures.
 
-Against this backdrop RNAflow is not "better" at any single step — each tool is
-excellent at what it targets — but occupies a distinct point in the design space
-(Table 3). Some capabilities are shared: iDEP also spans much of the workflow and
-exports R code, and both iDEP and GeneTonic produce reproducible reports. What
-distinguishes RNAflow is the *combination* of three things at once. First, it
-carries the full downstream workflow on the same loaded dataset, including the
-methods least often integrated into an interactive tool — **regulator and pathway
-activity inference (decoupleR)** and **per-sample gene-set signatures (GSVA)**,
-which are absent from the interactive tools compared here — alongside
-co-expression networks. Second, it makes reproducible export comprehensive: every
-session yields a runnable R script, a Methods paragraph, and a self-contained
-report together. Third, it is engineered as a tested, reusable R package that runs
-entirely locally, so its functions can be scripted and unit-tested independently
-of the interface and no data leave the user's machine. Where existing tools
-optimise one or two of breadth, reproducibility, and software engineering,
-RNAflow aims to hold all three at once for the common case of a single laboratory
-with a count matrix.
+Beyond these broad tools, two excellent *focused* applications are worth noting
+but are not directly comparable on a full-workflow feature matrix, because each
+deliberately covers a single stage: **pcaExplorer** [@pcaexplorer] for
+principal-component exploration and the functional annotation of components, and
+**GeneTonic** [@genetonic] for the interpretation step, fusing a DESeq2 result and
+an enrichment result into a linked interface with a reproducible R Markdown report.
+
+Against this backdrop RNAflow is not "better" at any single step (Table 3). Some
+capabilities are shared: iDEP and ExpressAnalyst also span much of the workflow
+and export reproducible R code. What distinguishes RNAflow is the *combination* of
+three things at once. First, it carries the full downstream workflow on one loaded
+dataset, including the methods least often integrated into an interactive tool —
+**regulator and pathway activity inference (decoupleR)** and **per-sample gene-set
+signatures (GSVA / ssGSEA)**, which are absent from the interactive tools compared
+here — alongside co-expression networks. Second, it makes reproducible export
+comprehensive, emitting a runnable R script, a Methods paragraph, and a
+self-contained report together. Third, it is engineered as a tested, reusable R
+package that runs entirely locally, so its functions can be scripted and
+unit-tested independently of the interface and no data leave the user's machine.
+Where existing tools optimise one or two of breadth, reproducibility, and software
+engineering, RNAflow aims to hold all three at once for the common case of a
+single laboratory with a count matrix.
 
 ### Limitations
 
