@@ -164,6 +164,95 @@ run_deseq2 <- function(counts, metadata,
   df
 }
 
+#' Run DESeq2 for every pairwise contrast of the design variable
+#'
+#' Fits the DESeq2 model once (shared dispersion estimates) and extracts every
+#' pairwise contrast of the design variable's levels -- far faster than calling
+#' [run_deseq2()] once per pair. Inference (Wald stat / p-values) always comes
+#' from the unshrunken test; effect-size shrinkage, when requested, is
+#' contrast-based (`normal`/`ashr`), since apeglm requires a model coefficient
+#' matching the pair. Each returned table carries an `attr(., "pair")` with the
+#' `treated` / `reference` levels.
+#'
+#' @inheritParams run_deseq2
+#' @param design_var design variable whose levels are compared pairwise
+#'   (default: the last term of `design`)
+#' @param shrink_type contrast-compatible shrinkage estimator
+#' @return a named list of tidy DE data.frames, keyed by
+#'   "<design_var>: <treated> vs <reference>"
+#' @export
+run_deseq2_all_pairs <- function(counts, meta, design, design_var = NULL,
+                                 shrink = TRUE,
+                                 shrink_type = c("normal", "ashr"),
+                                 min_count = 10, alpha = 0.05) {
+  if (!requireNamespace("DESeq2", quietly = TRUE)) {
+    stop("Package 'DESeq2' is required for differential expression.",
+         call. = FALSE)
+  }
+  shrink_type <- match.arg(shrink_type)
+  validate_counts(counts, strict = TRUE)
+  validate_metadata(meta, counts_samples = colnames(counts))
+
+  samp_col <- colnames(meta)[1]
+  idx <- match(colnames(counts), meta[[samp_col]])
+  if (anyNA(idx)) {
+    stop("DESeq2 requires metadata for every counts sample.", call. = FALSE)
+  }
+  m <- meta[idx, , drop = FALSE]
+  rownames(m) <- m[[samp_col]]; m[[samp_col]] <- NULL
+
+  dvars  <- all.vars(design)
+  target <- design_var %||% tail(dvars, 1)
+  if (!target %in% colnames(m)) {
+    stop("Design variable '", target, "' not found in metadata.", call. = FALSE)
+  }
+  for (v in dvars) {
+    col <- m[[v]]
+    if (identical(v, target) || is.character(col) || is.logical(col) ||
+        is.factor(col)) {
+      m[[v]] <- as.factor(col)
+    }
+  }
+  lv <- levels(m[[target]])
+  if (length(lv) < 2) {
+    stop("Design variable '", target, "' has fewer than 2 levels.", call. = FALSE)
+  }
+
+  dds <- DESeq2::DESeqDataSetFromMatrix(counts, colData = m, design = design)
+  dds <- dds[rowSums(DESeq2::counts(dds)) >= min_count, ]
+  dds <- DESeq2::DESeq(dds, quiet = TRUE)
+
+  if (isTRUE(shrink) && shrink_type == "ashr" &&
+      !requireNamespace("ashr", quietly = TRUE)) {
+    shrink_type <- "normal"
+  }
+
+  out <- list()
+  for (pr in utils::combn(lv, 2, simplify = FALSE)) {
+    ref <- pr[1]; trt <- pr[2]              # treated = second, reference = first
+    ct  <- c(target, trt, ref)
+    res <- DESeq2::results(dds, contrast = ct, alpha = alpha)
+    used <- "none"
+    if (isTRUE(shrink)) {
+      shr <- tryCatch(
+        DESeq2::lfcShrink(dds, contrast = ct, type = shrink_type, quiet = TRUE),
+        error = function(e) NULL)
+      if (!is.null(shr)) {
+        ii <- match(rownames(res), rownames(shr))
+        res$log2FoldChange <- shr$log2FoldChange[ii]
+        res$lfcSE          <- shr$lfcSE[ii]
+        used <- shrink_type
+      }
+    }
+    df <- as.data.frame(res); df$gene <- rownames(df)
+    df <- df[, c("gene", setdiff(colnames(df), "gene"))]; rownames(df) <- NULL
+    attr(df, "shrink") <- used
+    attr(df, "pair")   <- c(treated = trt, reference = ref)
+    out[[sprintf("%s: %s vs %s", target, trt, ref)]] <- df
+  }
+  out
+}
+
 #' Restrict counts + metadata to the samples of a contrast
 #'
 #' Given a contrast's parameters (`design_var`, `treated`, `reference`), keep

@@ -9,7 +9,8 @@ fig_pca_3d(
   metadata = NULL,
   n_top = 500,
   color_by = NULL,
-  title = NULL
+  title = NULL,
+  show_labels = TRUE
 )
 }
 \arguments{
@@ -22,6 +23,9 @@ fig_pca_3d(
 \item{color_by}{name of the metadata column to color by (or NULL)}
 
 \item{title}{plot title}
+
+\item{show_labels}{show sample names on the plot (hover tooltips are always
+available); turn off for large sample counts}
 }
 \value{
 a plotly scatter3d object

@@ -12,7 +12,8 @@ fig_umap(
   min_dist = 0.1,
   color_by = NULL,
   title = NULL,
-  seed = 42
+  seed = 42,
+  show_labels = TRUE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ fig_umap(
 \item{title}{plot title}
 
 \item{seed}{RNG seed for reproducibility}
+
+\item{show_labels}{show sample names on the plot (hover always available)}
 }
 \value{
 a plotly object

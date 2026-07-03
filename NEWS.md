@@ -1,3 +1,20 @@
+# RNAflow 0.16.0 (2026-07-03)
+
+## UI feedback: PCA labels, all-pairwise DE, cleaner dropdowns
+
+- **PCA sample labels toggle.** The PCA tab gains a *Show sample labels*
+  checkbox; `fig_pca()` / `fig_umap()` / `fig_pca_3d()` gain a `show_labels`
+  argument (hover tooltips are always available). Declutters large sample sets
+  such as the 120-sample TCGA demo.
+- **All pairwise DESeq2 comparisons.** New `run_deseq2_all_pairs()` fits the
+  model once and extracts every pairwise contrast of the design variable,
+  adding each to the multi-contrast store -- far faster than one fit per pair.
+  A *Run all pairwise comparisons* checkbox in the DE panel exposes it,
+  alongside the existing specific-contrast choice.
+- **Dropdown fix.** The selectize dropdown menu was transparent and bled onto
+  the controls below; it is now opaque, elevated (z-index + shadow), with an
+  accent hover state.
+
 # RNAflow 0.15.2 (2026-07-03)
 
 ## Fix

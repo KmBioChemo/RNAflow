@@ -29,6 +29,7 @@ reference:
 - title: Differential expression
   contents:
   - run_deseq2
+  - run_deseq2_all_pairs
   - normalize_counts
 
 - title: Core figures

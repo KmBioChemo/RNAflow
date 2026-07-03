@@ -172,6 +172,28 @@ input[type=number], input[type=text], input[type=color] {
   border-color: var(--rf-accent) !important;
   box-shadow: 0 0 0 3px var(--rf-accent-ring) !important;
 }
+/* Dropdown menu: opaque, elevated, above everything (fixes the transparent
+   menu that bled onto the controls below). */
+.selectize-dropdown {
+  background: var(--rf-surface) !important;
+  border: 1px solid var(--rf-border-strong) !important;
+  border-radius: var(--rf-radius-sm) !important;
+  box-shadow: var(--rf-shadow) !important;
+  z-index: 3000 !important;
+  margin-top: 3px !important;
+  overflow: hidden;
+}
+.selectize-dropdown-content { background: var(--rf-surface) !important; }
+.selectize-dropdown .option {
+  padding: 5px 10px !important; color: var(--rf-body); background: var(--rf-surface);
+}
+.selectize-dropdown .option.active,
+.selectize-dropdown .active {
+  background: var(--rf-accent-soft) !important; color: var(--rf-accent-dark) !important;
+}
+.selectize-dropdown .optgroup-header {
+  color: var(--rf-muted); font-weight: 650; background: var(--rf-surface-2);
+}
 select, select option { font-size: 0.8rem !important; }
 .shiny-input-container { margin-bottom: 8px !important; }
 

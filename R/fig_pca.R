@@ -50,10 +50,12 @@ compute_pca <- function(counts_mat, n_top = 500) {
 #' @param n_top number of variable genes
 #' @param color_by name of the metadata column to color by (or NULL)
 #' @param title plot title
+#' @param show_labels show sample names on the plot (hover tooltips are always
+#'   available); turn off for large sample counts
 #' @return a plotly object
 #' @export
 fig_pca <- function(counts_mat, metadata = NULL, n_top = 500,
-                    color_by = NULL, title = NULL) {
+                    color_by = NULL, title = NULL, show_labels = TRUE) {
 
   pca_out <- compute_pca(counts_mat, n_top)
   sc <- pca_out$scores
@@ -80,7 +82,8 @@ fig_pca <- function(counts_mat, metadata = NULL, n_top = 500,
   sub_txt <- sprintf("Top %d most variable genes | %d samples",
                      n_use, ncol(counts_mat))
 
-  fig <- plotly::plot_ly(type = "scatter", mode = "markers+text")
+  mode_str <- if (isTRUE(show_labels)) "markers+text" else "markers"
+  fig <- plotly::plot_ly(type = "scatter", mode = mode_str)
 
   if (!is.null(color_by) && color_by %in% colnames(sc) && nrow(sc) >= 2) {
     sc[[color_by]] <- as.character(sc[[color_by]])

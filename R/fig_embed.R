@@ -91,11 +91,12 @@ compute_umap <- function(counts_mat, n_top = 500, n_neighbors = 15,
 #' @param metadata sample metadata (column 1 = sample)
 #' @param color_by metadata column to colour by (or NULL to auto-pick)
 #' @param title plot title
+#' @param show_labels show sample names on the plot (hover always available)
 #' @return a plotly object
 #' @export
 fig_umap <- function(counts_mat, metadata = NULL, n_top = 500,
                      n_neighbors = 15, min_dist = 0.1, color_by = NULL,
-                     title = NULL, seed = 42) {
+                     title = NULL, seed = 42, show_labels = TRUE) {
   out <- compute_umap(counts_mat, n_top, n_neighbors, min_dist, seed)
   j <- .emb_join_meta(out$scores, metadata, color_by)
   sc <- j$sc; color_by <- j$color_by
@@ -104,7 +105,8 @@ fig_umap <- function(counts_mat, metadata = NULL, n_top = 500,
   sub_txt <- sprintf("Top %d variable genes | %d samples | n_neighbors=%d",
                      out$n_used, ncol(counts_mat), out$n_neighbors)
 
-  fig <- plotly::plot_ly(type = "scatter", mode = "markers+text")
+  mode_str <- if (isTRUE(show_labels)) "markers+text" else "markers"
+  fig <- plotly::plot_ly(type = "scatter", mode = mode_str)
   if (!is.null(color_by) && color_by %in% colnames(sc) && nrow(sc) >= 2) {
     conds <- sort(unique(sc[[color_by]])); col_map <- .emb_colmap(conds)
     for (cond in conds) {
@@ -150,7 +152,7 @@ fig_umap <- function(counts_mat, metadata = NULL, n_top = 500,
 #' @return a plotly scatter3d object
 #' @export
 fig_pca_3d <- function(counts_mat, metadata = NULL, n_top = 500,
-                       color_by = NULL, title = NULL) {
+                       color_by = NULL, title = NULL, show_labels = TRUE) {
   if (ncol(counts_mat) < 4) {
     stop("3D PCA requires at least 4 samples.", call. = FALSE)
   }
@@ -166,7 +168,8 @@ fig_pca_3d <- function(counts_mat, metadata = NULL, n_top = 500,
   ax <- function(i) sprintf("PC%d (%.1f%%)", i, if (length(pct) >= i) pct[i] else 0)
   mt <- trimws(title %||% ""); if (!nzchar(mt)) mt <- "3D PCA - Sample Overview"
 
-  fig <- plotly::plot_ly(type = "scatter3d", mode = "markers")
+  mode_str <- if (isTRUE(show_labels)) "markers+text" else "markers"
+  fig <- plotly::plot_ly(type = "scatter3d", mode = mode_str)
   if (!is.null(color_by) && color_by %in% colnames(sc) && nrow(sc) >= 2) {
     conds <- sort(unique(sc[[color_by]])); col_map <- .emb_colmap(conds)
     for (cond in conds) {
@@ -175,14 +178,17 @@ fig_pca_3d <- function(counts_mat, metadata = NULL, n_top = 500,
       tip <- paste0("<b>", sub$sample, "</b><br>", color_by, ": ", cond)
       fig <- plotly::add_trace(
         fig, x = sub$PC1, y = sub$PC2, z = sub$PC3, name = cond,
-        text = tip, hoverinfo = "text",
+        text = if (isTRUE(show_labels)) sub$sample else NULL,
+        hovertext = tip, hoverinfo = "text",
         marker = list(color = col_map[cond], size = 5,
                       line = list(color = "white", width = 1)))
     }
   } else {
     fig <- plotly::add_trace(
-      fig, x = sc$PC1, y = sc$PC2, z = sc$PC3, text = sc$sample,
-      hoverinfo = "text", marker = list(color = "#34495E", size = 5))
+      fig, x = sc$PC1, y = sc$PC2, z = sc$PC3,
+      text = if (isTRUE(show_labels)) sc$sample else NULL,
+      hovertext = sc$sample, hoverinfo = "text",
+      marker = list(color = "#34495E", size = 5))
   }
   fig %>%
     plotly::layout(

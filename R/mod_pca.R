@@ -33,6 +33,7 @@ mod_pca_ui <- function(id) {
         shiny::sliderInput(ns("min_dist"), "UMAP min. distance",
                            min = 0.01, max = 0.99, value = 0.1, step = 0.01)
       ),
+      shiny::checkboxInput(ns("labels"), "Show sample labels", value = TRUE),
       shiny::checkboxInput(ns("restrict"),
                            "Restrict to active contrast groups", value = FALSE),
       shiny::textInput(ns("title"), "Title", ""),
@@ -91,14 +92,18 @@ mod_pca_server <- function(id, counts_reactive, metadata_reactive,
           "UMAP and 3D PCA need at least 4 samples."))
       }
       col_by <- if (!is.null(input$col_by) && input$col_by != "(none)") input$col_by else NULL
+      labs <- isTRUE(input$labels)
       switch(
         method,
-        pca3d = fig_pca_3d(d$counts, d$metadata, input$n_num, col_by, input$title),
+        pca3d = fig_pca_3d(d$counts, d$metadata, input$n_num, col_by,
+                           input$title, show_labels = labs),
         umap  = fig_umap(d$counts, d$metadata, input$n_num,
                          n_neighbors = input$nn_num %||% 15,
                          min_dist = input$min_dist %||% 0.1,
-                         color_by = col_by, title = input$title),
-        fig_pca(d$counts, d$metadata, input$n_num, col_by, input$title)
+                         color_by = col_by, title = input$title,
+                         show_labels = labs),
+        fig_pca(d$counts, d$metadata, input$n_num, col_by, input$title,
+                show_labels = labs)
       )
     })
 
