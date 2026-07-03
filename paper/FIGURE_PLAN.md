@@ -1,126 +1,113 @@
 # RNAflow manuscript — figure plan
 
-How to produce each manuscript figure **directly from the app**: run the
-analysis, then use the **Export** bar on the tab (Format = PDF for vector panels,
-or PNG/TIFF; set W/H in inches; DPI = 300 or 600). Assemble panels in Inkscape /
-Illustrator / AI, or with `patchwork`/`cowplot` from the exported objects.
+Three main figures, matched panel-for-panel to `paper/paper.md`. Produce each
+sub-panel **directly from the app** (run the analysis → **Export** bar: Format =
+PDF for vector; W/H in inches; DPI = 300/600), then compose the plates. Reference
+renders of every panel are in `paper/figures/gallery/` (numbers in the tables).
 
-Datasets: **airway** = simple 2-group (clean DE/enrichment); **TCGA** =
-120-sample, 8-cancer-type (structure, networks, signatures, multi-contrast).
+Datasets: **airway** = simple 2-group (correctness on known biology);
+**TCGA** = 120 tumours × 8 cancer types (scale, structure, networks, comparison).
 
-Export type per figure:
-- **ggplot / pheatmap** tabs → Export bar gives true 300/600 DPI + vector PDF.
-- **plotly** tabs (PCA 2D/3D, UMAP, linked volcano, visNetwork) → install
-  `kaleido` once (`reticulate::py_install("kaleido")`) for 300 DPI PNG/PDF, or
-  use the plotly camera icon, or the static PCA from `paper/make_gallery.R`.
-
-Reference renders of every panel are in `paper/figures/gallery/` (numbers below).
+Export type: **ggplot/pheatmap** tabs export true 300 DPI + vector PDF directly;
+**plotly** views (PCA/UMAP/3D, networks) need `kaleido`
+(`reticulate::py_install("kaleido")`) or the plotly camera icon.
 
 ---
 
-## Figure 1 — Differential expression & functional interpretation (airway)
-The clean two-group story.
+## Figure 1 — Correct on a known study, powerful on a complex cohort (mixed)
 
-| Panel | Tab | Setting | Export | Gallery |
+| Panel | Content | Tab | Dataset | Gallery |
 |---|---|---|---|---|
-| A | Volcano | airway, Dex vs Control, publication | PDF 5×4 | `01_volcano_airway` |
-| B | Heatmap | top-30 DE genes, annotate condition | PDF 6×6 | `07_de_heatmap` |
-| C | Enrichment | GSEA, MSigDB Hallmark, dotplot | PDF 8×5 | `10_gsea_dotplot` |
-| D | Enrichment | ORA (GO BP) barplot, or GSEA running curve | PDF 8×5 | `11_ora_barplot` / `12_gsea_running_curve` |
+| A | Volcano (Dex vs Control) | Volcano | airway | `01_volcano_airway` |
+| B | GSEA dotplot (Hallmark) | Enrichment | airway | `10_gsea_dotplot` |
+| C | PCA, colour by `cancer_type` | PCA | TCGA | `09_pca_tcga` |
+| D | WGCNA module–trait | Network | TCGA | `15_wgcna_module_trait` |
 
-## Figure 2 — Sample structure of the pan-cancer cohort (TCGA)
-Exploration + QC on the big dataset.
+## Figure 2 — Per-sample signatures & co-expression structure (TCGA)
 
-| Panel | Tab | Setting | Export | Gallery |
-|---|---|---|---|---|
-| A | PCA | color by `cancer_type`, hide labels | kaleido/camera | `09_pca_tcga` |
-| B | PCA | Embedding = UMAP, color by `cancer_type` | kaleido/camera | (interactive) |
-| C | QC | sample-correlation heatmap | PDF 7×6 | `06_sample_correlation` |
-| D | QC | library sizes (or p-value histogram / MA) | PDF 8×4 | `05_library_sizes` |
+| Panel | Content | Tab | Gallery |
+|---|---|---|---|
+| A | GSVA Hallmark signature heatmap (hero) | Signatures | `17_gsva_signature_heatmap` |
+| B | WGCNA scale-free soft-threshold | Network | `13_wgcna_soft_threshold` |
+| C | WGCNA module sizes | Network | `14_wgcna_module_sizes` |
+| D | WGCNA eigengene (turquoise) by type | Network | `16_wgcna_eigengene` |
 
-## Figure 3 — Systems-level analysis of the cohort (TCGA)
-The downstream breadth — the differentiator.
+## Figure 3 — Multi-contrast comparison across cancer types (TCGA)
 
-| Panel | Tab | Setting | Export | Gallery |
-|---|---|---|---|---|
-| A | Network (WGCNA) | module–trait heatmap | PDF 8×6 | `15_wgcna_module_trait` |
-| B | Signatures | GSVA Hallmark heatmap, group by `cancer_type` | PDF 9×8 | `17_gsva_signature_heatmap` |
-| C | Compare | UpSet (or volcano grid) over ≥3 pairwise contrasts | PDF 9×6 | `20_upset` / `21_volcano_grid` |
-| D | Activity | pathway (PROGENy) activity bar | PDF 6×5 | `18` (needs OmniPath online) |
+Run DESeq2 for several pairs (or **Run all pairwise**), then the Compare tab.
 
-## Optional Figure 4 / Supplementary — extra views
-Pick from: `03_pvalue_histogram`, `04_ma_plot`, `08_gene_expression_raincloud`
-(a marker gene, e.g. GFAP), `13_wgcna_soft_threshold`, `14_wgcna_module_sizes`,
-`16_wgcna_eigengene`, `19_venn`, `22_lfc_heatmap`, `23_direction_alluvial`.
+| Panel | Content | Tab | Gallery |
+|---|---|---|---|
+| A | Volcano grid (pairwise) | Compare | `21_volcano_grid` |
+| B | UpSet (overlap) | Compare | `20_upset` |
+| C | Venn (3 contrasts) | Compare | `19_venn` |
+| D | log2FC heatmap across contrasts | Compare | `22_lfc_heatmap` |
+| E | Direction alluvial | Compare | `23_direction_alluvial` |
+
+*Optional / supplementary:* p-value histogram (`03`), MA (`04`), library sizes
+(`05`), sample correlation (`06`), DE heatmap (`07`), gene-expression raincloud
+(`08`), ORA barplot (`11`), GSEA running curve (`12`), pathway activity
+(`18`, needs OmniPath online).
 
 ---
 
----
+## Imposing "2026" plate layouts
 
-## Imposing "2026" panel layout (build these yourself)
-
-Design language for the composed plates — large, full-width, asymmetric **hero
-layouts** (one dominant panel + supporting panels), generous whitespace, bold
-sans tags in the accent colour, everything in **publication mode**.
+Design language: large full-width plates, asymmetric **hero** layouts (one
+dominant panel), generous whitespace, everything in **publication mode**.
 
 **Global spec**
-- **Canvas:** full journal width (~180 mm). Export each sub-figure as **vector
-  PDF**, compose in Illustrator/Inkscape (or `patchwork`/`cowplot`).
-- **Type:** one sans family throughout (Inter / Helvetica). Panel titles ~13 pt
-  bold, axis text ~9–10 pt, subtitle ~11 pt in grey `#5A6472`.
+- **Canvas:** full journal width (~180 mm). Export sub-panels as **vector PDF**;
+  compose in Illustrator/Inkscape or `patchwork`/`cowplot`.
+- **Type:** one sans family (Inter/Helvetica); titles ~13 pt bold, axes ~9–10 pt,
+  subtitles ~11 pt grey `#5A6472`.
 - **Tags:** `A B C …` top-left, ~20–22 pt **bold**, accent green `#1D9E75`.
 - **Palette:** categorical = Okabe-Ito (CVD-safe); diverging heatmaps = RdBu.
-  Keep the same cancer-type colours across every panel.
-- **Axes:** thin, no grid (publication mode). 2 px surface gap between adjacent
-  fills. Direct-label only the few genes/terms that matter.
-- **Alignment:** align panel edges; equal gutters (~6 mm); one shared legend per
-  colour mapping, not one per panel.
+  Same cancer-type colours in every panel. One shared legend per mapping.
+- **Axes:** thin, no grid; direct-label only the few genes/terms that matter.
 
-**Plate 1 — Overview (mixed airway + TCGA), hero = PCA · ~16 × 13 in**
+**Plate 1 — Figure 1 · hero = PCA · ~16 × 13 in**
 ```
-┌───────────────────┬─────────────┐
-│                   │   B  volcano│   A = TCGA PCA (hero)
-│   A   PCA (TCGA)  ├─────────────┤   B = airway volcano
-│                   │   C  GSEA   │   C = airway GSEA dotplot
-├───────────────────┴─────────────┤
-│   D   WGCNA module–trait (TCGA) │   D = full-width strip
-└─────────────────────────────────┘
+┌────────────┬───────────────────┐
+│ A  volcano │                   │   A,B = airway (left, stacked)
+├────────────┤   C   PCA (TCGA)  │   C   = PCA hero (right)
+│ B  GSEA    │                   │
+├────────────┴───────────────────┤
+│ D   WGCNA module–trait (TCGA)  │   D   = full-width strip
+└────────────────────────────────┘   design = "AC\nBC\nDD"
 ```
-Row heights ≈ 1 : 1 : 1.15. Message: *correct on the simple, powerful on the complex.*
 
-**Plate 2 — Systems-level (TCGA), hero = GSVA · ~17 × 10 in**
+**Plate 2 — Figure 2 · hero = GSVA · ~16 × 11 in**
 ```
-┌───────────────────┬─────────────┐
-│                   │   B  UpSet  │   A = GSVA signature heatmap (hero)
-│   A   GSVA (TCGA) ├─────────────┤   B = multi-contrast UpSet
-│                   │   C  grid   │   C = volcano grid
-└───────────────────┴─────────────┘
+┌───────────────────┬────────────┐
+│                   │ B  soft-thr│   A = GSVA heatmap (hero)
+│   A   GSVA (TCGA) ├────────────┤   B,C = WGCNA fit / module sizes
+│                   │ C  sizes   │
+├───────────────────┴────────────┤
+│   D   eigengene (turquoise)    │   D = full-width strip
+└─────────────────────────────────┘  design = "AAB\nAAC\nDDD"
 ```
-Right column widths ≈ 1.1×. Message: *per-sample signatures + multi-contrast depth.*
 
-**Plate 3 — Co-expression & comparison (TCGA), 3 × 2 grid · ~16 × 11 in**
+**Plate 3 — Figure 3 · hero = volcano grid · ~16 × 11 in**
 ```
-┌────────────┬────────────┬────────────┐
-│ A soft-thr │ B module   │ C eigengene│
-│            │   sizes    │ (turquoise)│
-├────────────┼────────────┼────────────┤
-│ D Venn     │ E LFC      │ F direction│
-│            │  heatmap   │  alluvial  │
-└────────────┴────────────┴────────────┘
+┌───────────────────┬────────────┐
+│                   │ B  UpSet   │   A = volcano grid (hero)
+│   A  grid (TCGA)  ├────────────┤   B,C = UpSet / Venn
+│                   │ C  Venn    │
+├───────────────────┴────────────┤
+│ D  LFC heatmap    │ E  alluvial│   design = "AAB\nAAC\nDDE"
+└───────────────────┴────────────┘
 ```
-Even grid; smaller supporting views. Message: *the network / comparison toolkit.*
 
-> Tip for `patchwork`: use `design = "AAB\nAAC\nDDD"` (Plate 1) or
-> `"AAB\nAAC"` (Plate 2) with `plot_annotation(tag_levels = "A")` and
-> `& theme(plot.tag = element_text(size = 22, face = "bold", colour = "#1D9E75"))`.
+> `patchwork`: `wrap_plots(..., design = "AC\nBC\nDD") +
+> plot_annotation(tag_levels = "A") &
+> theme(plot.tag = element_text(size = 22, face = "bold", colour = "#1D9E75"))`.
 > Wrap pheatmap/UpSet panels with `ggplotify::as.ggplot()` to mix them in.
 
 ### Practical tips
-- Use **PDF** for anything going into a composed panel (vector = crisp at any
-  size); use **PNG/TIFF 600 DPI** only if the journal requires flattened raster.
-- Keep panel widths consistent (e.g. all 3.3 in for a 2-column, or 7 in
-  full-width) so text sizes match across panels.
-- Every figure function has a `publication` mode (8-pt font, no grid) — the app's
-  publication toggle / the `mode = "publication"` argument — use it for final panels.
-- The gallery in `paper/figures/gallery/` was produced by
-  `Rscript paper/make_gallery.R`; adapt it if you prefer to script the panels.
+- **PDF** for anything composed into a panel (vector = crisp at any size);
+  PNG/TIFF **600 DPI** only if the journal requires flattened raster.
+- Keep panel widths consistent so text sizes match across a plate.
+- Every figure function has a `publication` mode (8-pt font, no grid) — use it.
+- Gallery renders (`paper/figures/gallery/`) were made by
+  `Rscript paper/make_gallery.R`; adapt it to script the plates if you prefer.

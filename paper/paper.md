@@ -390,104 +390,110 @@ interpretation.
 
 ## Results and discussion
 
-To demonstrate RNAflow across the difficulty spectrum, we analysed the two
-bundled datasets. All results below were produced with RNAflow's public
-functions and are reproduced by the figure script in the repository
-(`paper/make_figures.R`); every panel of Figures 1–3 is drawn by RNAflow's own
-figure functions, so they are exactly what a user obtains from the tool.
+To demonstrate RNAflow end to end, we analysed the two bundled datasets, chosen
+to probe opposite ends of the difficulty spectrum: **airway**, a small,
+well-understood two-group study that tests whether the tool recovers *known*
+biology, and a 120-sample, eight-class subset of **TCGA** that tests whether it
+*scales* to complex, multi-group data. All results were produced with RNAflow's
+public functions, and the three main figures are composed from the tool's own
+figure outputs (per-panel renders and layouts are in the repository).
 
-### A simple two-group study
+### RNAflow recovers established biology and resolves cohort structure
 
-The airway dataset [@airway] measures airway smooth-muscle cells treated with
-dexamethasone versus control across four cell lines (eight samples). Modelling
-expression as `~ cell + condition` to adjust for the paired cell line and
-contrasting dexamethasone against control, RNAflow identified 770 differentially
-expressed genes (415 up, 355 down; adjusted *p* < 0.05 and absolute log2 fold
-change > 1) out of 17,190 tested. The most strongly induced genes are canonical
-glucocorticoid-response genes — including *ZBTB16*, *STEAP4*, *ALOX15B*,
-*DUSP1*, and *SPARCL1* — and gene-set enrichment against the MSigDB Hallmark
-collection returned 19 significantly enriched sets (adjusted *p* < 0.05),
-recovering the expected anti-inflammatory and metabolic response programme
-(Figure 1C, D). This confirms that RNAflow reproduces the established biology of a
-well-characterised experiment, and that the enrichment ranking based on the
-preserved Wald statistic behaves as intended.
+We first confirmed that RNAflow reproduces the biology of a well-characterised
+experiment. In the airway dataset [@airway] — airway smooth-muscle cells treated
+with dexamethasone versus control across four cell lines — modelling
+`~ cell + condition` to adjust for the paired cell line, RNAflow identified 770
+differentially expressed genes (415 up, 355 down; adjusted *p* < 0.05,
+absolute log2 fold change > 1) of 17,190 tested. The most strongly induced genes
+are canonical glucocorticoid-response genes — *ZBTB16*, *STEAP4*, *ALOX15B*,
+*DUSP1*, *SPARCL1* (Figure 1A) — and gene-set enrichment against MSigDB Hallmark
+returned 19 significantly enriched sets (Figure 1B), recovering the expected
+response programme. This confirms both the differential-expression pipeline and
+that enrichment ranking on the preserved Wald statistic behaves correctly.
 
-### A complex multi-group study
+The same tool then resolved the structure of the complex cohort immediately. The
+TCGA subset (120 tumours across eight molecularly distinct cancer types — BRCA,
+LUAD, KIRC, LGG, THCA, PRAD, COAD, SKCM; 18,686 genes [@gse62944; @tcga])
+separates cleanly by cancer type in principal-component space (Figure 1C; the
+first two components explaining 30.3% and 12.9% of variance), and UMAP gives the
+same result. Weighted co-expression analysis then tied that structure to gene
+programmes: WGCNA recovered 11 modules whose eigengenes correlate strongly and
+specifically with cancer type (Figure 1D), the clearest being the turquoise
+module with glioma at *r* = 0.96, with comparably strong module–type pairs for
+each remaining cancer — consistent with modules capturing lineage-specific
+expression. Figure 1 thus shows a single tool that is both correct on a known
+study and powerful on a complex one.
 
-The TCGA subset comprises 120 tumours evenly sampled from eight molecularly
-distinct cancer types (BRCA, LUAD, KIRC, LGG, THCA, PRAD, COAD, SKCM; 18,686
-genes) obtained through the reprocessed GSE62944 resource [@gse62944; @tcga].
-Here the value of an integrated, multi-group tool becomes apparent, because the
-same loaded dataset drives every downstream analysis in turn.
+### Per-sample signatures and co-expression structure
 
-Principal-component analysis separates the eight cancer types into clearly
-resolved clusters (Figure 1A; the first two principal components explaining 30.3%
-and 12.9% of variance), exactly the structure expected from tissue-of-origin and
-driver differences and an immediate visual confirmation that the cohort is
-correctly assembled; UMAP produces the same separation. Because the design
-variable has eight levels, the all-pairwise mode produces all 28 pairwise
-contrasts from a single model fit; across these contrasts the number of
-differentially expressed genes ranges from 3,852 to 9,583 (median 6,523; adjusted
-*p* < 0.05 and absolute log2 fold change > 1), and comparing representative
-contrasts with an UpSet plot (Figure 3) separates a shared, pan-cancer component
-of differential expression from large contrast-specific components.
+Because every analysis works from the same loaded cohort, the characterisation
+deepens without leaving the application (Figure 2). Per-sample gene-set variation
+analysis against the Hallmark collection (50 signatures across the 120 tumours)
+yields profiles that cluster the samples by cancer type and expose coherent
+biological programmes — proliferation (E2F, MYC, G2M), interferon and
+inflammatory signalling, and metabolism (Figure 2A). The co-expression analysis
+summarised in Figure 1D is shown in full here: the scale-free soft-threshold
+selection (Figure 2B), the resulting module sizes (Figure 2C), and a
+representative module eigengene resolved by cancer type (Figure 2D). Interpretation
+thus moves from single genes to sample-level signatures and coordinated modules,
+all on the same data.
 
-The same cohort feeds directly into the systems-level modules. WGCNA identified
-11 co-expression modules among the 3,500 most variable genes, and correlating
-module eigengenes with cancer type revealed strong, type-specific associations —
-the strongest being the turquoise module with glioma (LGG) at *r* = 0.96, with
-comparably strong module–type pairs for each of the other cancers — consistent
-with modules capturing tissue- and lineage-specific expression programmes
-(Figure 1D). Per-sample GSVA scoring against the Hallmark collection (50
-signatures across the 120 samples) produced signature profiles that cluster the
-tumours by cancer type and expose the expected proliferation, metabolic, and
-immune-signalling contrasts between them (Figure 2). Together, Figures 1–3 show a
-single dataset carried from raw counts through visualisation, differential
-expression, co-expression modules, per-sample signatures, and multi-contrast
-comparison without leaving the application — and every panel is produced by
-RNAflow's own figure functions, so the manuscript figures are exactly what a user
-obtains from the tool.
+### Multi-contrast comparison across cancer types
+
+With eight groups, every pairwise difference is potentially informative.
+RNAflow's all-pairwise mode fits the model once and extracts all 28 contrasts;
+across them the number of differentially expressed genes ranges from 3,852 to
+9,583 (median 6,523; adjusted *p* < 0.05, absolute log2 fold change > 1). The
+comparison views turn this into interpretable structure (Figure 3): a grid of
+pairwise volcano plots in which tissue-appropriate markers surface automatically
+(thyroglobulin for thyroid, surfactant and napsin genes for lung; Figure 3A);
+UpSet and Venn views of the significant-gene overlap that separate a shared,
+pan-cancer component from contrast-specific genes (Figure 3B, C); a
+log-fold-change heatmap of genes across contrasts (Figure 3D); and an alluvial
+diagram tracing how genes move between up-, down-, and not-significant across
+contrasts (Figure 3E).
 
 ### Reproducibility in practice
 
-For both analyses, exporting the session produced a runnable R script that
-regenerates the DE tables and figures from the original inputs using the
-package's public functions, together with a Methods paragraph reporting the
-software versions and a self-contained HTML report. The reference analysis is
-therefore not only demonstrable interactively but recoverable as code — the
-property that most distinguishes RNAflow from a purely interactive tool, and the
-one most relevant to the reproducibility of the science it supports.
+For every analysis above, exporting the session produced a runnable R script
+that regenerates the differential-expression tables and figures from the
+original inputs using the package's public functions, together with a Methods
+paragraph reporting the software versions and a self-contained HTML report. The
+reference analysis is therefore not only demonstrable interactively but
+recoverable as code — the property that most distinguishes RNAflow from a purely
+interactive tool, and the one most relevant to the reproducibility of the science
+it supports.
 
-![](figures/figure1.png){width=100%}
+*[Figure 1 near here.]*
 
-**Figure 1.** *RNAflow analysis of the two bundled datasets, produced with the
-package's own figure functions.* **(A)** Principal-component analysis of the
-120-sample TCGA pan-cancer subset, coloured by cancer type (a
-colour-vision-deficiency-safe palette); the eight types form clearly separated
-clusters. **(B)** Volcano plot (`fig_volcano`, publication mode) of the airway
-dexamethasone-versus-control contrast, highlighting glucocorticoid-response
-genes. **(C)** Gene-set enrichment (`fig_enrich_dot`; MSigDB Hallmark) for the
-same contrast, showing normalised enrichment score, set size, and
-false-discovery rate. **(D)** WGCNA module–trait correlation
-(`fig_module_trait`) between the TCGA co-expression module eigengenes and cancer
-type, annotated with correlation coefficients and significance.
+**Figure 1. RNAflow is correct on a known study and powerful on a complex
+cohort.** **(A)** Volcano plot of the airway dexamethasone-versus-control
+contrast; canonical glucocorticoid-response genes are the top hits.
+**(B)** Gene-set enrichment (MSigDB Hallmark) for the same contrast, showing
+normalised enrichment score, set size, and false-discovery rate.
+**(C)** Principal-component analysis of the 120-sample TCGA cohort, coloured by
+cancer type (colour-vision-deficiency-safe palette); the eight types separate
+cleanly. **(D)** WGCNA module–trait correlation between the TCGA co-expression
+module eigengenes and cancer type, with correlation coefficients and
+significance. Panels A–B, airway; C–D, TCGA.
 
-![](figures/figure2.png){width=100%}
+*[Figure 2 near here.]*
 
-**Figure 2.** *Per-sample signatures on the TCGA cohort.* GSVA Hallmark
-signature scores (`fig_gsva_heatmap`) for the 120 tumours (columns, annotated by
-cancer type) across the 40 most variable Hallmark signatures (rows). Both axes
-are hierarchically clustered; the tumours group by cancer type, and the row
-blocks recover coherent biological programmes (proliferation, interferon and
-inflammatory signalling, metabolism).
+**Figure 2. Per-sample signatures and co-expression structure of the TCGA
+cohort.** **(A)** GSVA Hallmark signature scores for the 120 tumours (columns,
+annotated by cancer type) across the 40 most variable signatures (rows); both
+axes hierarchically clustered. **(B)** WGCNA scale-free soft-threshold
+selection. **(C)** Co-expression module sizes. **(D)** Eigengene of a
+representative module (turquoise) across cancer types.
 
-![](figures/figure3.png){width=100%}
+*[Figure 3 near here.]*
 
-**Figure 3.** *Multi-contrast comparison on the TCGA cohort.* UpSet plot
-(`fig_upset`) of the overlap between the significant-gene sets (adjusted *p* <
-0.05, absolute log2 fold change > 1) of five representative pairwise contrasts,
-separating differential expression shared across contrasts from
-contrast-specific components.
+**Figure 3. Multi-contrast comparison across cancer types (TCGA).** **(A)** Grid
+of pairwise volcano plots for representative contrasts. **(B)** UpSet and
+**(C)** Venn views of the overlap between significant-gene sets across contrasts.
+**(D)** Log-fold-change heatmap of genes across contrasts. **(E)** Alluvial
+diagram of up-/down-/not-significant transitions across contrasts.
 
 ### Comparison with existing tools
 
