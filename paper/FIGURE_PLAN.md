@@ -111,3 +111,10 @@ dominant panel), generous whitespace, everything in **publication mode**.
 - Every figure function has a `publication` mode (8-pt font, no grid) — use it.
 - Gallery renders (`paper/figures/gallery/`) were made by
   `Rscript paper/make_gallery.R`; adapt it to script the plates if you prefer.
+
+## Figure 4 — Validation (already generated, not a plate to build)
+
+`paper/figures/figure4_validation.{png,pdf}` is produced by
+`Rscript paper/make_validation.R` (reproducibility round-trip · all-pairwise ==
+single fit · DESeq2 vs limma-voom concordance). It is a finished figure — no
+paneling needed. Coverage (77% pure core / 41% overall) is measured with `covr`.
