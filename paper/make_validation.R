@@ -88,20 +88,29 @@ cat(sprintf("[CONCORDANCE] n=%d  Pearson=%.3f  Spearman=%.3f  Jaccard(sig)=%.3f 
             nrow(mc), co_r, co_rs, jac, length(sd), length(sl), length(intersect(sd, sl))))
 
 ## ===== Figure 4 ========================================================
+annot <- function(lbl) annotate("label", x = -Inf, y = Inf, hjust = -0.06, vjust = 1.08,
+  label = lbl, size = 3.2, label.size = 0, fill = "#ffffffcc",
+  colour = "#2b2f36", lineheight = 0.98)
+comma <- function(n) formatC(n, big.mark = ",", format = "d")
+
 pA <- ggplot(m1, aes(log2FoldChange.o, log2FoldChange.r)) + idline +
   geom_point(size = 1.1, alpha = .4, colour = "#1D9E75") +
+  annot(sprintf("r = %.4f\nmax abs diff = %.0e\nn = %s genes", rt_cor, rt_maxdiff, comma(nrow(m1)))) +
   labs(title = "Reproducibility round-trip",
-       subtitle = sprintf("exported script vs original (r = %.4f)", rt_cor),
+       subtitle = "exported R script re-run vs original",
        x = "log2FC (interactive)", y = "log2FC (re-run script)") + theme_v
 pB <- ggplot(ap_df, aes(log2FoldChange.i, log2FoldChange.s)) + idline +
   geom_point(size = 1.1, alpha = .4, colour = "#0072B2") +
+  annot(sprintf("r = %.4f\nmax abs diff = %.0f\n3 contrasts", ap_cor, maxd)) +
   labs(title = "All-pairwise = single shared fit",
-       subtitle = sprintf("LGG vs LUAD: independent vs shared (r = %.4f)", ap_cor),
+       subtitle = "contrasts from one fit vs independent fits",
        x = "log2FC (independent fit)", y = "log2FC (shared fit)") + theme_v
 pC <- ggplot(mc, aes(logFC, log2FoldChange)) + idline +
   geom_point(size = 1.1, alpha = .4, colour = "#D55E00") +
+  annot(sprintf("Pearson r = %.3f\nSpearman = %.3f\nJaccard(sig) = %.2f\nn = %s genes",
+                co_r, co_rs, jac, comma(nrow(mc)))) +
   labs(title = "DESeq2 vs limma-voom (airway)",
-       subtitle = sprintf("Pearson r = %.3f, Spearman = %.3f", co_r, co_rs),
+       subtitle = "concordance with an independent method",
        x = "log2FC (limma-voom)", y = "log2FC (RNAflow / DESeq2)") + theme_v
 fig4 <- (pA | pB | pC) + patchwork::plot_annotation(tag_levels = "A")
 ggsave("paper/figures/figure4_validation.png", fig4, width = 14, height = 4.6, dpi = 300, bg = "white")
