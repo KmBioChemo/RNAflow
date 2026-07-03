@@ -15,3 +15,8 @@ figure/
 vignettes/*.html
 vignettes/*_files/
 *_cache/
+
+# rendered manuscript (regenerable from paper.md)
+paper/paper.html
+paper/paper.docx
+paper/paper.pdf
