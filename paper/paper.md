@@ -551,23 +551,23 @@ scope compares with representative interactive RNA-seq applications, and we
 discuss each in turn below.
 
 **Table 3.** Feature comparison with representative interactive bulk RNA-seq
-tools. ● present; ○ partial or via a related feature; blank not a focus.
-(Feature sets evolve; this reflects the tools' primary published scope.)
+tools. **Y** = present; **~** = partial or via a related feature; **–** = not a
+focus. (Feature sets evolve; this reflects the tools' primary published scope.)
 
 | Capability | iDEP | DEBrowser | pcaExplorer | GeneTonic | ExpressAnalyst | **RNAflow** |
 |---|:--:|:--:|:--:|:--:|:--:|:--:|
-| Differential expression | ● | ● | ○ | ○ | ● | ● |
-| QC / diagnostics | ● | ● | ● | | ● | ● |
-| PCA / UMAP | ● | ● | ● | ○ | ● | ● |
-| Multi-contrast comparison | ○ | ○ | | | ○ | ● |
-| GSEA + ORA | ● | ● | ○ | ● | ● | ● |
-| Co-expression (WGCNA) | ○ | | | | ○ | ● |
-| TF / pathway activity | | | | | ○ | ● |
-| Per-sample signatures (GSVA) | | | | | | ● |
-| AI-assisted interpretation | | | | | | ● |
-| Runnable-script / report export | ○ | ○ | ○ | ○ | ○ | ● |
-| Tested, reusable R package | | ● | ● | ● | ○ | ● |
-| Runs fully locally / offline | ○ | ● | ● | ● | ● | ● |
+| Differential expression | Y | Y | ~ | ~ | Y | **Y** |
+| QC / diagnostics | Y | Y | Y | – | Y | **Y** |
+| PCA / UMAP | Y | Y | Y | ~ | Y | **Y** |
+| Multi-contrast comparison | ~ | ~ | – | – | ~ | **Y** |
+| GSEA + ORA | Y | Y | ~ | Y | Y | **Y** |
+| Co-expression (WGCNA) | ~ | – | – | – | ~ | **Y** |
+| TF / pathway activity | – | – | – | – | ~ | **Y** |
+| Per-sample signatures (GSVA) | – | – | – | – | – | **Y** |
+| AI-assisted interpretation | – | – | – | – | – | **Y** |
+| Runnable-script / report export | ~ | ~ | ~ | ~ | ~ | **Y** |
+| Tested, reusable R package | – | Y | Y | Y | ~ | **Y** |
+| Runs fully locally / offline | ~ | Y | Y | Y | Y | **Y** |
 
 Each of these tools is strong within its scope, and the differences are of
 emphasis rather than quality. **iDEP** [@idep] is among the most complete web
