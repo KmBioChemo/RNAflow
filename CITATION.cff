@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: "If you use RNAflow, please cite it using this metadata."
+title: "RNAflow: An Interactive Shiny Platform for End-to-End RNA-seq Analysis"
+type: software
+authors:
+  - family-names: Matmat
+    given-names: Karim
+    email: karimatmat@gmail.com
+repository-code: "https://github.com/KmBioChemo/RNAflow"
+url: "https://KmBioChemo.github.io/RNAflow/"
+abstract: >-
+  RNAflow is a modular Shiny application packaged as an R package for
+  end-to-end bulk RNA-seq analysis. From a raw count matrix and sample
+  metadata it provides differential expression (DESeq2), quality-control
+  diagnostics, sample overviews (PCA / UMAP / 3D PCA), a linked
+  volcano-table explorer, multi-contrast comparison, functional enrichment
+  (GSEA / ORA), co-expression network analysis (WGCNA), transcription-factor
+  and pathway activity inference (decoupleR), per-sample gene-set signatures
+  (GSVA / ssGSEA), optional AI-assisted interpretation, and reproducible R
+  script and self-contained HTML report generation.
+keywords:
+  - RNA-seq
+  - differential expression
+  - functional enrichment
+  - co-expression network
+  - bioinformatics
+  - Shiny
+  - R
+  - reproducibility
+license: MIT
+version: 0.14.2
+date-released: "2026-07-03"

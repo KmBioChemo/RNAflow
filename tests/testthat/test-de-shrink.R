@@ -1,13 +1,13 @@
 test_that("run_deseq2 keeps the Wald stat and separates inference from shrinkage", {
   skip_if_not_installed("DESeq2")
   skip_on_cran()
-  f_counts <- system.file("extdata", "demo_counts.csv", package = "RNAflow")
-  f_meta   <- system.file("extdata", "demo_metadata.csv", package = "RNAflow")
+  f_counts <- system.file("extdata", "demo_airway_counts.csv", package = "RNAflow")
+  f_meta   <- system.file("extdata", "demo_airway_metadata.csv", package = "RNAflow")
   skip_if(!file.exists(f_counts) || !file.exists(f_meta))
   counts <- read_counts(f_counts)
   meta   <- read_metadata(f_meta, counts_samples = colnames(counts))
 
-  ct <- c("condition", "Treatment", "Control")
+  ct <- c("condition", "Dex", "Control")
   raw <- suppressMessages(suppressWarnings(
     run_deseq2(counts, meta, design = ~condition, contrast = ct, shrink = FALSE)))
 
@@ -39,8 +39,8 @@ test_that("run_deseq2 keeps the Wald stat and separates inference from shrinkage
 test_that("run_deseq2 keeps numeric covariates numeric (continuous adjustment)", {
   skip_if_not_installed("DESeq2")
   skip_on_cran()
-  f_counts <- system.file("extdata", "demo_counts.csv", package = "RNAflow")
-  f_meta   <- system.file("extdata", "demo_metadata.csv", package = "RNAflow")
+  f_counts <- system.file("extdata", "demo_airway_counts.csv", package = "RNAflow")
+  f_meta   <- system.file("extdata", "demo_airway_metadata.csv", package = "RNAflow")
   skip_if(!file.exists(f_counts) || !file.exists(f_meta))
   counts <- read_counts(f_counts)
   meta   <- read_metadata(f_meta, counts_samples = colnames(counts))
@@ -52,7 +52,7 @@ test_that("run_deseq2 keeps numeric covariates numeric (continuous adjustment)",
 
   res <- suppressMessages(suppressWarnings(
     run_deseq2(counts, meta, design = ~ rin + condition,
-               contrast = c("condition", "Treatment", "Control"),
+               contrast = c("condition", "Dex", "Control"),
                shrink = FALSE)))
   expect_s3_class(res, "data.frame")
   expect_gt(nrow(res), 0)

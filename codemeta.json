@@ -1,0 +1,45 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "identifier": "RNAflow",
+  "name": "RNAflow: An Interactive Shiny Platform for End-to-End RNA-seq Analysis",
+  "version": "0.14.2",
+  "description": "A modular Shiny application packaged as an R package for end-to-end bulk RNA-seq analysis: differential expression (DESeq2), QC diagnostics, PCA/UMAP/3D PCA, a linked volcano-table explorer, multi-contrast comparison, functional enrichment (GSEA/ORA), co-expression networks (WGCNA), transcription-factor and pathway activity (decoupleR), per-sample gene-set signatures (GSVA/ssGSEA), optional AI-assisted interpretation, and reproducible R-script and HTML report generation.",
+  "applicationCategory": "Bioinformatics",
+  "programmingLanguage": {
+    "@type": "ComputerLanguage",
+    "name": "R",
+    "url": "https://r-project.org"
+  },
+  "runtimePlatform": "R",
+  "license": "https://spdx.org/licenses/MIT",
+  "codeRepository": "https://github.com/KmBioChemo/RNAflow",
+  "url": "https://KmBioChemo.github.io/RNAflow/",
+  "issueTracker": "https://github.com/KmBioChemo/RNAflow/issues",
+  "keywords": [
+    "RNA-seq",
+    "differential expression",
+    "functional enrichment",
+    "co-expression network",
+    "bioinformatics",
+    "Shiny",
+    "R",
+    "reproducibility"
+  ],
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Karim",
+      "familyName": "Matmat",
+      "email": "karimatmat@gmail.com"
+    }
+  ],
+  "maintainer": [
+    {
+      "@type": "Person",
+      "givenName": "Karim",
+      "familyName": "Matmat",
+      "email": "karimatmat@gmail.com"
+    }
+  ]
+}

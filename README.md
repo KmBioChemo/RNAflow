@@ -129,11 +129,12 @@ sample3,Treatment,B
 
 ## Demo datasets
 
-Bundled in `inst/extdata/` (see `dev/make_demo_*.R` for how they are built):
+Two real, published human datasets are bundled in `inst/extdata/` (see the
+matching `dev/make_demo_*.R` scripts for exactly how they are built from their
+Bioconductor sources):
 
-- **`demo_airway_*.csv`** — a real, published human dataset ([airway](https://bioconductor.org/packages/airway/), Himes et al. 2014): airway smooth muscle cells treated with **dexamethasone** vs. control across **4 cell lines**. Organism = human; use `condition` as the design variable and adjust for `cell`. Good for demonstrating DE, covariate adjustment, and enrichment on genuine biology.
-- **`demo_multi_*.csv`** — a **simulated** mouse factorial set (genotype × treatment, 6 groups) with a planted signal, for multi-contrast comparison and WGCNA. Organism = mouse; design variable `group`.
-- **`demo_counts.csv` / `demo_metadata.csv`** — a minimal simulated 2-group set.
+- **`demo_airway_*.csv`** — [airway](https://bioconductor.org/packages/airway/) (Himes et al. 2014): airway smooth muscle cells treated with **dexamethasone** vs. control across **4 cell lines** (8 samples). Organism = human; design variable `condition`, adjust for `cell`. Gene **symbols**. Good for DE, covariate adjustment, and enrichment on genuine biology.
+- **`demo_pickrell_*.csv`** — [Pickrell et al. 2010](https://doi.org/10.1038/nature08872) (tweeDEseqCountData): lymphoblastoid cell lines, a balanced **female-vs-male** subset (30 samples). Organism = human; design variable `sex`. **Ensembl** IDs (exercises the ID → symbol mapping). A clean, well-understood signal (XIST, Y-chromosome genes) and enough samples for WGCNA / signatures.
 
 ## Roadmap
 

@@ -82,16 +82,16 @@ app_ui <- function() {
               shiny::tags$ul(
                 class = "rf-demo-list",
                 shiny::tags$li(shiny::tags$code("demo_airway_counts.csv"),
-                  " -- real published human data (airway; dexamethasone vs. ",
-                  "control across 4 cell lines). Organism ", shiny::strong("Human"),
-                  "; design ", shiny::tags$code("condition"), ", adjust for ",
-                  shiny::tags$code("cell"), "."),
-                shiny::tags$li(shiny::tags$code("demo_multi_counts.csv"),
-                  " -- simulated mouse factorial set (6 groups) for ",
-                  "multi-contrast / WGCNA testing. Organism ", shiny::strong("Mouse"),
-                  "; design ", shiny::tags$code("group"), "."),
-                shiny::tags$li(shiny::tags$code("demo_counts.csv"),
-                  " -- a minimal 2-group simulated set.")
+                  " -- real published human data (Himes et al. 2014, airway ",
+                  "smooth muscle; dexamethasone vs. control across 4 cell ",
+                  "lines). Organism ", shiny::strong("Human"), "; design ",
+                  shiny::tags$code("condition"), ", adjust for ",
+                  shiny::tags$code("cell"), ". Gene symbols."),
+                shiny::tags$li(shiny::tags$code("demo_pickrell_counts.csv"),
+                  " -- real published human data (Pickrell et al. 2010, ",
+                  "lymphoblastoid cell lines; a balanced female-vs-male subset). ",
+                  "Organism ", shiny::strong("Human"), "; design ",
+                  shiny::tags$code("sex"), ". Ensembl IDs.")
               ),
               shiny::div(
                 class = "rnaflow-banner rf-success",

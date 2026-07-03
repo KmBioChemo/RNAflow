@@ -9,3 +9,9 @@
 docs/
 omnipathr-log/
 
+
+# knitr/vignette build artifacts
+figure/
+vignettes/*.html
+vignettes/*_files/
+*_cache/

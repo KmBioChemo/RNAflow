@@ -1,3 +1,26 @@
+# RNAflow 0.15.0 (2026-07-03)
+
+## Publication readiness & repository hygiene (no new features)
+
+- **Bundled data is now two real, published human datasets**, and nothing else:
+  **airway** (Himes *et al.* 2014; gene symbols) and a balanced female-vs-male
+  subset of **Pickrell *et al.* 2010** (`tweeDEseqCountData`; Ensembl IDs, which
+  also exercises the ID → symbol mapping). Removed the simulated sets
+  (`demo_counts`, `demo_multi`) and project-specific files (`mrl_lpr_*`,
+  `Book*.xlsx`). Each dataset has a `dev/make_demo_*.R` build script.
+- **Tests rewired to the real data**: DE/shrinkage on airway, demo-data
+  validation on both sets. The module-enrichment test is now a *deterministic*
+  real-gene-set example (two Hallmark sets → two modules → GO enrichment),
+  removing the dependency on a bundled simulated dataset.
+- **Reproducible reference analysis**: the *Getting started* vignette now
+  **executes** its core (load → validate → DESeq2 → volcano) on the bundled
+  airway data, so a reader can reproduce a real result end to end.
+- **Community & citation files** for open-source practice: `CITATION.cff`,
+  `inst/CITATION`, `codemeta.json`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, and
+  GitHub issue templates.
+- **Docs**: DESCRIPTION and README describe the full current scope and cite both
+  demo datasets with their sources.
+
 # RNAflow 0.14.2 (2026-07-03)
 
 ## Stabilization pass (no new features)
