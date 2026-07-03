@@ -116,3 +116,12 @@ fig4 <- (pA | pB | pC) + patchwork::plot_annotation(tag_levels = "A")
 ggsave("paper/figures/figure5.png", fig4, width = 14, height = 4.6, dpi = 300, bg = "white")
 ggsave("paper/figures/figure5.pdf", fig4, width = 14, height = 4.6, bg = "white")
 cat("Wrote figure5\n")
+
+# individual plot PDFs (one plot per file)
+dir.create("paper/figures/panels", showWarnings = FALSE, recursive = TRUE)
+ind <- list(F5A_reproducibility_roundtrip = pA, F5B_allpairwise_consistency = pB, F5C_concordance_limma = pC)
+for (nm in names(ind)) {
+  ggsave(paste0("paper/figures/panels/", nm, ".pdf"), ind[[nm]], width = 5.2, height = 4.6)
+  ggsave(paste0("paper/figures/panels/", nm, ".png"), ind[[nm]], width = 5.2, height = 4.6, dpi = 300, bg = "white")
+}
+cat("Wrote validation panels\n")
