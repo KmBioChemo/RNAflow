@@ -501,6 +501,46 @@ log-fold-change heatmap of genes across contrasts (Figure 3D); and an alluvial
 diagram tracing how genes move between up-, down-, and not-significant across
 contrasts (Figure 3E).
 
+### AI-assisted interpretation
+
+As an optional final step, RNAflow can draft a biological interpretation of a
+contrast — the feature that most distinguishes it from other tools. It assembles
+a structured prompt from the contrast (the top up- and down-regulated genes with
+their statistics and the most enriched gene sets) and queries a large language
+model under a system prompt that instructs the model to stay grounded in the
+supplied data, distinguish established biology from speculation, and note caveats.
+For the airway contrast, the feature returns a concise narrative that correctly
+identifies the canonical glucocorticoid-receptor signature and its
+anti-inflammatory counterpart (Box 1). We stress that this is a
+*hypothesis-generating aid, not a source of ground truth*: it runs only when the
+user supplies their own API key, no data leave the machine otherwise, and its
+statements — like any interpretation — must be verified against the primary
+results and the literature. Its value is to help a user orient quickly in an
+unfamiliar area and to draft a first version of a Methods or Discussion narrative
+that the analyst then checks and edits; the exact wording is model- and
+version-dependent and is regenerated, not fixed.
+
+> **Box 1 · Example AI-assisted interpretation** (airway, dexamethasone vs
+> control; produced by the feature with Claude Opus 4.8 from the exported
+> contrast, abridged). *Illustrative and hypothesis-generating; to be verified.*
+>
+> The contrast is dominated by a canonical glucocorticoid-receptor (GR)
+> transcriptional signature. The most strongly induced genes include
+> well-established glucocorticoid-responsive genes — *FKBP5* (a classical direct
+> GR target), *KLF15*, *ZBTB16*, *SAMHD1*, and *STEAP4* — together with *CIDEC*,
+> *ANGPTL7*, and other genes consistent with the metabolic/adipogenic arm of
+> glucocorticoid action, matching the Hallmark **adipogenesis** enrichment.
+> Conversely, the down-regulated set includes pro-inflammatory and cell-adhesion
+> genes (*VCAM1*, *CCL8*, *WNT2*), consistent with the well-documented
+> anti-inflammatory effect of dexamethasone and the suppression of
+> TNFα/NF-κB signalling seen in the enrichment.
+>
+> Overall this is the expected biology of glucocorticoid exposure in airway
+> smooth muscle. Two caveats: enrichment reflects the ranked gene list rather
+> than proof of mechanism, and the four cell lines are a limited sample. A
+> reasonable next step is to confirm representative GR targets (e.g. *FKBP5*) and
+> test for GR-binding motifs among the induced genes.
+
 ### Validation and reproducibility
 
 We validated RNAflow's correctness and reproducibility directly (Figure 4).
