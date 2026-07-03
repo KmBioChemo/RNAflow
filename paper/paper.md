@@ -555,7 +555,7 @@ version-dependent and is regenerated, not fixed.
 > Conversely, the down-regulated set includes pro-inflammatory and cell-adhesion
 > genes (*VCAM1*, *CCL8*, *WNT2*), consistent with the well-documented
 > anti-inflammatory effect of dexamethasone and the suppression of
-> TNFalpha/NF-κB signalling seen in the enrichment.
+> TNFalpha/NF-kB signalling seen in the enrichment.
 >
 > Overall this is the expected biology of glucocorticoid exposure in airway
 > smooth muscle. Two caveats: enrichment reflects the ranked gene list rather
@@ -569,7 +569,7 @@ We validated RNAflow's correctness and reproducibility directly (Figure 5).
 *Reproducibility.* Exporting the airway session as an R script and re-running it
 in a clean R process regenerated the differential-expression table bit for bit:
 across all 17,190 tested genes the largest absolute difference in log2 fold change
-was 3 × 10⁻¹⁴ — numerical noise — and its correlation with the interactive result
+was 3 × 10^-14^ — numerical noise — and its correlation with the interactive result
 was 1.000 (Figure 5A). An interactive analysis is therefore *exactly* recoverable
 as code, not merely approximately. *All-pairwise consistency.* The all-pairwise
 mode, which extracts every contrast from a single model fit, is statistically
