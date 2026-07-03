@@ -560,14 +560,14 @@ documentation; feature sets evolve.
 | Differential expression | Y | Y | Y | **Y** |
 | QC / diagnostics | Y | Y | Y | **Y** |
 | PCA / dimensionality reduction | Y | Y | Y | **Y** |
-| Multi-contrast comparison | ~ | ~ | ~ | **Y** |
+| Multi-contrast comparison | ~ | Y | ~ | **Y** |
 | Functional enrichment (GSEA + ORA) | Y | Y | Y | **Y** |
 | Co-expression networks | Y | – | ~ | **Y** |
 | TF / pathway activity inference | ~ | – | ~ | **Y** |
 | Per-sample signatures (GSVA / ssGSEA) | – | – | – | **Y** |
 | AI-assisted interpretation | – | – | – | **Y** |
 | Reproducible script / report export | Y | ~ | Y | **Y** |
-| Tested, reusable R / Bioconductor package | – | Y | ~ | **Y** |
+| Tested, reusable R / Bioconductor package | ~ | Y | ~ | **Y** |
 | Runs locally / offline | ~ | Y | ~ | **Y** |
 
 We compare against three broad, well-established interactive tools whose scope is
@@ -576,12 +576,14 @@ documentation. **iDEP** [@idep] is among the most complete: from a count matrix 
 performs exploratory analysis (hierarchical and k-means clustering, PCA),
 differential expression, GSEA and GO/KEGG pathway analysis, and co-expression
 network analysis across 220 species, and its workflow can be re-run from
-downloadable R code — but it is primarily a hosted web service used through its
-interface rather than distributed as a tested, reusable package. **DEBrowser**
-[@debrowser] is a polished Bioconductor/Shiny tool centred on interactive
-differential expression (DESeq2, edgeR, limma) with quality-control diagnostics,
-PCA, heatmaps, and GO/GSEA; it does not target co-expression networks, activity
-inference, or per-sample signatures. **ExpressAnalyst** [@expressanalyst] is a
+downloadable R code — it is used mainly as a hosted web service (though also
+available as the idepGolem R package for local installation), with its code
+organised around the application rather than as a documented, unit-tested analysis
+API. **DEBrowser** [@debrowser] is a polished Bioconductor/Shiny tool centred on
+interactive differential expression (DESeq2, edgeR, limma), with quality-control
+diagnostics, PCA, heatmaps, multi-condition comparison, batch-effect correction
+(ComBat/Harman), and GO/GSEA enrichment; it does not target co-expression
+networks, activity inference, or per-sample signatures. **ExpressAnalyst** [@expressanalyst] is a
 broad web platform spanning read quantification, differential expression,
 functional enrichment, interaction- and regulatory-network analysis, and
 cross-species meta-analysis, with a companion ExpressAnalystR package and a
@@ -600,10 +602,11 @@ Against this backdrop RNAflow is not "better" at any single step (Table 3). Some
 capabilities are shared: iDEP and ExpressAnalyst also span much of the workflow
 and export reproducible R code. What distinguishes RNAflow is the *combination* of
 three things at once. First, it carries the full downstream workflow on one loaded
-dataset, including the methods least often integrated into an interactive tool —
-**regulator and pathway activity inference (decoupleR)** and **per-sample gene-set
-signatures (GSVA / ssGSEA)**, which are absent from the interactive tools compared
-here — alongside co-expression networks. Second, it makes reproducible export
+dataset, including methods rarely integrated into an interactive tool:
+**per-sample gene-set signatures (GSVA / ssGSEA)** and **AI-assisted
+interpretation**, which none of the compared tools provide, together with
+**regulator and pathway activity inference (decoupleR / PROGENy)** and
+co-expression networks, which the others cover only partially if at all. Second, it makes reproducible export
 comprehensive, emitting a runnable R script, a Methods paragraph, and a
 self-contained report together. Third, it is engineered as a tested, reusable R
 package that runs entirely locally, so its functions can be scripted and
