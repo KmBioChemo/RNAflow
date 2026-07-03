@@ -547,12 +547,8 @@ diagram of up-/down-/not-significant transitions across contrasts.
 RNAflow's contribution is not a new statistical method but an integration: it
 brings the standard, best-in-class methods for each analysis step into one
 coherent, reproducible, and properly engineered tool. Table 3 summarises how its
-scope compares with representative interactive RNA-seq applications. Several
-tools cover differential expression, dimensionality reduction, and enrichment
-well; RNAflow's distinguishing combination is the inclusion of co-expression
-networks, regulator and pathway activity, and per-sample signatures alongside
-them, together with first-class reproducibility export and a tested-package
-architecture, in a tool that runs locally on the user's own machine.
+scope compares with representative interactive RNA-seq applications, and we
+discuss each in turn below.
 
 **Table 3.** Feature comparison with representative interactive bulk RNA-seq
 tools. ● present; ○ partial or via a related feature; blank not a focus.
@@ -572,6 +568,47 @@ tools. ● present; ○ partial or via a related feature; blank not a focus.
 | Runnable-script / report export | ○ | ○ | ○ | ○ | ○ | ● |
 | Tested, reusable R package | | ● | ● | ● | ○ | ● |
 | Runs fully locally / offline | ○ | ● | ● | ● | ● | ● |
+
+Each of these tools is strong within its scope, and the differences are of
+emphasis rather than quality. **iDEP** [@idep] is among the most complete web
+applications: from a count matrix it runs differential expression, clustering
+and PCA, GSEA and GO/pathway analysis, and has grown co-expression and
+pathway-diagram features; for our purposes its main constraints are that it is a
+hosted web service (data must be uploaded) and is used through its interface
+rather than as a reusable, tested code base. **DEBrowser** [@debrowser] is a
+polished Shiny tool centred on interactive differential expression and quality
+control — several DE back-ends, batch-effect diagnostics, PCA and heatmaps, and
+GO/GSEA — but does not target co-expression networks, activity inference, or
+per-sample signatures. **pcaExplorer** [@pcaexplorer] is excellent for the
+exploration it is named for — principal components, sample/gene inspection, and
+functional annotation of the components, with a reproducible report — but is
+deliberately scoped to that stage rather than the whole workflow. **GeneTonic**
+[@genetonic] shines at the *interpretation* step, fusing a DESeq2 result and an
+enrichment result into a linked, bookmarkable interface with a reproducible
+report; it takes those results as input rather than running the pipeline, and
+does not cover networks, activity, or signatures. **ExpressAnalyst**
+[@expressanalyst] is the broadest of the set — differential expression,
+enrichment, protein–protein and regulatory-network analysis, meta-analysis, and
+wide species support — but is primarily a web platform, and its network emphasis
+is on interaction networks rather than WGCNA co-expression, decoupleR activity,
+or GSVA signatures.
+
+Against this backdrop RNAflow is not "better" at any single step — each tool
+above is excellent at what it targets — but occupies a distinct point in the
+design space, defined by three choices taken together. First, it runs the
+**whole downstream workflow** and, in particular, carries the less commonly
+integrated methods — WGCNA co-expression, decoupleR transcription-factor and
+pathway activity, and per-sample GSVA signatures — on the same loaded dataset, so
+an analyst does not leave the tool to move from genes to modules, regulators, and
+sample-level signatures. Second, it treats **reproducible export** as a primary
+feature: every session becomes a runnable script, a Methods paragraph, and a
+self-contained report, so an interactive analysis is always recoverable as code,
+where most interactive tools offer partial or report-only export. Third, it is
+**engineered as a tested, reusable R package** that runs locally, so its
+functions can be scripted and unit-tested independently of the interface and no
+data leave the user's machine. Where existing tools optimise one or two of
+breadth, reproducibility, and software engineering, RNAflow's aim is to hold all
+three at once for the common case of a single laboratory with a count matrix.
 
 ### Limitations
 
