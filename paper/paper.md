@@ -405,18 +405,18 @@ pairwise contrast from that shared fit, which is both statistically consistent
 
 | Step | Method / test | Multiple testing | Key defaults |
 |---|---|---|---|
-| Pre-filtering | drop low-count genes | — | row sum ≥ 10 |
-| Differential expression | DESeq2 negative-binomial GLM, Wald test | Benjamini–Hochberg | covariates + variable of interest; independent filtering at α = 0.05; apeglm LFC shrinkage |
+| Pre-filtering | drop low-count genes | — | row sum >= 10 |
+| Differential expression | DESeq2 negative-binomial GLM, Wald test | Benjamini–Hochberg | covariates + variable of interest; independent filtering at alpha = 0.05; apeglm LFC shrinkage |
 | All-pairwise DE | one DESeq2 fit, `results()` per pair | Benjamini–Hochberg | contrast-based `normal`/`ashr` shrinkage |
-| Normalisation | VST (n ≥ 4) / rlog / log2-CPM | — | VST, blind |
+| Normalisation | VST (n >= 4) / rlog / log2-CPM | — | VST, blind |
 | PCA | `prcomp` on top-variable genes | — | 500 most variable (VST) |
 | UMAP | uwot | — | 500 genes; neighbours = 15; min-dist = 0.1; seeded |
 | GSEA | fgsea | Benjamini–Hochberg | ranked by Wald statistic |
 | ORA | clusterProfiler hypergeometric test | Benjamini–Hochberg | universe = tested genes; significant = padj < 0.05 and \|log2FC\| > 1 |
-| Co-expression | WGCNA, signed network | — | soft power at scale-free R² ≥ 0.8; dynamic tree cut, min module 30, deepSplit 2, merge height 0.25 |
+| Co-expression | WGCNA, signed network | — | soft power at scale-free R^2^ >= 0.8; dynamic tree cut, min module 30, deepSplit 2, merge height 0.25 |
 | Module–trait | Pearson eigengene–trait correlation | — | correlation p-values |
 | Activity | decoupleR univariate linear model | — | CollecTRI / PROGENy priors; min set size 5 |
-| Signatures | GSVA (Gaussian kernel) / ssGSEA | — | set size ∈ [5, 500] |
+| Signatures | GSVA (Gaussian kernel) / ssGSEA | — | set size in [5, 500] |
 
 Gene-set collections are MSigDB (Hallmark, curated C2, ontology C5) via msigdbr,
 plus GO, KEGG, and Reactome.
@@ -555,7 +555,7 @@ version-dependent and is regenerated, not fixed.
 > Conversely, the down-regulated set includes pro-inflammatory and cell-adhesion
 > genes (*VCAM1*, *CCL8*, *WNT2*), consistent with the well-documented
 > anti-inflammatory effect of dexamethasone and the suppression of
-> TNFα/NF-κB signalling seen in the enrichment.
+> TNFalpha/NF-κB signalling seen in the enrichment.
 >
 > Overall this is the expected biology of glucocorticoid exposure in airway
 > smooth muscle. Two caveats: enrichment reflects the ranked gene list rather
@@ -579,7 +579,7 @@ fitted values exactly (maximum absolute difference 0; Figure 5B), confirming tha
 the shared-fit shortcut changes only the run time. *Method concordance.* On the
 airway contrast, RNAflow's DESeq2 log-fold-changes agree closely with an
 independent limma-voom analysis of the same data (Pearson *r* = 0.97, Spearman
-*ρ* = 0.99 across 13,952 common genes; Figure 5C), and the significant-gene sets
+*rho* = 0.99 across 13,952 common genes; Figure 5C), and the significant-gene sets
 overlap substantially (Jaccard 0.70), as expected for two well-established but
 distinct methods. *Test coverage.* The pure analysis and figure layer — the code
 that produces every result and plot — has 77% line coverage from the unit-test
@@ -629,7 +629,7 @@ original interactive run (identical; *r* = 1.000). **(B)** Log-fold-changes for 
 TCGA contrast extracted from the single all-pairwise fit versus an independent
 DESeq2 fit (identical; *r* = 1.000). **(C)** RNAflow (DESeq2) versus an
 independent limma-voom analysis of the airway data (Pearson *r* = 0.97, Spearman
-*ρ* = 0.99). Dashed line, *y* = *x*.
+*rho* = 0.99). Dashed line, *y* = *x*.
 
 ### Comparison with existing tools
 
@@ -752,7 +752,7 @@ individual laboratories and as a well-structured codebase that others can extend
 - **Archived version:** *TODO: Zenodo DOI (minted at release).*
 - **Operating systems:** platform-independent (Linux, macOS, Windows); a Docker
   image is provided.
-- **Programming language:** R (≥ 4.4; developed and tested against R 4.5 /
+- **Programming language:** R (>= 4.4; developed and tested against R 4.5 /
   Bioconductor 3.22).
 - **Other requirements:** DESeq2, fgsea, clusterProfiler, WGCNA, GSVA, decoupleR,
   and related Bioconductor packages (installed automatically or via the provided
