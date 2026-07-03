@@ -1,3 +1,33 @@
+# RNAflow 0.14.0 (2026-07-02)
+
+## New analyses & visualizations (backlog features)
+
+Four backlog items, each following the pure/impure rule (tested pure
+functions + thin module wiring). All new dependencies are Suggests and guarded.
+
+- **UMAP + 3D PCA.** New `compute_umap()` / `fig_umap()` (via \pkg{uwot}) and
+  `fig_pca_3d()` (interactive PC1/PC2/PC3). The PCA tab gains an *Embedding*
+  selector (PCA 2D / PCA 3D / UMAP) with UMAP neighbour/min-distance controls.
+  UMAP is deterministic (seeded, RNG restored).
+- **Interactive enrichment network.** `fig_enrich_visnet()` renders the
+  enrichment map as a draggable \pkg{visNetwork} widget (hover tooltips,
+  neighbour highlighting), reusing the same shared-gene Jaccard graph as the
+  static map. Added as an *Interactive map* view on the Enrichment tab (guarded
+  so the tab degrades gracefully without visNetwork).
+- **Distribution figures.** `fig_gene_expression()` plots a gene's normalized
+  expression across groups as a raincloud / beeswarm / box (via \pkg{ggdist} /
+  \pkg{ggbeeswarm}) -- wired into the QC tab with a gene selector.
+  `contrast_direction_table()` + `fig_contrast_alluvial()` show Up/NS/Down gene
+  flow across contrasts (via \pkg{ggalluvial}) -- added to the Compare tab.
+- **Per-sample signatures (GSVA / ssGSEA).** New `run_gsva()` (via \pkg{GSVA})
+  turns counts into a sets x samples score matrix; `fig_gsva_heatmap()` draws
+  the annotated signature heatmap. A new **Signatures** tab scores samples
+  against an MSigDB collection; counts are mapped to gene symbols first
+  (`gsva_symbol_counts()`), matching the enrichment path so Ensembl/ENTREZ
+  projects score correctly.
+- **Tests.** +44 tests (embeddings, visNetwork map, gene/alluvial, GSVA):
+  422 pass / 0 fail / 1 skip (shinytest2). `pkgdown::check_pkgdown()` clean.
+
 # RNAflow 0.13.0 (2026-07-02)
 
 ## Reproducibility, distribution, UI finish, integration tests

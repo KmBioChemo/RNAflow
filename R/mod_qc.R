@@ -23,7 +23,8 @@ mod_qc_ui <- function(id) {
         choices = c("P-value histogram" = "pval",
                     "MA plot"            = "ma",
                     "Sample correlation" = "cor",
-                    "Library sizes"      = "lib"),
+                    "Library sizes"      = "lib",
+                    "Gene expression"    = "gene"),
         selected = "pval"),
       shiny::conditionalPanel(
         sprintf("input['%s'] == 'ma'", ns("view")),
@@ -34,6 +35,14 @@ mod_qc_ui <- function(id) {
         shiny::radioButtons(ns("cor_method"), "Correlation",
                             choices = c("pearson", "spearman"),
                             selected = "pearson", inline = TRUE)),
+      shiny::conditionalPanel(
+        sprintf("input['%s'] == 'gene'", ns("view")),
+        shiny::selectizeInput(ns("gene"), "Gene", choices = NULL,
+                              options = list(placeholder = "type a gene...")),
+        shiny::radioButtons(ns("gene_style"), "Style",
+                            choices = c("Raincloud" = "raincloud",
+                                        "Beeswarm" = "beeswarm", "Box" = "box"),
+                            selected = "raincloud", inline = TRUE)),
       ui_export_bar(ns("qc"), 7, 5)
     ),
     shiny::uiOutput(ns("notice")),
@@ -64,7 +73,17 @@ mod_qc_server <- function(id, de_reactive, counts_reactive,
       pval = "Run DESeq2 to see the p-value distribution.",
       ma   = "Run DESeq2 to see the MA plot.",
       cor  = "Load counts (and run DESeq2 for normalization) for the correlation heatmap.",
-      lib  = "Load a counts matrix to see library sizes.")
+      lib  = "Load a counts matrix to see library sizes.",
+      gene = "Load counts (normalized) to plot a gene's expression.")
+
+    # Populate the gene selector (server-side for large matrices).
+    shiny::observeEvent(counts_norm_reactive(), {
+      cn <- counts_norm_reactive()
+      if (is.null(cn) || is.null(rownames(cn))) return()
+      shiny::updateSelectizeInput(
+        session, "gene", choices = rownames(cn), server = TRUE,
+        selected = (shiny::isolate(input$gene) %||% rownames(cn)[1]))
+    }, ignoreNULL = FALSE)
 
     cur_plot <- shiny::reactive({
       v <- input$view %||% "pval"
@@ -83,7 +102,16 @@ mod_qc_server <- function(id, de_reactive, counts_reactive,
                                 method = input$cor_method %||% "pearson") },
         lib  = { ct <- counts_reactive()
                  shiny::validate(shiny::need(!is.null(ct), needs$lib))
-                 fig_lib_sizes(ct, metadata_reactive(), mode = mode) })
+                 fig_lib_sizes(ct, metadata_reactive(), mode = mode) },
+        gene = { cn <- counts_norm_reactive()
+                 shiny::validate(shiny::need(!is.null(cn), needs$gene))
+                 shiny::req(input$gene)
+                 shiny::validate(shiny::need(
+                   input$gene %in% rownames(cn),
+                   "Pick a gene present in the counts matrix."))
+                 fig_gene_expression(cn, metadata_reactive(), input$gene,
+                                     style = input$gene_style %||% "raincloud",
+                                     mode = mode) })
     })
 
     output$plot <- shiny::renderPlot({

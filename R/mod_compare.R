@@ -23,10 +23,11 @@ mod_compare_ui <- function(id) {
       ui_section_title("View"),
       shiny::radioButtons(
         ns("view"), NULL,
-        choices = c("Venn diagram"      = "venn",
-                    "UpSet plot"        = "upset",
-                    "Volcano grid"      = "grid",
-                    "log2FC heatmap"    = "heatmap"),
+        choices = c("Venn diagram"       = "venn",
+                    "UpSet plot"         = "upset",
+                    "Volcano grid"       = "grid",
+                    "log2FC heatmap"     = "heatmap",
+                    "Direction alluvial" = "alluvial"),
         selected = "venn"
       ),
       shiny::tags$hr(style = "margin:8px 0;"),
@@ -151,7 +152,10 @@ mod_compare_server <- function(id, store_reactive) {
             contrasts, gene_src = input$gene_src %||% "sig_union",
             n_genes = max(2L, as.integer(input$ngenes_num %||% 50)),
             padj_thr = input$padj_num, lfc_thr = input$lfc_num,
-            palette_name = input$palette %||% "RdBu")
+            palette_name = input$palette %||% "RdBu"),
+          alluvial = fig_contrast_alluvial(
+            contrasts, padj_thr = input$padj_num, lfc_thr = input$lfc_num,
+            mode = if (isTRUE(input$publication)) "publication" else "exploration")
         )
       }, error = function(e) structure(conditionMessage(e), class = "cmp_error"))
       if (inherits(obj, "cmp_error")) return(list(error = as.character(obj)))

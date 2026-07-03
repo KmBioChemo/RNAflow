@@ -11,9 +11,19 @@ mod_pca_ui <- function(id) {
   bslib::layout_sidebar(
     sidebar = bslib::sidebar(
       width = 280,
+      shiny::selectInput(ns("method"), "Embedding",
+                         c("PCA (2D)" = "pca", "PCA (3D)" = "pca3d",
+                           "UMAP" = "umap")),
       ui_slider_num(ns("n_sld"), ns("n_num"),
                     "Top variable genes", 50, 5000, 500, 50),
       shiny::uiOutput(ns("col_ui")),
+      shiny::conditionalPanel(
+        condition = sprintf("input['%s'] == 'umap'", ns("method")),
+        ui_slider_num(ns("nn_sld"), ns("nn_num"),
+                      "UMAP neighbors", 2, 50, 15, 1),
+        shiny::sliderInput(ns("min_dist"), "UMAP min. distance",
+                           min = 0.01, max = 0.99, value = 0.1, step = 0.01)
+      ),
       shiny::checkboxInput(ns("restrict"),
                            "Restrict to active contrast groups", value = FALSE),
       shiny::textInput(ns("title"), "Title", ""),
@@ -62,11 +72,25 @@ mod_pca_server <- function(id, counts_reactive, metadata_reactive,
       d <- data_r()
       shiny::validate(shiny::need(
         !is.null(d$counts),
-        "Load a counts matrix to generate the PCA."
+        "Load a counts matrix to generate the sample overview."
       ))
       shiny::req(input$n_num)
+      method <- input$method %||% "pca"
+      if (method %in% c("umap", "pca3d")) {
+        shiny::validate(shiny::need(
+          ncol(d$counts) >= 4,
+          "UMAP and 3D PCA need at least 4 samples."))
+      }
       col_by <- if (!is.null(input$col_by) && input$col_by != "(none)") input$col_by else NULL
-      fig_pca(d$counts, d$metadata, input$n_num, col_by, input$title)
+      switch(
+        method,
+        pca3d = fig_pca_3d(d$counts, d$metadata, input$n_num, col_by, input$title),
+        umap  = fig_umap(d$counts, d$metadata, input$n_num,
+                         n_neighbors = input$nn_num %||% 15,
+                         min_dist = input$min_dist %||% 0.1,
+                         color_by = col_by, title = input$title),
+        fig_pca(d$counts, d$metadata, input$n_num, col_by, input$title)
+      )
     })
 
     output$msg <- shiny::renderUI({

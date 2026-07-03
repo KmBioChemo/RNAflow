@@ -72,7 +72,8 @@ mod_enrich_ui <- function(id) {
       ui_section_title("Display"),
       shiny::selectInput(ns("view"), "Plot",
                          choices = c("Dotplot" = "dot", "Bar (-log10 FDR)" = "bar",
-                                     "Enrichment map" = "emap")),
+                                     "Enrichment map" = "emap",
+                                     "Interactive map" = "vnet")),
       shiny::conditionalPanel(
         sprintf("input['%s'] == 'gsea' && input['%s'] == 'curve'",
                 ns("method"), ns("view")),
@@ -83,9 +84,16 @@ mod_enrich_ui <- function(id) {
       ui_export_bar(ns("enr"), 7, 6)
     ),
     shiny::uiOutput(ns("notice")),
-    shinycssloaders::withSpinner(
-      shiny::plotOutput(ns("plot"), height = "520px"),
-      type = 6, color = "#1D9E75"
+    shiny::conditionalPanel(
+      condition = sprintf("input['%s'] != 'vnet'", ns("view")),
+      shinycssloaders::withSpinner(
+        shiny::plotOutput(ns("plot"), height = "520px"),
+        type = 6, color = "#1D9E75"
+      )
+    ),
+    shiny::conditionalPanel(
+      condition = sprintf("input['%s'] == 'vnet'", ns("view")),
+      shiny::uiOutput(ns("vnet_holder"))
     ),
     shiny::tags$hr(),
     DT::DTOutput(ns("table"))
@@ -124,7 +132,7 @@ mod_enrich_server <- function(id, de_reactive, organism_reactive,
     shiny::observeEvent(result(), {
       r <- result()
       choices <- c("Dotplot" = "dot", "Bar (-log10 FDR)" = "bar",
-                   "Enrichment map" = "emap")
+                   "Enrichment map" = "emap", "Interactive map" = "vnet")
       if (!is.null(r) && r$method == "gsea") {
         choices <- c(choices, "GSEA curve" = "curve", "Ridgeline" = "ridge")
       }
@@ -256,6 +264,30 @@ mod_enrich_server <- function(id, de_reactive, organism_reactive,
     })
 
     output$plot <- shiny::renderPlot({ print(cur_plot()) })
+
+    # Interactive enrichment map (visNetwork). Guarded so the tab degrades
+    # gracefully when the optional 'visNetwork' package is absent, rather than
+    # breaking the always-built UI.
+    output$vnet_holder <- shiny::renderUI({
+      if (!requireNamespace("visNetwork", quietly = TRUE)) {
+        return(ui_banner("Install the 'visNetwork' package to use the ",
+                         "interactive enrichment map.", type = "warning"))
+      }
+      shinycssloaders::withSpinner(
+        visNetwork::visNetworkOutput(session$ns("vnet"), height = "520px"),
+        type = 6, color = "#1D9E75")
+    })
+    if (requireNamespace("visNetwork", quietly = TRUE)) {
+      output$vnet <- visNetwork::renderVisNetwork({
+        r <- result()
+        shiny::req(r, r$table)
+        shiny::validate(shiny::need(
+          nrow(r$table) >= 2,
+          "Need at least 2 enriched terms for a network."))
+        n <- max(as.integer(input$nterm_num %||% 20), 15)
+        fig_enrich_visnet(r$table, n = n)
+      })
+    }
 
     output$table <- DT::renderDT({
       r <- result()

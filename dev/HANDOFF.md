@@ -12,10 +12,11 @@ _"Lis dev/HANDOFF.md, NEWS.md et le git log, puis on continue."_
 
 ## Current state (keep this updated)
 
-- **Version 0.13.0** (reproducibility/distribution + UI finish + integration
-  tests; then 0.12.0 UI overhaul, 0.11.4 bug-fix pass; see `NEWS.md`),
+- **Version 0.14.0** (backlog features: UMAP/3D PCA, visNetwork enrichment,
+  raincloud/alluvial, GSVA Signatures tab; then 0.13.0 repro/UI/tests,
+  0.12.0 UI overhaul, 0.11.4 bug-fix pass; see `NEWS.md`),
   `git log --oneline` is the record.
-- **378 pass / 0 fail / 1 skip** (`devtools::test()`). The skip is the
+- **422 pass / 0 fail / 1 skip** (`devtools::test()`). The skip is the
   `shinytest2` app smoke test (`test-shiny-app.R`), which needs Chrome/chromote
   -- runs in CI, skips on dev boxes without a browser. decoupleR + OmnipathR
   must be installed for the Activity tests to run for real.
@@ -43,19 +44,22 @@ _"Lis dev/HANDOFF.md, NEWS.md et le git log, puis on continue."_
 
 ## What's built (tabs)
 
-Data · Volcano · **Explore** (linked volcano↔table, crosstalk) · Heatmap · PCA ·
-QC · Compare · Enrichment (GSEA/ORA) · Network (WGCNA) · **Activity** (TF/pathway
-via decoupleR) · **AI** (Claude interpretation) · Project · Report.
+Data · Volcano · **Explore** (linked volcano↔table, crosstalk) · Heatmap ·
+PCA (2D / 3D / UMAP) · QC (+ per-gene raincloud/beeswarm) · Compare (+ direction
+alluvial) · Enrichment (GSEA/ORA, + interactive visNetwork map) · Network
+(WGCNA) · **Activity** (TF/pathway via decoupleR) · **Signatures** (GSVA/ssGSEA
+per-sample) · **AI** (Claude interpretation) · Project · Report.
 
 Recent additions (this session): AI interpretation tab + report integration;
 decoupleR Activity tab; crosstalk Explore tab. See `NEWS.md` for details.
 
-## Backlog / next ideas (2026 features, not yet built)
+## Backlog / next ideas (2026 features)
 
-- GSVA / ssGSEA per-sample pathway scores
-- UMAP + interactive 3D PCA
-- visNetwork interactive enrichment networks
-- raincloud / beeswarm / alluvial / circos figures
+- (GSVA/ssGSEA per-sample scores — DONE in 0.14.0, Signatures tab)
+- (UMAP + interactive 3D PCA — DONE in 0.14.0, PCA tab selector)
+- (visNetwork interactive enrichment networks — DONE in 0.14.0, Enrichment tab)
+- (raincloud/beeswarm gene expression + direction alluvial — DONE in 0.14.0;
+  circos still not built — niche, deferred)
 - (AI, decoupleR, crosstalk linked dashboard — DONE)
 - (the four low-priority review items — KEGG readable, read_counts dup-ID
   message, recent-cache name collision, decoupleR organism errors — DONE in
@@ -96,7 +100,7 @@ decoupleR Activity tab; crosstalk Explore tab. See `NEWS.md` for details.
 ```r
 source("dev/install_deps.R")   # one-time per machine (needs Rtools on Windows)
 devtools::load_all()           # load
-devtools::test()               # 378 pass / 0 fail / 1 skip
+devtools::test()               # 422 pass / 0 fail / 1 skip
 devtools::document()           # after any roxygen change
 RNAflow::run_app()             # launch
 ```

@@ -39,6 +39,10 @@ reference:
   - fig_heatmap
   - fig_pca
   - compute_pca
+  - fig_pca_3d
+  - fig_umap
+  - compute_umap
+  - fig_gene_expression
 
 - title: QC & diagnostics
   contents:
@@ -62,10 +66,12 @@ reference:
   - contrast_sig_genes
   - contrast_sig_sets
   - contrast_lfc_matrix
+  - contrast_direction_table
   - fig_venn
   - fig_upset
   - fig_volcano_grid
   - fig_lfc_heatmap
+  - fig_contrast_alluvial
 
 - title: Functional enrichment
   desc: GSEA (fgsea / MSigDB) and ORA (clusterProfiler; GO / KEGG / Reactome).
@@ -78,7 +84,14 @@ reference:
   - fig_enrich_bar
   - fig_gsea_curve
   - fig_enrich_map
+  - fig_enrich_visnet
   - fig_gsea_ridge
+
+- title: Per-sample signatures (GSVA / ssGSEA)
+  desc: Score every sample against gene sets and view the signature matrix.
+  contents:
+  - run_gsva
+  - fig_gsva_heatmap
 
 - title: Co-expression networks (WGCNA)
   contents:

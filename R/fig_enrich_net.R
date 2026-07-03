@@ -125,6 +125,77 @@ fig_enrich_map <- function(df, n = 30, min_similarity = 0.2, label_n = 12,
                    plot.background = ggplot2::element_rect(fill = "white", colour = NA))
 }
 
+#' Interactive enrichment map (visNetwork)
+#'
+#' The interactive counterpart of [fig_enrich_map()]: the same pathway network
+#' (nodes = enriched terms, edges = shared-gene Jaccard similarity), rendered as
+#' a draggable \pkg{visNetwork} htmlwidget with hover tooltips and
+#' neighbour-highlighting. Node colour encodes NES (GSEA) or -log10(FDR) (ORA);
+#' node size encodes gene-set size.
+#'
+#' @param df a data.frame from [run_gsea()] or [run_ora()]
+#' @param n number of top terms (by padj) to include
+#' @param min_similarity minimum Jaccard similarity to draw an edge
+#' @return a visNetwork htmlwidget
+#' @export
+fig_enrich_visnet <- function(df, n = 30, min_similarity = 0.2) {
+  if (!requireNamespace("visNetwork", quietly = TRUE)) {
+    stop("Package 'visNetwork' is required for the interactive enrichment map. ",
+         "Install with: install.packages('visNetwork')", call. = FALSE)
+  }
+  nd    <- enrich_network_data(df, n)
+  nodes <- nd$nodes
+  genes <- nd$genes
+  k     <- nrow(nodes)
+  is_gsea <- nodes$is_gsea[1]
+  sc    <- nodes$score
+
+  # Node fill: diverging around 0 for NES, sequential for -log10(FDR).
+  if (is_gsea) {
+    lim  <- max(abs(sc), na.rm = TRUE); lim <- if (is.finite(lim) && lim > 0) lim else 1
+    ramp <- grDevices::colorRamp(c("#3B4CC0", "#E9E9E9", "#B40426"))
+    norm <- (sc + lim) / (2 * lim)
+  } else {
+    rng  <- range(sc, na.rm = TRUE); den <- diff(rng); den <- if (den > 0) den else 1
+    ramp <- grDevices::colorRamp(c("#FCE3C6", "#E34A33"))
+    norm <- (sc - rng[1]) / den
+  }
+  norm[!is.finite(norm)] <- 0.5
+  cols <- grDevices::rgb(ramp(pmin(pmax(norm, 0), 1)), maxColorValue = 255)
+
+  score_lbl <- if (is_gsea) "NES: " else "-log10 FDR: "
+  vnodes <- data.frame(
+    id    = seq_len(k),
+    label = clean_term(nodes$term),
+    title = paste0("<b>", clean_term(nodes$term), "</b><br>",
+                   score_lbl, round(sc, 2), "<br>genes: ",
+                   ifelse(is.na(nodes$size), "?", nodes$size)),
+    value = ifelse(is.na(nodes$size), 1, nodes$size),
+    color = cols,
+    stringsAsFactors = FALSE)
+
+  edges <- data.frame(from = integer(0), to = integer(0), value = numeric(0))
+  if (k >= 2) {
+    for (i in seq_len(k - 1)) for (j in (i + 1):k) {
+      a <- genes[[i]]; b <- genes[[j]]
+      u <- length(union(a, b))
+      w <- if (u > 0) length(intersect(a, b)) / u else 0
+      if (w >= min_similarity) edges <- rbind(edges,
+        data.frame(from = i, to = j, value = w))
+    }
+  }
+
+  visNetwork::visNetwork(vnodes, edges) %>%
+    visNetwork::visNodes(shape = "dot", borderWidth = 1,
+                         scaling = list(min = 12, max = 42)) %>%
+    visNetwork::visEdges(color = list(color = "#C0C7CE", highlight = "#1D9E75"),
+                         smooth = FALSE) %>%
+    visNetwork::visPhysics(solver = "forceAtlas2Based", stabilization = TRUE) %>%
+    visNetwork::visOptions(
+      highlightNearest = list(enabled = TRUE, degree = 1, hover = TRUE)) %>%
+    visNetwork::visInteraction(hover = TRUE, tooltipDelay = 120)
+}
+
 #' GSEA ridgeline plot
 #'
 #' For the top pathways, the distribution of the gene-level ranking metric

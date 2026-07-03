@@ -1,6 +1,6 @@
 Package: RNAflow
 Title: An Interactive Shiny Platform for End-to-End RNA-seq Analysis
-Version: 0.13.0
+Version: 0.14.0
 Authors@R: person("Karim", "Matmat", role = c("aut", "cre"),
                   email = "karimatmat@gmail.com")
 Description: RNAflow is a modular Shiny application packaged as an R package
@@ -43,6 +43,7 @@ Imports:
 Suggests:
     testthat (>= 3.0.0),
     shinytest2,
+    chromote,
     withr,
     httr2,
     apeglm,
@@ -54,6 +55,11 @@ Suggests:
     ggridges,
     ggtext,
     scico,
+    uwot,
+    visNetwork,
+    ggalluvial,
+    ggbeeswarm,
+    ggdist,
     fgsea,
     clusterProfiler,
     msigdbr,
@@ -63,6 +69,7 @@ Suggests:
     org.Mm.eg.db,
     org.Rn.eg.db,
     WGCNA,
+    GSVA,
     decoupleR,
     OmnipathR,
     knitr,
