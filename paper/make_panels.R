@@ -69,6 +69,8 @@ save_plate <- function(pl, name, w, h) {
 }
 
 ## ---- Figure 1: differential expression & enrichment (airway) ----------
+# grouped: DE diagnostics (volcano/MA/p-value) then enrichment (GSEA ridge/ORA)
+sets <- get_gene_sets("human", collection = "H")
 p1 <- wrap_plots(
   gg(fig_volcano(D$a_res, n_label = 8, mode = "publication"),
      "Differential expression: dexamethasone vs control (airway)"),
@@ -77,51 +79,48 @@ p1 <- wrap_plots(
   titled(hm(fig_heatmap(D$a_vst, D$a_res, D$am, n_genes = 30, show_colnames = FALSE,
                         direction_annotation = TRUE, show_title = FALSE)),
          "Expression of top differential genes (airway)"),
-  gg(fig_enrich_dot(D$a_gsea, n = 8), "Gene-set enrichment (airway; MSigDB Hallmark)"),
+  gg(fig_gsea_ridge(D$a_res, sets, D$a_gsea, n = 10, mode = "publication"),
+     "Gene-set enrichment ridgeline (airway; MSigDB Hallmark)"),
   gg(fig_enrich_bar(D$a_ora, n = 10, mode = "publication"),
      "Over-representation analysis (airway; GO BP)"),
   ncol = 3) + plot_annotation(tag_levels = "A") & tag_theme
 save_plate(p1, "figure1", 17, 10.5)
 
-## ---- Figure 2: structure & co-expression (TCGA) -----------------------
+## ---- Figure 2: molecular landscape & co-expression (TCGA) -------------
+# hero: the per-sample GSVA signature heatmap; supporting: PCA + WGCNA
 sc <- merge(D$pca$scores, D$tm, by = "sample")
 p_pca <- ggplot(sc, aes(PC1, PC2, colour = cancer_type)) +
   geom_point(size = 2.4, alpha = .92, stroke = 0) +
   scale_colour_manual(values = OI, name = "Cancer type") +
-  labs(title = "Principal-component analysis (TCGA pan-cancer cohort)",
+  labs(title = "Principal-component analysis (TCGA)",
        x = sprintf("PC1 (%.1f%%)", D$pca$pct[1]), y = sprintf("PC2 (%.1f%%)", D$pca$pct[2])) +
   theme_2026()
-p2D <- if (!is.null(D$mod_enrich))
-  (gg(fig_module_enrichment(D$mod_enrich, mode = "publication"),
-      "Functional enrichment of co-expression modules (GO BP)") +
+p2E <- if (!is.null(D$mod_enrich))
+  (gg(fig_module_enrichment(D$mod_enrich, max_terms = 15, mode = "publication"),
+      "Enrichment of co-expression modules (GO BP)") +
      theme(axis.text.x = ggtext::element_markdown(size = 7))) else
-  gg(fig_module_sizes(D$wg, mode = "publication"), "WGCNA co-expression module sizes")
+  gg(fig_module_sizes(D$wg, mode = "publication"), "WGCNA module sizes")
 p2 <- wrap_plots(
+  titled(hm(fig_gsva_heatmap(D$gv, D$tm, group_by = "cancer_type", n_top = 45, title = "")),
+         "Per-sample gene-set signatures (GSVA; MSigDB Hallmark; 120 TCGA tumours)"),
   p_pca,
-  titled(hm(fig_sample_cor(D$vst, D$tm, show_names = FALSE, title = NA)),
-         "Sample-to-sample correlation (TCGA)"),
-  titled(hm(fig_heatmap(D$vst, D$dfs[["LGG vs LUAD"]], D$tm, n_genes = 40,
-                        show_colnames = FALSE, show_title = FALSE)),
-         "Top differentially expressed genes across tumours (TCGA)"),
-  gg(fig_soft_threshold(D$sft, mode = "publication"), "WGCNA scale-free soft-threshold selection"),
-  gg(fig_module_trait(D$mt, mode = "publication"), "WGCNA module–trait correlation (TCGA)") +
+  gg(fig_soft_threshold(D$sft, mode = "publication"), "WGCNA soft-threshold selection"),
+  gg(fig_module_trait(D$mt, mode = "publication"), "WGCNA module–trait correlation") +
     theme(axis.text.x = element_text(angle = 40, hjust = 1, size = 6.5)),
-  p2D, ncol = 3) + plot_annotation(tag_levels = "A") & tag_theme
-save_plate(p2, "figure2", 17, 11)
+  p2E,
+  design = "AABC\nAADE") + plot_annotation(tag_levels = "A") & tag_theme
+save_plate(p2, "figure2", 18, 9.5)
 
-## ---- Figure 3: multi-contrast comparison & signatures (TCGA) ----------
+## ---- Figure 3: multi-contrast comparison (TCGA) -----------------------
+# hero: the pairwise volcano grid; supporting: overlap + flow views
 p3 <- wrap_plots(
-  gg(fig_volcano_grid(D$dfs, n_label = 3, mode = "publication"),
+  gg(fig_volcano_grid(D$dfs, n_label = 2, mode = "publication"),
      "Pairwise differential expression across cancer types (TCGA)"),
-  titled(hm(fig_upset(D$setlist, min_size = 1)),
-         "Overlap of significant genes across contrasts (UpSet)"),
-  titled(hm(fig_venn(D$setlist[1:3])),
-         "Overlap of significant genes across contrasts (Venn)"),
+  titled(hm(fig_upset(D$setlist, min_size = 1)), "Significant-gene overlap (UpSet)"),
+  titled(hm(fig_venn(D$setlist[1:3])), "Significant-gene overlap (Venn)"),
   titled(hm(fig_lfc_heatmap(D$dfs, n_genes = 40, show_title = FALSE)),
-         "Log2 fold-change of genes across contrasts"),
+         "Log2 fold-change across contrasts"),
   gg(fig_contrast_alluvial(D$dfs, mode = "publication"),
-     "Direction of change of genes across contrasts"),
-  titled(hm(fig_gsva_heatmap(D$gv, D$tm, group_by = "cancer_type", n_top = 40, title = NA)),
-         "Per-sample gene-set signatures (GSVA; Hallmark)"),
-  ncol = 3) + plot_annotation(tag_levels = "A") & tag_theme
-save_plate(p3, "figure3", 17, 11)
+     "Direction of change across contrasts"),
+  design = "AABC\nAADE") + plot_annotation(tag_levels = "A") & tag_theme
+save_plate(p3, "figure3", 18, 9.5)

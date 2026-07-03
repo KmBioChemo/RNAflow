@@ -466,25 +466,27 @@ over-representation analysis against Gene Ontology agrees (Figure 1F). This
 confirms both the differential-expression pipeline and that enrichment ranking on
 the preserved Wald statistic behaves correctly.
 
-### Structure and co-expression of the pan-cancer cohort
+### Molecular characterisation of the pan-cancer cohort
 
-The same tool then resolved the structure of the complex cohort (Figure 2). The
-TCGA subset (120 tumours across eight molecularly distinct cancer types — BRCA,
-LUAD, KIRC, LGG, THCA, PRAD, COAD, SKCM; 18,686 genes [@gse62944; @tcga])
-separates cleanly by cancer type in principal-component space (Figure 2A; the
-first two components explaining 30.3% and 12.9% of variance), a structure echoed
-in the sample-to-sample correlation matrix (Figure 2B) and in a heatmap of the
-top differentially expressed genes (Figure 2C). Weighted co-expression analysis
-then ties that structure to gene programmes: after scale-free soft-threshold
-selection (Figure 2D), WGCNA recovers 11 modules whose eigengenes correlate
-strongly and specifically with cancer type (Figure 2E) — the clearest being the
-turquoise module with glioma at *r* = 0.96, with comparably strong module–type
-pairs for each remaining cancer. Functional enrichment of the modules (Figure 2F)
-attaches biological meaning to them, recovering cell-cycle, immune,
-extracellular-matrix, and tissue-specific programmes, so interpretation moves
-from single genes to coordinated, annotated gene modules.
+The same tool then characterised the complex cohort from several angles
+(Figure 2). The TCGA subset comprises 120 tumours across eight molecularly
+distinct cancer types (BRCA, LUAD, KIRC, LGG, THCA, PRAD, COAD, SKCM; 18,686
+genes [@gse62944; @tcga]). Per-sample gene-set variation analysis against the
+Hallmark collection scores every tumour on 45 pathway signatures; clustered,
+these group the tumours by cancer type and expose coherent programmes —
+proliferation (E2F, MYC, G2M), interferon and inflammatory signalling, and
+metabolism (Figure 2A). Principal-component analysis confirms the same separation
+(Figure 2B; the first two components explaining 30.3% and 12.9% of variance).
+Weighted co-expression analysis then ties this structure to gene programmes:
+after scale-free soft-threshold selection (Figure 2C), WGCNA recovers 11 modules
+whose eigengenes correlate strongly and specifically with cancer type
+(Figure 2D) — the clearest being the turquoise module with glioma at *r* = 0.96,
+with comparably strong module–type pairs for each remaining cancer — and
+functional enrichment of the modules (Figure 2E) recovers cell-cycle, immune,
+extracellular-matrix, and tissue-specific programmes, moving interpretation from
+single genes to coordinated, annotated modules.
 
-### Multi-contrast comparison and per-sample signatures
+### Multi-contrast comparison across cancer types
 
 With eight groups, every pairwise difference is potentially informative.
 RNAflow's all-pairwise mode fits the model once and extracts all 28 contrasts;
@@ -497,10 +499,7 @@ UpSet and Venn views of the significant-gene overlap that separate a shared,
 pan-cancer component from contrast-specific genes (Figure 3B, C); a
 log-fold-change heatmap of genes across contrasts (Figure 3D); and an alluvial
 diagram tracing how genes move between up-, down-, and not-significant across
-contrasts (Figure 3E). Finally, per-sample gene-set variation analysis scores
-every tumour against the Hallmark collection (Figure 3F), producing signature
-profiles that cluster the tumours by cancer type — a sample-level complement to
-the contrast-based views.
+contrasts (Figure 3E).
 
 ### Validation and reproducibility
 
@@ -536,29 +535,29 @@ and shareable as a single file.
 (airway).** **(A)** Volcano plot of the dexamethasone-versus-control contrast;
 canonical glucocorticoid-response genes are the top hits. **(B)** MA plot.
 **(C)** P-value distribution. **(D)** Heatmap of the top differential genes across
-samples (annotated by condition). **(E)** Gene-set enrichment (MSigDB Hallmark),
-showing normalised enrichment score, set size, and false-discovery rate.
+samples (annotated by condition). **(E)** Gene-set enrichment ridgeline (MSigDB Hallmark): the
+ranking-metric distribution of the top enriched sets, coloured by normalised
+enrichment score.
 **(F)** Over-representation analysis against Gene Ontology (biological process).
 
 ![](figures/figure2.png){width=100%}
 
-**Figure 2. Structure and co-expression of the TCGA pan-cancer cohort.**
-**(A)** Principal-component analysis coloured by cancer type; the eight types
-separate cleanly. **(B)** Sample-to-sample correlation matrix. **(C)** Heatmap of
-the top differentially expressed genes across the 120 tumours. **(D)** WGCNA
-scale-free soft-threshold selection. **(E)** WGCNA module–trait correlation
-between module eigengenes and cancer type. **(F)** Functional enrichment (GO
-biological process) of the co-expression modules.
+**Figure 2. Molecular characterisation of the TCGA pan-cancer cohort.**
+**(A)** Per-sample GSVA Hallmark signature scores for the 120 tumours (columns
+annotated by cancer type; both axes hierarchically clustered), the tumours
+grouping by type. **(B)** Principal-component analysis coloured by cancer type.
+**(C)** WGCNA scale-free soft-threshold selection. **(D)** WGCNA module–trait
+correlation between module eigengenes and cancer type. **(E)** Functional
+enrichment (GO biological process) of the co-expression modules.
 
 ![](figures/figure3.png){width=100%}
 
-**Figure 3. Multi-contrast comparison and per-sample signatures (TCGA).**
+**Figure 3. Multi-contrast comparison across cancer types (TCGA).**
 **(A)** Grid of pairwise volcano plots for representative contrasts. **(B)** UpSet
 and **(C)** Venn views of the overlap between significant-gene sets across
 contrasts. **(D)** Log-fold-change heatmap of genes across contrasts.
-**(E)** Alluvial diagram of up-/down-/not-significant transitions.
-**(F)** Per-sample GSVA Hallmark signature scores (columns annotated by cancer
-type).
+**(E)** Alluvial diagram of up-/down-/not-significant transitions across
+contrasts.
 
 ![](figures/figure4_validation.png){width=100%}
 
