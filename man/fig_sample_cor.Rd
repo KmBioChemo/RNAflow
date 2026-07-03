@@ -8,7 +8,9 @@ fig_sample_cor(
   counts_norm,
   metadata = NULL,
   method = c("pearson", "spearman"),
-  palette_name = "Blues"
+  palette_name = "Blues",
+  show_names = NULL,
+  title = NULL
 )
 }
 \arguments{
@@ -19,6 +21,12 @@ fig_sample_cor(
 \item{method}{correlation method}
 
 \item{palette_name}{palette for the heatmap}
+
+\item{show_names}{show per-sample row/column labels; \code{NULL} (default) shows
+them only for small cohorts (<= 30 samples), where long sample identifiers
+would otherwise be illegible}
+
+\item{title}{heatmap title; \code{NULL} uses a default, \code{NA} suppresses it}
 }
 \value{
 a pheatmap object

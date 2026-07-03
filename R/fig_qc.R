@@ -89,11 +89,16 @@ fig_ma <- function(res, padj_thr = 0.05,
 #' @param metadata optional metadata (column 1 = sample, column 2 = group)
 #' @param method correlation method
 #' @param palette_name palette for the heatmap
+#' @param show_names show per-sample row/column labels; `NULL` (default) shows
+#'   them only for small cohorts (<= 30 samples), where long sample identifiers
+#'   would otherwise be illegible
+#' @param title heatmap title; `NULL` uses a default, `NA` suppresses it
 #' @return a pheatmap object
 #' @export
 fig_sample_cor <- function(counts_norm, metadata = NULL,
                            method = c("pearson", "spearman"),
-                           palette_name = "Blues") {
+                           palette_name = "Blues",
+                           show_names = NULL, title = NULL) {
   method <- match.arg(method)
   if (is.null(counts_norm) || ncol(counts_norm) < 2) {
     stop("Need a normalized matrix with at least 2 samples.", call. = FALSE)
@@ -107,12 +112,15 @@ fig_sample_cor <- function(counts_norm, metadata = NULL,
     rownames(ann) <- colnames(cm)
     colnames(ann) <- gc
   }
+  sn <- show_names %||% (ncol(cm) <= 30)
   pheatmap::pheatmap(
     cm, color = make_palette(palette_name, 100),
     annotation_col = ann, annotation_row = ann,
+    show_rownames = sn, show_colnames = sn,
     display_numbers = ncol(cm) <= 16, number_format = "%.2f",
     fontsize = 9, fontsize_number = 6, border_color = NA,
-    main = sprintf("Sample correlation (%s)", method), silent = TRUE)
+    main = if (is.null(title)) sprintf("Sample correlation (%s)", method) else title,
+    silent = TRUE)
 }
 
 #' Library-size bar chart

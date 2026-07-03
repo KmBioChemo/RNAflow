@@ -448,48 +448,43 @@ biology, and a 120-sample, eight-class subset of **TCGA** that tests whether it
 public functions, and the three main figures are composed from the tool's own
 figure outputs (per-panel renders and layouts are in the repository).
 
-### RNAflow recovers established biology and resolves cohort structure
+### RNAflow recovers established biology on a known study
 
 We first confirmed that RNAflow reproduces the biology of a well-characterised
-experiment. In the airway dataset [@airway] — airway smooth-muscle cells treated
-with dexamethasone versus control across four cell lines — modelling
-`~ cell + condition` to adjust for the paired cell line, RNAflow identified 770
-differentially expressed genes (415 up, 355 down; adjusted *p* < 0.05,
-absolute log2 fold change > 1) of 17,190 tested. The most strongly induced genes
-are canonical glucocorticoid-response genes — *ZBTB16*, *STEAP4*, *ALOX15B*,
-*DUSP1*, *SPARCL1* (Figure 1A) — and gene-set enrichment against MSigDB Hallmark
-returned 19 significantly enriched sets (Figure 1B), recovering the expected
-response programme. This confirms both the differential-expression pipeline and
-that enrichment ranking on the preserved Wald statistic behaves correctly.
+experiment (Figure 1). In the airway dataset [@airway] — airway smooth-muscle
+cells treated with dexamethasone versus control across four cell lines —
+modelling `~ cell + condition` to adjust for the paired cell line, RNAflow
+identified 770 differentially expressed genes (415 up, 355 down; adjusted
+*p* < 0.05, absolute log2 fold change > 1) of 17,190 tested (Figure 1A). The MA
+plot and a well-behaved p-value distribution confirm a sound test (Figure 1B, C),
+and a heatmap of the top genes cleanly separates treated from control samples
+(Figure 1D). The most strongly induced genes are canonical glucocorticoid-response
+genes (*ZBTB16*, *STEAP4*, *ALOX15B*, *DUSP1*, *SPARCL1*), and functional
+enrichment recovers the expected programme: gene-set enrichment against MSigDB
+Hallmark returns 19 significantly enriched sets (Figure 1E) and
+over-representation analysis against Gene Ontology agrees (Figure 1F). This
+confirms both the differential-expression pipeline and that enrichment ranking on
+the preserved Wald statistic behaves correctly.
 
-The same tool then resolved the structure of the complex cohort immediately. The
+### Structure and co-expression of the pan-cancer cohort
+
+The same tool then resolved the structure of the complex cohort (Figure 2). The
 TCGA subset (120 tumours across eight molecularly distinct cancer types — BRCA,
 LUAD, KIRC, LGG, THCA, PRAD, COAD, SKCM; 18,686 genes [@gse62944; @tcga])
-separates cleanly by cancer type in principal-component space (Figure 1C; the
-first two components explaining 30.3% and 12.9% of variance), and UMAP gives the
-same result. Weighted co-expression analysis then tied that structure to gene
-programmes: WGCNA recovered 11 modules whose eigengenes correlate strongly and
-specifically with cancer type (Figure 1D), the clearest being the turquoise
-module with glioma at *r* = 0.96, with comparably strong module–type pairs for
-each remaining cancer — consistent with modules capturing lineage-specific
-expression. Figure 1 thus shows a single tool that is both correct on a known
-study and powerful on a complex one.
+separates cleanly by cancer type in principal-component space (Figure 2A; the
+first two components explaining 30.3% and 12.9% of variance), a structure echoed
+in the sample-to-sample correlation matrix (Figure 2B) and in a heatmap of the
+top differentially expressed genes (Figure 2C). Weighted co-expression analysis
+then ties that structure to gene programmes: after scale-free soft-threshold
+selection (Figure 2D), WGCNA recovers 11 modules whose eigengenes correlate
+strongly and specifically with cancer type (Figure 2E) — the clearest being the
+turquoise module with glioma at *r* = 0.96, with comparably strong module–type
+pairs for each remaining cancer. Functional enrichment of the modules (Figure 2F)
+attaches biological meaning to them, recovering cell-cycle, immune,
+extracellular-matrix, and tissue-specific programmes, so interpretation moves
+from single genes to coordinated, annotated gene modules.
 
-### Co-expression structure and module enrichment
-
-Because every analysis works from the same loaded cohort, the characterisation
-deepens without leaving the application (Figure 2). A heatmap of the top
-differentially expressed genes separates the tumours cleanly by cancer type
-(Figure 2A). The weighted co-expression analysis summarised in Figure 1D is shown
-in full here: the scale-free soft-threshold selection that sets the network's
-connectivity (Figure 2B) and the eleven resulting co-expression modules with
-their sizes (Figure 2C). Running functional enrichment on each module (Figure 2D)
-attaches biological meaning to them — recovering cell-cycle, immune, and
-tissue-specific programmes — so interpretation moves from single genes to
-coordinated, annotated gene modules. Per-sample gene-set signatures (GSVA /
-ssGSEA) are available in the same way for stratifying samples by pathway activity.
-
-### Multi-contrast comparison across cancer types
+### Multi-contrast comparison and per-sample signatures
 
 With eight groups, every pairwise difference is potentially informative.
 RNAflow's all-pairwise mode fits the model once and extracts all 28 contrasts;
@@ -497,11 +492,15 @@ across them the number of differentially expressed genes ranges from 3,852 to
 9,583 (median 6,523; adjusted *p* < 0.05, absolute log2 fold change > 1). The
 comparison views turn this into interpretable structure (Figure 3): a grid of
 pairwise volcano plots in which tissue-appropriate markers surface automatically
-(thyroglobulin for thyroid, surfactant and napsin genes for lung; Figure 3A); an
-UpSet view of the significant-gene overlap that separates a shared, pan-cancer
-component from contrast-specific genes (Figure 3B); a log-fold-change heatmap of
-genes across contrasts (Figure 3C); and an alluvial diagram tracing how genes
-move between up-, down-, and not-significant across contrasts (Figure 3D).
+(thyroglobulin for thyroid, surfactant and napsin genes for lung; Figure 3A);
+UpSet and Venn views of the significant-gene overlap that separate a shared,
+pan-cancer component from contrast-specific genes (Figure 3B, C); a
+log-fold-change heatmap of genes across contrasts (Figure 3D); and an alluvial
+diagram tracing how genes move between up-, down-, and not-significant across
+contrasts (Figure 3E). Finally, per-sample gene-set variation analysis scores
+every tumour against the Hallmark collection (Figure 3F), producing signature
+profiles that cluster the tumours by cancer type — a sample-level complement to
+the contrast-based views.
 
 ### Validation and reproducibility
 
@@ -533,33 +532,33 @@ and shareable as a single file.
 
 ![](figures/figure1.png){width=100%}
 
-**Figure 1. RNAflow is correct on a known study and powerful on a complex
-cohort.** **(A)** Volcano plot of the airway dexamethasone-versus-control
-contrast; canonical glucocorticoid-response genes are the top hits.
-**(B)** Gene-set enrichment (MSigDB Hallmark) for the same contrast, showing
-normalised enrichment score, set size, and false-discovery rate.
-**(C)** Principal-component analysis of the 120-sample TCGA cohort, coloured by
-cancer type (colour-vision-deficiency-safe palette); the eight types separate
-cleanly. **(D)** WGCNA module–trait correlation between the TCGA co-expression
-module eigengenes and cancer type, with correlation coefficients and
-significance. Panels A–B, airway; C–D, TCGA.
+**Figure 1. Differential expression and functional enrichment on a known study
+(airway).** **(A)** Volcano plot of the dexamethasone-versus-control contrast;
+canonical glucocorticoid-response genes are the top hits. **(B)** MA plot.
+**(C)** P-value distribution. **(D)** Heatmap of the top differential genes across
+samples (annotated by condition). **(E)** Gene-set enrichment (MSigDB Hallmark),
+showing normalised enrichment score, set size, and false-discovery rate.
+**(F)** Over-representation analysis against Gene Ontology (biological process).
 
 ![](figures/figure2.png){width=100%}
 
-**Figure 2. Co-expression structure and module enrichment of the TCGA cohort.**
-**(A)** Heatmap of the top differentially expressed genes across the 120 tumours
-(columns annotated by cancer type; both axes hierarchically clustered).
-**(B)** WGCNA scale-free soft-threshold selection. **(C)** Co-expression module
-sizes. **(D)** Functional enrichment (GO biological process) of the co-expression
-modules.
+**Figure 2. Structure and co-expression of the TCGA pan-cancer cohort.**
+**(A)** Principal-component analysis coloured by cancer type; the eight types
+separate cleanly. **(B)** Sample-to-sample correlation matrix. **(C)** Heatmap of
+the top differentially expressed genes across the 120 tumours. **(D)** WGCNA
+scale-free soft-threshold selection. **(E)** WGCNA module–trait correlation
+between module eigengenes and cancer type. **(F)** Functional enrichment (GO
+biological process) of the co-expression modules.
 
 ![](figures/figure3.png){width=100%}
 
-**Figure 3. Multi-contrast comparison across cancer types (TCGA).** **(A)** Grid
-of pairwise volcano plots for representative contrasts. **(B)** UpSet view of the
-overlap between significant-gene sets across contrasts. **(C)** Log-fold-change
-heatmap of genes across contrasts. **(D)** Alluvial diagram of
-up-/down-/not-significant transitions across contrasts.
+**Figure 3. Multi-contrast comparison and per-sample signatures (TCGA).**
+**(A)** Grid of pairwise volcano plots for representative contrasts. **(B)** UpSet
+and **(C)** Venn views of the overlap between significant-gene sets across
+contrasts. **(D)** Log-fold-change heatmap of genes across contrasts.
+**(E)** Alluvial diagram of up-/down-/not-significant transitions.
+**(F)** Per-sample GSVA Hallmark signature scores (columns annotated by cancer
+type).
 
 ![](figures/figure4_validation.png){width=100%}
 
