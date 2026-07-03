@@ -20,3 +20,5 @@ vignettes/*_files/
 paper/paper.html
 paper/paper.docx
 paper/paper.pdf
+paper/.panel_cache.rds
+paper/figures/plate*.pdf

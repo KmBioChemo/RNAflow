@@ -55,6 +55,66 @@ Pick from: `03_pvalue_histogram`, `04_ma_plot`, `08_gene_expression_raincloud`
 
 ---
 
+---
+
+## Imposing "2026" panel layout (build these yourself)
+
+Design language for the composed plates — large, full-width, asymmetric **hero
+layouts** (one dominant panel + supporting panels), generous whitespace, bold
+sans tags in the accent colour, everything in **publication mode**.
+
+**Global spec**
+- **Canvas:** full journal width (~180 mm). Export each sub-figure as **vector
+  PDF**, compose in Illustrator/Inkscape (or `patchwork`/`cowplot`).
+- **Type:** one sans family throughout (Inter / Helvetica). Panel titles ~13 pt
+  bold, axis text ~9–10 pt, subtitle ~11 pt in grey `#5A6472`.
+- **Tags:** `A B C …` top-left, ~20–22 pt **bold**, accent green `#1D9E75`.
+- **Palette:** categorical = Okabe-Ito (CVD-safe); diverging heatmaps = RdBu.
+  Keep the same cancer-type colours across every panel.
+- **Axes:** thin, no grid (publication mode). 2 px surface gap between adjacent
+  fills. Direct-label only the few genes/terms that matter.
+- **Alignment:** align panel edges; equal gutters (~6 mm); one shared legend per
+  colour mapping, not one per panel.
+
+**Plate 1 — Overview (mixed airway + TCGA), hero = PCA · ~16 × 13 in**
+```
+┌───────────────────┬─────────────┐
+│                   │   B  volcano│   A = TCGA PCA (hero)
+│   A   PCA (TCGA)  ├─────────────┤   B = airway volcano
+│                   │   C  GSEA   │   C = airway GSEA dotplot
+├───────────────────┴─────────────┤
+│   D   WGCNA module–trait (TCGA) │   D = full-width strip
+└─────────────────────────────────┘
+```
+Row heights ≈ 1 : 1 : 1.15. Message: *correct on the simple, powerful on the complex.*
+
+**Plate 2 — Systems-level (TCGA), hero = GSVA · ~17 × 10 in**
+```
+┌───────────────────┬─────────────┐
+│                   │   B  UpSet  │   A = GSVA signature heatmap (hero)
+│   A   GSVA (TCGA) ├─────────────┤   B = multi-contrast UpSet
+│                   │   C  grid   │   C = volcano grid
+└───────────────────┴─────────────┘
+```
+Right column widths ≈ 1.1×. Message: *per-sample signatures + multi-contrast depth.*
+
+**Plate 3 — Co-expression & comparison (TCGA), 3 × 2 grid · ~16 × 11 in**
+```
+┌────────────┬────────────┬────────────┐
+│ A soft-thr │ B module   │ C eigengene│
+│            │   sizes    │ (turquoise)│
+├────────────┼────────────┼────────────┤
+│ D Venn     │ E LFC      │ F direction│
+│            │  heatmap   │  alluvial  │
+└────────────┴────────────┴────────────┘
+```
+Even grid; smaller supporting views. Message: *the network / comparison toolkit.*
+
+> Tip for `patchwork`: use `design = "AAB\nAAC\nDDD"` (Plate 1) or
+> `"AAB\nAAC"` (Plate 2) with `plot_annotation(tag_levels = "A")` and
+> `& theme(plot.tag = element_text(size = 22, face = "bold", colour = "#1D9E75"))`.
+> Wrap pheatmap/UpSet panels with `ggplotify::as.ggplot()` to mix them in.
+
 ### Practical tips
 - Use **PDF** for anything going into a composed panel (vector = crisp at any
   size); use **PNG/TIFF 600 DPI** only if the journal requires flattened raster.
