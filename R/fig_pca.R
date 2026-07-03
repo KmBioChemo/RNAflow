@@ -101,8 +101,9 @@ fig_pca <- function(counts_mat, metadata = NULL, n_top = 500,
                     "<br>PC1: ", round(sub$PC1, 2),
                     "<br>PC2: ", round(sub$PC2, 2))
       fig <- plotly::add_trace(
-        fig, x = sub$PC1, y = sub$PC2, name = cond,
-        text = sub$sample, hovertext = tip, hoverinfo = "text",
+        fig, x = sub$PC1, y = sub$PC2, name = cond, mode = mode_str,
+        text = if (isTRUE(show_labels)) sub$sample else NULL,
+        hovertext = tip, hoverinfo = "text",
         textposition = "top center", textfont = list(size = 10),
         marker = list(color = col_map[cond], size = 14,
                       line = list(color = "white", width = 1.5)),
@@ -113,8 +114,9 @@ fig_pca <- function(counts_mat, metadata = NULL, n_top = 500,
     tip <- paste0("<b>", sc$sample, "</b><br>PC1: ", round(sc$PC1, 2),
                   "<br>PC2: ", round(sc$PC2, 2))
     fig <- plotly::add_trace(
-      fig, x = sc$PC1, y = sc$PC2,
-      text = sc$sample, hovertext = tip, hoverinfo = "text",
+      fig, x = sc$PC1, y = sc$PC2, mode = mode_str,
+      text = if (isTRUE(show_labels)) sc$sample else NULL,
+      hovertext = tip, hoverinfo = "text",
       textposition = "top center", textfont = list(size = 10),
       marker = list(color = "#34495E", size = 14,
                     line = list(color = "white", width = 1.5)),

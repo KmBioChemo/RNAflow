@@ -114,8 +114,9 @@ fig_umap <- function(counts_mat, metadata = NULL, n_top = 500,
       if (nrow(sub) == 0) next
       tip <- paste0("<b>", sub$sample, "</b><br>", color_by, ": ", cond)
       fig <- plotly::add_trace(
-        fig, x = sub$UMAP1, y = sub$UMAP2, name = cond,
-        text = sub$sample, hovertext = tip, hoverinfo = "text",
+        fig, x = sub$UMAP1, y = sub$UMAP2, name = cond, mode = mode_str,
+        text = if (isTRUE(show_labels)) sub$sample else NULL,
+        hovertext = tip, hoverinfo = "text",
         textposition = "top center", textfont = list(size = 10),
         marker = list(color = col_map[cond], size = 14,
                       line = list(color = "white", width = 1.5)),
@@ -124,7 +125,8 @@ fig_umap <- function(counts_mat, metadata = NULL, n_top = 500,
   } else {
     tip <- paste0("<b>", sc$sample, "</b>")
     fig <- plotly::add_trace(
-      fig, x = sc$UMAP1, y = sc$UMAP2, text = sc$sample,
+      fig, x = sc$UMAP1, y = sc$UMAP2, mode = mode_str,
+      text = if (isTRUE(show_labels)) sc$sample else NULL,
       hovertext = tip, hoverinfo = "text", textposition = "top center",
       textfont = list(size = 10),
       marker = list(color = "#34495E", size = 14,

@@ -46,7 +46,8 @@ app_ui <- function() {
     header = shiny::tagList(
       shiny::tags$head(
         shiny::tags$link(rel = "stylesheet", type = "text/css",
-                         href = "rnaflow/rnaflow.css")
+                         href = paste0("rnaflow/rnaflow.css?v=",
+                                       utils::packageVersion("RNAflow")))
       )
     ),
     fillable = TRUE,

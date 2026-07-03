@@ -1,3 +1,15 @@
+# RNAflow 0.16.1 (2026-07-03)
+
+## Fixes
+
+- **PCA label toggle now actually hides labels.** Setting `show_labels =
+  FALSE` omits the on-plot text data entirely (not just the plotly mode), so
+  unchecking *Show sample labels* reliably clears the names in PCA / UMAP / 3D.
+- **Stylesheet cache-busting.** The `rnaflow.css` link now carries a `?v=`
+  version query so browsers fetch the current stylesheet instead of a stale
+  cached copy (the selectize dropdown fix from 0.16.0 was being masked by the
+  browser cache).
+
 # RNAflow 0.16.0 (2026-07-03)
 
 ## UI feedback: PCA labels, all-pairwise DE, cleaner dropdowns
