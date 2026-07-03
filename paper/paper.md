@@ -621,7 +621,7 @@ contrasts. **(D)** Log-fold-change heatmap of genes across contrasts.
 **(E)** Alluvial diagram of up-/down-/not-significant transitions across
 contrasts.
 
-![](figures/figure5_validation.png){width=100%}
+![](figures/figure5.png){width=100%}
 
 **Figure 5. Validation of correctness and reproducibility.** **(A)** Log-fold-
 changes for the airway analysis re-run from the exported R script versus the
