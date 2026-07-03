@@ -84,7 +84,7 @@ p1 <- wrap_plots(
   gg(fig_enrich_bar(D$a_ora, n = 10, mode = "publication"),
      "Over-representation analysis (airway; GO BP)"),
   ncol = 3) + plot_annotation(tag_levels = "A") & tag_theme
-save_plate(p1, "figure1", 17, 10.5)
+save_plate(p1, "figure2", 17, 10.5)
 
 ## ---- Figure 2: molecular landscape & co-expression (TCGA) -------------
 # hero: the per-sample GSVA signature heatmap; supporting: PCA + WGCNA
@@ -109,7 +109,7 @@ p2 <- wrap_plots(
     theme(axis.text.x = element_text(angle = 40, hjust = 1, size = 6.5)),
   p2E,
   design = "AABC\nAADE") + plot_annotation(tag_levels = "A") & tag_theme
-save_plate(p2, "figure2", 18, 9.5)
+save_plate(p2, "figure3", 18, 9.5)
 
 ## ---- Figure 3: multi-contrast comparison (TCGA) -----------------------
 # hero: the pairwise volcano grid; supporting: overlap + flow views
@@ -123,4 +123,4 @@ p3 <- wrap_plots(
   gg(fig_contrast_alluvial(D$dfs, mode = "publication"),
      "Direction of change across contrasts"),
   design = "AABC\nAADE") + plot_annotation(tag_levels = "A") & tag_theme
-save_plate(p3, "figure3", 18, 9.5)
+save_plate(p3, "figure4", 18, 9.5)

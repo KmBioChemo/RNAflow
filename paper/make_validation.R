@@ -113,6 +113,6 @@ pC <- ggplot(mc, aes(logFC, log2FoldChange)) + idline +
        subtitle = "concordance with an independent method",
        x = "log2FC (limma-voom)", y = "log2FC (RNAflow / DESeq2)") + theme_v
 fig4 <- (pA | pB | pC) + patchwork::plot_annotation(tag_levels = "A")
-ggsave("paper/figures/figure4_validation.png", fig4, width = 14, height = 4.6, dpi = 300, bg = "white")
-ggsave("paper/figures/figure4_validation.pdf", fig4, width = 14, height = 4.6, bg = "white")
-cat("Wrote figure4_validation\n")
+ggsave("paper/figures/figure5_validation.png", fig4, width = 14, height = 4.6, dpi = 300, bg = "white")
+ggsave("paper/figures/figure5_validation.pdf", fig4, width = 14, height = 4.6, bg = "white")
+cat("Wrote figure5_validation\n")
