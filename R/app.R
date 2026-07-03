@@ -156,6 +156,12 @@ app_ui <- function() {
 #' @keywords internal
 app_server <- function(input, output, session) {
 
+  # Allow large count-matrix uploads. Shiny's default cap is 5 MB, but real
+  # RNA-seq matrices (and the bundled TCGA demo, ~9 MB) exceed that.
+  old_max <- getOption("shiny.maxRequestSize")
+  options(shiny.maxRequestSize = 200 * 1024^2)   # 200 MB
+  shiny::onStop(function() options(shiny.maxRequestSize = old_max))
+
   # Shared data layer
   data_mod <- mod_data_server("data")
 

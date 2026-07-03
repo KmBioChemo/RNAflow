@@ -1,3 +1,12 @@
+# RNAflow 0.15.2 (2026-07-03)
+
+## Fix
+
+- Raise the Shiny file-upload cap from the 5 MB default to 200 MB in
+  `app_server()`. Real RNA-seq count matrices -- and the bundled TCGA demo
+  (~9 MB) -- exceeded the default, so uploads failed with "Maximum upload
+  size exceeded". The previous option value is restored on app stop.
+
 # RNAflow 0.15.1 (2026-07-03)
 
 ## Complex demo dataset
