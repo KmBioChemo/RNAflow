@@ -475,19 +475,19 @@ each remaining cancer — consistent with modules capturing lineage-specific
 expression. Figure 1 thus shows a single tool that is both correct on a known
 study and powerful on a complex one.
 
-### Per-sample signatures and co-expression structure
+### Co-expression structure and module enrichment
 
 Because every analysis works from the same loaded cohort, the characterisation
-deepens without leaving the application (Figure 2). Per-sample gene-set variation
-analysis against the Hallmark collection (50 signatures across the 120 tumours)
-yields profiles that cluster the samples by cancer type and expose coherent
-biological programmes — proliferation (E2F, MYC, G2M), interferon and
-inflammatory signalling, and metabolism (Figure 2A). The co-expression analysis
-summarised in Figure 1D is shown in full here: the scale-free soft-threshold
-selection (Figure 2B), the resulting module sizes (Figure 2C), and a
-representative module eigengene resolved by cancer type (Figure 2D). Interpretation
-thus moves from single genes to sample-level signatures and coordinated modules,
-all on the same data.
+deepens without leaving the application (Figure 2). A heatmap of the top
+differentially expressed genes separates the tumours cleanly by cancer type
+(Figure 2A). The weighted co-expression analysis summarised in Figure 1D is shown
+in full here: the scale-free soft-threshold selection that sets the network's
+connectivity (Figure 2B) and the eleven resulting co-expression modules with
+their sizes (Figure 2C). Running functional enrichment on each module (Figure 2D)
+attaches biological meaning to them — recovering cell-cycle, immune, and
+tissue-specific programmes — so interpretation moves from single genes to
+coordinated, annotated gene modules. Per-sample gene-set signatures (GSVA /
+ssGSEA) are available in the same way for stratifying samples by pathway activity.
 
 ### Multi-contrast comparison across cancer types
 
@@ -497,12 +497,11 @@ across them the number of differentially expressed genes ranges from 3,852 to
 9,583 (median 6,523; adjusted *p* < 0.05, absolute log2 fold change > 1). The
 comparison views turn this into interpretable structure (Figure 3): a grid of
 pairwise volcano plots in which tissue-appropriate markers surface automatically
-(thyroglobulin for thyroid, surfactant and napsin genes for lung; Figure 3A);
-UpSet and Venn views of the significant-gene overlap that separate a shared,
-pan-cancer component from contrast-specific genes (Figure 3B, C); a
-log-fold-change heatmap of genes across contrasts (Figure 3D); and an alluvial
-diagram tracing how genes move between up-, down-, and not-significant across
-contrasts (Figure 3E).
+(thyroglobulin for thyroid, surfactant and napsin genes for lung; Figure 3A); an
+UpSet view of the significant-gene overlap that separates a shared, pan-cancer
+component from contrast-specific genes (Figure 3B); a log-fold-change heatmap of
+genes across contrasts (Figure 3C); and an alluvial diagram tracing how genes
+move between up-, down-, and not-significant across contrasts (Figure 3D).
 
 ### Validation and reproducibility
 
@@ -547,20 +546,20 @@ significance. Panels A–B, airway; C–D, TCGA.
 
 ![](figures/figure2.png){width=100%}
 
-**Figure 2. Per-sample signatures and co-expression structure of the TCGA
-cohort.** **(A)** GSVA Hallmark signature scores for the 120 tumours (columns,
-annotated by cancer type) across the 40 most variable signatures (rows); both
-axes hierarchically clustered. **(B)** WGCNA scale-free soft-threshold
-selection. **(C)** Co-expression module sizes. **(D)** Eigengene of a
-representative module (turquoise) across cancer types.
+**Figure 2. Co-expression structure and module enrichment of the TCGA cohort.**
+**(A)** Heatmap of the top differentially expressed genes across the 120 tumours
+(columns annotated by cancer type; both axes hierarchically clustered).
+**(B)** WGCNA scale-free soft-threshold selection. **(C)** Co-expression module
+sizes. **(D)** Functional enrichment (GO biological process) of the co-expression
+modules.
 
 ![](figures/figure3.png){width=100%}
 
 **Figure 3. Multi-contrast comparison across cancer types (TCGA).** **(A)** Grid
-of pairwise volcano plots for representative contrasts. **(B)** UpSet and
-**(C)** Venn views of the overlap between significant-gene sets across contrasts.
-**(D)** Log-fold-change heatmap of genes across contrasts. **(E)** Alluvial
-diagram of up-/down-/not-significant transitions across contrasts.
+of pairwise volcano plots for representative contrasts. **(B)** UpSet view of the
+overlap between significant-gene sets across contrasts. **(C)** Log-fold-change
+heatmap of genes across contrasts. **(D)** Alluvial diagram of
+up-/down-/not-significant transitions across contrasts.
 
 ![](figures/figure4_validation.png){width=100%}
 
