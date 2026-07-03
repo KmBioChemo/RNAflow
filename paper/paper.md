@@ -364,6 +364,53 @@ them, and their principal outputs.
 | Interpretation | LLM API (opt-in) | narrative draft (to verify) |
 | Reproducibility | base R / Docker | session file, R script, Methods text, HTML report |
 
+### Statistical methods and defaults
+
+Each analysis uses the field-standard method with documented, user-adjustable
+defaults (Table 2). Two conventions are worth highlighting. First,
+differential-expression *inference* and *effect-size shrinkage* are kept
+separate: p-values and the test statistic always come from the unshrunken DESeq2
+Wald test, while apeglm shrinkage only adjusts the reported log-fold-change — so
+the Wald statistic, and therefore the GSEA ranking that consumes it, is always
+well defined. Second, the all-pairwise mode fits the model once and extracts each
+pairwise contrast from that shared fit, which is both statistically consistent
+(common dispersion estimates) and far cheaper than independent fits.
+
+**Table 2.** Statistical methods and default parameters (all user-adjustable).
+
+| Step | Method / test | Multiple testing | Key defaults |
+|---|---|---|---|
+| Pre-filtering | drop low-count genes | — | row sum ≥ 10 |
+| Differential expression | DESeq2 negative-binomial GLM, Wald test | Benjamini–Hochberg | covariates + variable of interest; independent filtering at α = 0.05; apeglm LFC shrinkage |
+| All-pairwise DE | one DESeq2 fit, `results()` per pair | Benjamini–Hochberg | contrast-based `normal`/`ashr` shrinkage |
+| Normalisation | VST (n ≥ 4) / rlog / log2-CPM | — | VST, blind |
+| PCA | `prcomp` on top-variable genes | — | 500 most variable (VST) |
+| UMAP | uwot | — | 500 genes; neighbours = 15; min-dist = 0.1; seeded |
+| GSEA | fgsea | Benjamini–Hochberg | ranked by Wald statistic |
+| ORA | clusterProfiler hypergeometric test | Benjamini–Hochberg | universe = tested genes; significant = padj < 0.05 and \|log2FC\| > 1 |
+| Co-expression | WGCNA, signed network | — | soft power at scale-free R² ≥ 0.8; dynamic tree cut, min module 30, deepSplit 2, merge height 0.25 |
+| Module–trait | Pearson eigengene–trait correlation | — | correlation p-values |
+| Activity | decoupleR univariate linear model | — | CollecTRI / PROGENy priors; min set size 5 |
+| Signatures | GSVA (Gaussian kernel) / ssGSEA | — | set size ∈ [5, 500] |
+
+Gene-set collections are MSigDB (Hallmark, curated C2, ontology C5) via msigdbr,
+plus GO, KEGG, and Reactome.
+
+### Performance
+
+RNAflow is built to stay interactive on a laptop. On the 120-sample TCGA cohort
+(18,686 genes) and the 8-sample airway dataset, running on a current laptop
+(Apple M-series, R 4.5 / Bioconductor 3.22), representative steps took: the
+variance-stabilising transform 0.5 s, PCA < 0.1 s, UMAP 0.9 s, GSEA 1.0 s, GSVA
+(120 samples × 50 signatures) 1.4 s, and WGCNA (3,500 genes) 7.4 s. The
+compute-bound steps are the DESeq2 fits: a single 120-sample contrast with
+shrinkage took 25 s and over-representation analysis 15 s, while — the payoff of
+the shared-fit design — **all 28 pairwise contrasts together took 30 s**, versus
+the several minutes that 28 independent fits would require. A complete reference
+analysis of the pan-cancer cohort therefore runs end to end in a couple of
+minutes and within a few gigabytes of memory, well inside the envelope of an
+interactive session.
+
 ## Design rationale and intended use
 
 RNAflow is aimed at the researcher who needs a complete, credible bulk RNA-seq
@@ -499,7 +546,7 @@ diagram of up-/down-/not-significant transitions across contrasts.
 
 RNAflow's contribution is not a new statistical method but an integration: it
 brings the standard, best-in-class methods for each analysis step into one
-coherent, reproducible, and properly engineered tool. Table 2 summarises how its
+coherent, reproducible, and properly engineered tool. Table 3 summarises how its
 scope compares with representative interactive RNA-seq applications. Several
 tools cover differential expression, dimensionality reduction, and enrichment
 well; RNAflow's distinguishing combination is the inclusion of co-expression
@@ -507,7 +554,7 @@ networks, regulator and pathway activity, and per-sample signatures alongside
 them, together with first-class reproducibility export and a tested-package
 architecture, in a tool that runs locally on the user's own machine.
 
-**Table 2.** Feature comparison with representative interactive bulk RNA-seq
+**Table 3.** Feature comparison with representative interactive bulk RNA-seq
 tools. ● present; ○ partial or via a related feature; blank not a focus.
 (Feature sets evolve; this reflects the tools' primary published scope.)
 
