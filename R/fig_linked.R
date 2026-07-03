@@ -57,6 +57,7 @@ fig_linked_volcano <- function(shared, col_up = "#C0392B",
     xaxis = list(title = "log2 fold change"),
     yaxis = list(title = "-log10 FDR"),
     legend = list(title = list(text = "")))
+  p <- rnaflow_plotly(p)
   plotly::highlight(p, on = "plotly_selected", off = "plotly_deselect",
                     persistent = FALSE, selectize = FALSE)
 }

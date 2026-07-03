@@ -9,6 +9,15 @@ NULL
 mod_pca_ui <- function(id) {
   ns <- shiny::NS(id)
   bslib::layout_sidebar(
+    ui_page_header(
+      "Sample overview (PCA / UMAP)",
+      "Low-dimensional map of samples from the whole expression matrix.",
+      about = paste(
+        "PCA and UMAP compress thousands of genes into a 2-3D map of your",
+        "samples, exposing the dominant axes of variation. If replicates",
+        "cluster tightly and conditions separate, the design is sound; a",
+        "mislabelled sample or an unwanted batch effect usually shows up here",
+        "first, before it contaminates the differential-expression results.")),
     sidebar = bslib::sidebar(
       width = 280,
       shiny::selectInput(ns("method"), "Embedding",

@@ -9,6 +9,15 @@ NULL
 mod_heatmap_ui <- function(id) {
   ns <- shiny::NS(id)
   bslib::layout_sidebar(
+    ui_page_header(
+      "Expression heatmap",
+      "Clustered expression of selected genes across samples.",
+      about = paste(
+        "A heatmap shows whether your genes of interest actually separate the",
+        "conditions and cluster into coherent patterns. Row-scaling (z-score",
+        "per gene) puts every gene on the same footing, so co-regulated gene",
+        "modules and any outlier samples become visible at a glance -- a quick",
+        "check that the DE signal is structured, not noise.")),
     sidebar = bslib::sidebar(
       width = 320,
       shiny::radioButtons(ns("src"), "Genes to display",

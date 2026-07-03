@@ -23,6 +23,16 @@ ENRICH_COLLECTIONS <- list(
 mod_enrich_ui <- function(id) {
   ns <- shiny::NS(id)
   bslib::layout_sidebar(
+    ui_page_header(
+      "Functional enrichment",
+      "GSEA and ORA against MSigDB / GO / KEGG / Reactome.",
+      about = paste(
+        "Enrichment moves from individual genes to biology. GSEA asks whether",
+        "a pathway is coordinately shifted across the entire ranked gene list",
+        "(no cutoff needed), while ORA tests whether your significant genes",
+        "over-represent a pathway versus background. Both answer 'which",
+        "processes are changing', turning a long gene list into interpretable",
+        "mechanisms.")),
     sidebar = bslib::sidebar(
       width = 340,
       shiny::uiOutput(ns("organism_note")),

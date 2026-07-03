@@ -77,6 +77,15 @@ hr { border-top: 1px solid var(--rf-border); opacity: 1; margin: 10px 0; }
   background: var(--rf-accent-soft);
   font-weight: 650;
 }
+/* Tab icons: sit just left of the label, recessive until active */
+.navbar .nav-link > .fa, .navbar .nav-link > svg,
+.navbar .nav-link > i {
+  margin-right: 6px; font-size: 0.82em; opacity: 0.7;
+  vertical-align: -1px;
+}
+.navbar .nav-link:hover > .fa, .navbar .nav-link:hover > i,
+.navbar .nav-link.active > .fa, .navbar .nav-link.active > i,
+.navbar .nav-link[aria-selected="true"] > .fa { opacity: 1; }
 
 /* Brand wordmark */
 .rnaflow-brand {
@@ -257,6 +266,27 @@ select, select option { font-size: 0.8rem !important; }
 .rnaflow-page-header .rf-h { font-size: 1.02rem; font-weight: 700; color: var(--rf-ink); }
 .rnaflow-page-header .rf-sub { font-size: 0.82rem; color: var(--rf-muted); margin-top: 1px; }
 .rf-microcopy { font-size: 0.78rem; color: var(--rf-muted); margin: 2px 0 8px; }
+
+/* Collapsible "Why this analysis?" panel in the page header */
+.rnaflow-page-header .rf-about { margin-top: 6px; }
+.rf-about > summary {
+  cursor: pointer; list-style: none; display: inline-flex; align-items: center;
+  gap: 6px; font-size: 0.78rem; font-weight: 600; color: var(--rf-accent-dark);
+  padding: 2px 0; user-select: none;
+}
+.rf-about > summary::-webkit-details-marker { display: none; }
+.rf-about > summary::before {
+  content: "\25B8"; font-size: 0.7em; transition: transform .15s ease;
+  color: var(--rf-muted);
+}
+.rf-about[open] > summary::before { transform: rotate(90deg); }
+.rf-about[open] > summary { color: var(--rf-ink); }
+.rf-about-body {
+  margin-top: 5px; font-size: 0.8rem; color: var(--rf-body); line-height: 1.55;
+  max-width: 760px; border-left: 3px solid var(--rf-accent);
+  background: var(--rf-surface-2); border-radius: 0 8px 8px 0;
+  padding: 8px 12px;
+}
 
 /* ------------------------------------------------------------- banners ---- */
 .rnaflow-banner, .demo-banner {

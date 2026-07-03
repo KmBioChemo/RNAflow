@@ -15,8 +15,16 @@ NULL
 mod_signatures_ui <- function(id) {
   ns <- shiny::NS(id)
   bslib::layout_sidebar(
-    ui_page_header("Signatures (GSVA / ssGSEA)",
-                   "Per-sample gene-set scores from normalized counts."),
+    ui_page_header(
+      "Signatures (GSVA / ssGSEA)",
+      "Per-sample gene-set scores from normalized counts.",
+      about = paste(
+        "GSEA gives one score per contrast; GSVA / ssGSEA give every sample",
+        "its own score for each gene set, turning pathways into a sets x",
+        "samples signature matrix. That per-sample view lets you cluster",
+        "samples by pathway activity, correlate a signature with a phenotype,",
+        "or feed the scores into a downstream model -- without needing a",
+        "predefined contrast.")),
     sidebar = bslib::sidebar(
       width = 300,
       shiny::selectInput(ns("collection"), "Gene set collection",

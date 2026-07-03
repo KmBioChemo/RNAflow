@@ -244,6 +244,7 @@ fig_volcano_interactive <- function(res,
       hovermode = "closest", paper_bgcolor = "white", plot_bgcolor = "white",
       margin = list(t = if (nzchar(t_txt)) 55 else 22, r = 18, b = 48, l = 58)
     ) %>%
+    rnaflow_plotly() %>%
     plotly::config(
       displaylogo = FALSE,
       modeBarButtonsToRemove = c("lasso2d", "select2d", "autoScale2d"),

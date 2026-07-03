@@ -84,6 +84,27 @@ theme_exploration <- function(base_size = 13) {
     )
 }
 
+#' Apply consistent RNAflow styling to an interactive (plotly) figure
+#'
+#' Sets the app's font family and ink colour globally on the widget plus a
+#' clean hover label, so every interactive plot (volcano, PCA, UMAP, 3D, ...)
+#' shares one typographic system. Only the global `font` and `hoverlabel` are
+#' set, so per-figure titles, axes and legends are preserved.
+#'
+#' @param fig a plotly object
+#' @return the plotly object, restyled
+#' @keywords internal
+rnaflow_plotly <- function(fig) {
+  fam <- paste("Inter, -apple-system, 'Segoe UI', Roboto, Helvetica,",
+               "Arial, sans-serif")
+  plotly::layout(
+    fig,
+    font = list(family = fam, color = "#46545f"),
+    hoverlabel = list(
+      font = list(family = fam, size = 12, color = "#1f2d3a"),
+      bgcolor = "white", bordercolor = "#e6ebe9"))
+}
+
 #' Dispatcher: returns the right theme for the given mode
 #'
 #' @param mode "exploration" or "publication"

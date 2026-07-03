@@ -12,7 +12,7 @@ _"Lis dev/HANDOFF.md, NEWS.md et le git log, puis on continue."_
 
 ## Current state (keep this updated)
 
-- **Version 0.14.0** (backlog features: UMAP/3D PCA, visNetwork enrichment,
+- **Version 0.14.1** (backlog features: UMAP/3D PCA, visNetwork enrichment,
   raincloud/alluvial, GSVA Signatures tab; then 0.13.0 repro/UI/tests,
   0.12.0 UI overhaul, 0.11.4 bug-fix pass; see `NEWS.md`),
   `git log --oneline` is the record.

@@ -12,6 +12,16 @@ NULL
 mod_volcano_ui <- function(id) {
   ns <- shiny::NS(id)
   bslib::layout_sidebar(
+    ui_page_header(
+      "Volcano plot",
+      "Effect size vs. significance for every gene.",
+      about = paste(
+        "The volcano plot puts each gene's magnitude of change (log2 fold-",
+        "change, x) against how reliable that change is (-log10 FDR, y), so",
+        "you see strength and confidence at once. Genes in the top corners --",
+        "large fold-change and small FDR -- are your most credible up- and",
+        "down-regulated candidates; the dashed lines mark the fold-change and",
+        "significance cutoffs.")),
     sidebar = bslib::sidebar(
       width = 320,
       ui_section_title("Thresholds"),

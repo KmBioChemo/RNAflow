@@ -16,6 +16,16 @@ NULL
 mod_ai_ui <- function(id) {
   ns <- shiny::NS(id)
   bslib::layout_sidebar(
+    ui_page_header(
+      "AI interpretation",
+      "A Claude-drafted biological narrative of the active contrast.",
+      about = paste(
+        "This sends a compact summary of your top genes and enriched terms to",
+        "the Claude API and asks for a biological narrative -- fast context,",
+        "candidate mechanisms, and follow-up ideas. It is a hypothesis-",
+        "generating starting point, not a conclusion: treat every claim as a",
+        "draft to verify against the data and the literature. Only gene names",
+        "and summary statistics leave your machine, never the raw counts.")),
     sidebar = bslib::sidebar(
       width = 340,
       ui_section_title("Claude API"),

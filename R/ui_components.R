@@ -55,17 +55,25 @@ ui_empty_state <- function(title, message = NULL, icon = "inbox") {
   )
 }
 
-#' Tab page header with optional microcopy
+#' Tab page header with optional microcopy and an "about" panel
 #'
 #' @param title the tab's title
 #' @param subtitle optional one-line description shown under the title
+#' @param about optional longer explanation of *why* the analysis matters,
+#'   rendered as a collapsible "Why this analysis?" panel (a native
+#'   `<details>` element -- present but not cluttering)
 #' @return a \code{div} tag
 #' @keywords internal
-ui_page_header <- function(title, subtitle = NULL) {
+ui_page_header <- function(title, subtitle = NULL, about = NULL) {
   shiny::div(
     class = "rnaflow-page-header",
     shiny::div(class = "rf-h", title),
-    if (!is.null(subtitle)) shiny::div(class = "rf-sub", subtitle)
+    if (!is.null(subtitle)) shiny::div(class = "rf-sub", subtitle),
+    if (!is.null(about)) shiny::tags$details(
+      class = "rf-about",
+      shiny::tags$summary(shiny::icon("circle-info"), " Why this analysis?"),
+      shiny::div(class = "rf-about-body", about)
+    )
   )
 }
 

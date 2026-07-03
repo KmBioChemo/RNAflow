@@ -140,6 +140,7 @@ fig_umap <- function(counts_mat, metadata = NULL, n_top = 500,
                    ticks = "outside"),
       hovermode = "closest", paper_bgcolor = "white", plot_bgcolor = "white",
       margin = list(t = 55, r = 18, b = 48, l = 58)) %>%
+    rnaflow_plotly() %>%
     plotly::config(displaylogo = FALSE)
 }
 
@@ -189,5 +190,6 @@ fig_pca_3d <- function(counts_mat, metadata = NULL, n_top = 500,
                    x = 0, xanchor = "left"),
       scene = list(xaxis = list(title = ax(1)), yaxis = list(title = ax(2)),
                    zaxis = list(title = ax(3)))) %>%
+    rnaflow_plotly() %>%
     plotly::config(displaylogo = FALSE)
 }

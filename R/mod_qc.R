@@ -13,8 +13,16 @@ NULL
 mod_qc_ui <- function(id) {
   ns <- shiny::NS(id)
   bslib::layout_sidebar(
-    ui_page_header("Quality control",
-                   "Sample correlations, library sizes, and p-value diagnostics."),
+    ui_page_header(
+      "Quality control",
+      "Sample correlations, library sizes, and p-value diagnostics.",
+      about = paste(
+        "QC tells you whether to trust everything downstream. The p-value",
+        "histogram flags mis-calibrated tests (it should be flat with a spike",
+        "near zero), the MA plot reveals intensity-dependent bias, sample",
+        "correlations catch swapped or outlier samples, and library sizes",
+        "expose sequencing-depth imbalance. Per-gene expression lets you sanity",
+        "-check a specific hit across groups.")),
     sidebar = bslib::sidebar(
       width = 300,
       ui_section_title("Diagnostic"),

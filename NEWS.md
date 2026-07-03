@@ -1,3 +1,20 @@
+# RNAflow 0.14.1 (2026-07-03)
+
+## Visual refinements & per-tab explanations
+
+- **Navbar tab icons.** Every tab gains a distinct, recessive Font Awesome icon
+  (bright on the active/hovered tab) for faster orientation and a more
+  product-like navbar.
+- **Unified interactive-plot typography.** New internal `rnaflow_plotly()` helper
+  applies the app's font (Inter) and ink colour plus a clean hover label to all
+  interactive figures (volcano, PCA, UMAP, 3D PCA, linked Explore), so they read
+  as one system instead of plotly defaults.
+- **"Why this analysis?" panels.** `ui_page_header()` gained an `about` argument
+  rendered as a collapsible native `<details>` panel. All 11 analysis tabs
+  (Volcano, Explore, Heatmap, PCA, QC, Compare, Enrichment, Network, Activity,
+  Signatures, AI) now carry a short explanation of *why* the analysis matters
+  and how to read it -- present but collapsed by default, so no clutter.
+
 # RNAflow 0.14.0 (2026-07-02)
 
 ## New analyses & visualizations (backlog features)

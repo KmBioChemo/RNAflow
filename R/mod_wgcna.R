@@ -13,8 +13,15 @@ NULL
 mod_wgcna_ui <- function(id) {
   ns <- shiny::NS(id)
   bslib::layout_sidebar(
-    ui_page_header("Co-expression network (WGCNA)",
-                   "Modules, module-trait correlations, and hub genes."),
+    ui_page_header(
+      "Co-expression network (WGCNA)",
+      "Modules, module-trait correlations, and hub genes.",
+      about = paste(
+        "WGCNA groups genes that vary together across samples into modules,",
+        "then correlates each module with your sample traits. It surfaces",
+        "coordinated transcriptional programmes -- and the hub genes that",
+        "sit at their centre -- that testing genes one at a time would miss,",
+        "pointing to candidate regulators and trait-associated pathways.")),
     sidebar = bslib::sidebar(
       width = 340,
       ui_section_title("1. Network construction"),

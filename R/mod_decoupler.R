@@ -14,8 +14,16 @@ NULL
 mod_activity_ui <- function(id) {
   ns <- shiny::NS(id)
   bslib::layout_sidebar(
-    ui_page_header("Activity inference",
-                   "TF (CollecTRI) and pathway (PROGENy) activity via decoupleR."),
+    ui_page_header(
+      "Activity inference",
+      "TF (CollecTRI) and pathway (PROGENy) activity via decoupleR.",
+      about = paste(
+        "Rather than 'which genes changed', activity inference asks 'which",
+        "upstream regulators best explain the change'. It scores prior-",
+        "knowledge networks -- transcription-factor regulons (CollecTRI) and",
+        "pathway-responsive genes (PROGENy) -- against your ranked DE",
+        "statistic, so a coordinated shift in a TF's targets shows up as that",
+        "TF being active even if the TF's own mRNA barely moved.")),
     sidebar = bslib::sidebar(
       width = 340,
       shiny::uiOutput(ns("organism_note")),

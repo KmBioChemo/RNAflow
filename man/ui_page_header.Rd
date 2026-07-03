@@ -2,19 +2,23 @@
 % Please edit documentation in R/ui_components.R
 \name{ui_page_header}
 \alias{ui_page_header}
-\title{Tab page header with optional microcopy}
+\title{Tab page header with optional microcopy and an "about" panel}
 \usage{
-ui_page_header(title, subtitle = NULL)
+ui_page_header(title, subtitle = NULL, about = NULL)
 }
 \arguments{
 \item{title}{the tab's title}
 
 \item{subtitle}{optional one-line description shown under the title}
+
+\item{about}{optional longer explanation of \emph{why} the analysis matters,
+rendered as a collapsible "Why this analysis?" panel (a native
+\verb{<details>} element — present but not cluttering)}
 }
 \value{
 a \code{div} tag
 }
 \description{
-Tab page header with optional microcopy
+Tab page header with optional microcopy and an "about" panel
 }
 \keyword{internal}

@@ -14,8 +14,15 @@ NULL
 mod_linked_ui <- function(id) {
   ns <- shiny::NS(id)
   bslib::layout_sidebar(
-    ui_page_header("Explore",
-                   "Linked volcano and table -- select genes in either view."),
+    ui_page_header(
+      "Explore",
+      "Linked volcano and table -- select genes in either view.",
+      about = paste(
+        "Brush a region of the volcano and the table filters to those genes",
+        "instantly (and vice-versa). It lets you read out the identity and",
+        "statistics of a cluster of hits -- e.g. the top-right up-regulated",
+        "corner -- without leaving the plot, turning a static figure into an",
+        "interactive query over your results.")),
     sidebar = bslib::sidebar(
       width = 300,
       ui_section_title("Thresholds"),
