@@ -532,7 +532,7 @@ Beyond these checks, exporting any session also yields a Methods paragraph and a
 self-contained HTML report, so a reference analysis is recoverable, documented,
 and shareable as a single file.
 
-*[Figure 1 near here.]*
+![](figures/figure1.png){width=100%}
 
 **Figure 1. RNAflow is correct on a known study and powerful on a complex
 cohort.** **(A)** Volcano plot of the airway dexamethasone-versus-control
@@ -545,7 +545,7 @@ cleanly. **(D)** WGCNA module–trait correlation between the TCGA co-expression
 module eigengenes and cancer type, with correlation coefficients and
 significance. Panels A–B, airway; C–D, TCGA.
 
-*[Figure 2 near here.]*
+![](figures/figure2.png){width=100%}
 
 **Figure 2. Per-sample signatures and co-expression structure of the TCGA
 cohort.** **(A)** GSVA Hallmark signature scores for the 120 tumours (columns,
@@ -554,7 +554,7 @@ axes hierarchically clustered. **(B)** WGCNA scale-free soft-threshold
 selection. **(C)** Co-expression module sizes. **(D)** Eigengene of a
 representative module (turquoise) across cancer types.
 
-*[Figure 3 near here.]*
+![](figures/figure3.png){width=100%}
 
 **Figure 3. Multi-contrast comparison across cancer types (TCGA).** **(A)** Grid
 of pairwise volcano plots for representative contrasts. **(B)** UpSet and

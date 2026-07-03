@@ -84,7 +84,9 @@ p2 <- wrap_plots(
   gg(fig_soft_threshold(D$sft, mode = "publication"), "WGCNA soft-threshold"),
   gg(fig_module_sizes(D$wg, mode = "publication"), "WGCNA module sizes"),
   gg(fig_eigengene(D$wg, "turquoise", groups = D$grp, mode = "publication"),
-     "Turquoise eigengene by cancer type"),
+     "Turquoise eigengene by cancer type") +
+    theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
+          axis.title.x = element_blank()),
   design = "AAB\nAAC\nDDD", heights = c(1, 1, 0.9)) +
   plot_annotation(tag_levels = "A") & tag_theme
 save_plate(p2, "figure2", 16, 12)
