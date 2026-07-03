@@ -120,10 +120,23 @@ mod_signatures_server <- function(id, counts_norm_reactive, metadata_reactive,
           scores(es)
           if (!is.null(settings_store)) {
             s <- settings_store()
-            s$gsva <- list(collection = input$collection,
-                           method = input$method %||% "gsva",
-                           n_sets = nrow(es), n_samples = ncol(es),
-                           generated = format(Sys.time(), "%Y-%m-%d %H:%M:%S"))
+            grp <- if (!is.null(input$group_by) && input$group_by != "(none)")
+              input$group_by else NA_character_
+            # Canonical `signatures` record (was `gsva` before 0.14.1). Keep
+            # enough to reproduce the run, plus the (small) score matrix so the
+            # report can show it without recomputing.
+            s$signatures <- list(
+              collection = input$collection,
+              method     = input$method %||% "gsva",
+              organism   = org,
+              group_by   = grp,
+              n_top      = as.integer(input$nset_num %||% 30),
+              n_sets     = nrow(es),
+              n_samples  = ncol(es),
+              min_size   = 5L, max_size = 500L,
+              generated  = format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+              scores     = es)
+            s$gsva <- NULL   # drop the legacy key once migrated
             settings_store(s)
           }
         }, error = function(e) {

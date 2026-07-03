@@ -29,6 +29,7 @@ empty_project <- function(name = "untitled") {
     enrichment  = list(),               # GSEA/ORA results
     wgcna       = list(),               # WGCNA modules + correlations
     activity    = list(),               # decoupleR TF/pathway activity (type, table)
+    signatures  = list(),               # GSVA/ssGSEA per-sample scores (settings + matrix)
     ai_interpretation = NULL,           # optional AI narrative (list: text, model)
     notes       = character(0)          # free-text annotations
   )
@@ -97,6 +98,9 @@ assemble_project <- function(name, organism = NA_character_,
   p$enrichment <- if (is.null(settings$enrichment)) list() else settings$enrichment
   p$wgcna      <- if (is.null(settings$wgcna)) list() else settings$wgcna
   p$activity   <- if (is.null(settings$activity)) list() else settings$activity
+  # Signatures (GSVA/ssGSEA): canonical slot is `signatures`; fall back to the
+  # legacy `gsva` key for sessions/records created before 0.14.1.
+  p$signatures <- settings$signatures %||% settings$gsva %||% list()
   p$ai_interpretation <- settings$ai_interpretation
   active <- contrast_store_results(p$contrasts)
   p$de_results <- if (length(active)) active[[1]] else NULL

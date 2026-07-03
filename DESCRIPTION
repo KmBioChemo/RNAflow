@@ -1,15 +1,19 @@
 Package: RNAflow
 Title: An Interactive Shiny Platform for End-to-End RNA-seq Analysis
-Version: 0.14.1
+Version: 0.14.2
 Authors@R: person("Karim", "Matmat", role = c("aut", "cre"),
                   email = "karimatmat@gmail.com")
 Description: RNAflow is a modular Shiny application packaged as an R package
     for end-to-end bulk RNA-seq analysis. It takes raw count matrices and
     sample metadata as input and provides differential expression analysis
-    (DESeq2), visualization (volcano, heatmap, PCA), functional enrichment
-    (GSEA, ORA against MSigDB / GO / KEGG / Reactome), co-expression network
-    analysis (WGCNA) and reproducible HTML report generation. Supports human,
-    mouse and rat organisms with publication-ready figure exports.
+    (DESeq2), visualization (volcano, heatmap, PCA / UMAP / 3D PCA, a linked
+    volcano-table explorer), quality-control diagnostics, multi-contrast
+    comparison, functional enrichment (GSEA, ORA against MSigDB / GO / KEGG /
+    Reactome), co-expression network analysis (WGCNA), transcription-factor and
+    pathway activity inference (decoupleR), per-sample gene-set signatures
+    (GSVA / ssGSEA), optional AI-assisted interpretation, and reproducible R
+    script and self-contained HTML report generation. Supports human, mouse
+    and rat organisms with publication-ready figure exports.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

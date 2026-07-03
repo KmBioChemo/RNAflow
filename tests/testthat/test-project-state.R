@@ -101,3 +101,34 @@ test_that("recent project caching lists newest first by project name", {
   expect_equal(rp$name[1], "beta")   # newest modified_at first
   expect_true(all(file.exists(rp$file)))
 })
+
+test_that("empty_project has a canonical signatures slot", {
+  p <- empty_project("x")
+  expect_true("signatures" %in% names(p))
+  expect_equal(p$signatures, list())
+})
+
+test_that("assemble_project copies settings$signatures (legacy gsva fallback)", {
+  sig <- list(collection = "MSigDB Hallmark", method = "gsva",
+              n_sets = 40, n_samples = 6)
+  p <- assemble_project("demo", organism = "human",
+                        settings = list(signatures = sig))
+  expect_equal(p$signatures$collection, "MSigDB Hallmark")
+  expect_equal(p$signatures$n_sets, 40)
+
+  # legacy sessions that only set $gsva still populate the signatures slot
+  p2 <- assemble_project("demo", settings = list(gsva = sig))
+  expect_equal(p2$signatures$method, "gsva")
+
+  # no signatures -> empty list, not NULL
+  p3 <- assemble_project("demo")
+  expect_equal(p3$signatures, list())
+})
+
+test_that("load_project backfills the signatures slot for old files", {
+  old <- empty_project("old"); old$signatures <- NULL   # simulate a pre-0.14.1 file
+  f <- tempfile(fileext = ".rnaflow.rds"); saveRDS(old, f)
+  loaded <- load_project(f)
+  expect_true("signatures" %in% names(loaded))
+  expect_equal(loaded$signatures, list())
+})

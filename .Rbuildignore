@@ -10,6 +10,7 @@
 ^pkgdown$
 ^inst/extdata/Book1_deduplicated\.xlsx$
 ^inst/extdata/Book2\.xlsx$
+^inst/extdata/mrl_lpr_.*\.csv$
 ^omnipathr-log
 ^Dockerfile$
 ^\.dockerignore$

@@ -9,7 +9,7 @@
 
 > End-to-end bulk RNA-seq analysis platform — interactive Shiny app, packaged as an R package.
 
-**RNAflow** is a modular Shiny application built as a proper R package for end-to-end bulk RNA-seq analysis. It takes raw count matrices and sample metadata as input and provides differential expression (DESeq2), QC diagnostics, multi-contrast comparisons, functional enrichment (GSEA / ORA), co-expression network analysis (WGCNA), publication-ready figures, and reproducible R-script / HTML report / Methods-paragraph export.
+**RNAflow** is a modular Shiny application built as a proper R package for end-to-end bulk RNA-seq analysis. It takes raw count matrices and sample metadata as input and provides differential expression (DESeq2), QC diagnostics, sample overviews (PCA / UMAP / 3D PCA), a linked volcano-table explorer, multi-contrast comparisons, functional enrichment (GSEA / ORA, with an interactive enrichment network), co-expression network analysis (WGCNA), transcription-factor and pathway activity inference (decoupleR), per-sample gene-set signatures (GSVA / ssGSEA), optional AI-assisted interpretation, publication-ready figures, and reproducible R-script / HTML report / Methods-paragraph export.
 
 Supported organisms: **human**, **mouse**, **rat**.
 
@@ -142,6 +142,7 @@ Bundled in `inst/extdata/` (see `dev/make_demo_*.R` for how they are built):
 - **Phase 3** ✅ — GSEA / ORA (MSigDB Hallmark/C2/C5, GO BP/MF/CC, KEGG, Reactome) with dotplot / bar / running-enrichment curve
 - **Phase 4** ✅ — WGCNA co-expression networks (soft-threshold picking, module detection, module-trait correlation, hub genes, per-module enrichment)
 - **Phase 5** ✅ — Self-contained HTML report + reproducible R script export for Methods
+- **Phase 6** ✅ (2026) — Linked volcano-table explorer, activity inference (decoupleR TF / pathway), AI-assisted interpretation, per-sample signatures (GSVA / ssGSEA), UMAP + interactive 3D PCA, interactive enrichment network (visNetwork), distribution figures (raincloud / beeswarm / alluvial), professional UI design system, and a reproducible Docker image
 
 All roadmap phases are complete.
 

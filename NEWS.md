@@ -1,3 +1,27 @@
+# RNAflow 0.14.2 (2026-07-03)
+
+## Stabilization pass (no new features)
+
+- **Signatures project state.** `empty_project()` / `assemble_project()` gained
+  a canonical `signatures` slot; a Signatures run now records collection,
+  method, organism, group-by, top-sets / set & sample counts, size filters,
+  timestamp, and the (small) score matrix under `settings$signatures` (was the
+  ad-hoc `settings$gsva`, which is still read as a fallback). `load_project()`
+  backfills the slot for older `.rnaflow.rds` files. Previously GSVA runs were
+  not persisted into saved projects at all.
+- **Report & reproducible script.** When a Signatures run is recorded, the HTML
+  report adds a concise Signatures section (settings + the saved score heatmap,
+  or a note to recompute if the matrix wasn't stored), and `generate_r_script()`
+  emits runnable `get_gene_sets()` / `run_gsva()` / `fig_gsva_heatmap()` code.
+- **Session manifest.** `session_manifest()` now lists the v0.14 dependencies
+  (GSVA, uwot, visNetwork, ggalluvial, ggbeeswarm, ggdist) alongside the rest.
+- **Integration test.** `test-shiny-app.R` asserts all 14 tabs, including
+  Signatures (still guarded; skips without Chrome/chromote).
+- **Docs & hygiene.** DESCRIPTION and README describe the full current scope
+  (Explore, QC, Compare, Activity, Signatures, AI, UMAP / 3D PCA). The
+  project-specific `mrl_lpr_*` source CSVs are build-ignored (not bundled demo
+  data). No runtime logs or temp files are tracked.
+
 # RNAflow 0.14.1 (2026-07-03)
 
 ## Visual refinements & per-tab explanations

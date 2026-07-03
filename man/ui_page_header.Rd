@@ -13,7 +13,7 @@ ui_page_header(title, subtitle = NULL, about = NULL)
 
 \item{about}{optional longer explanation of \emph{why} the analysis matters,
 rendered as a collapsible "Why this analysis?" panel (a native
-\verb{<details>} element — present but not cluttering)}
+\verb{<details>} element -- present but not cluttering)}
 }
 \value{
 a \code{div} tag

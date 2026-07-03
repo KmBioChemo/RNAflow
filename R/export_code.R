@@ -149,8 +149,29 @@ generate_r_script <- function(project,
   }
   add("traits  <- build_traits(meta, rownames(datExpr))",
       "fig_module_trait(module_trait_cor(wg$MEs, traits))",
-      "",
-      "## 6. Session information -----------------------------------------------",
+      "")
+
+  # ---- Signatures (GSVA/ssGSEA): exact collection/method when recorded ----
+  add("## 6. Signatures (GSVA / ssGSEA) ---------------------------------------",
+      "# NOTE: the app maps gene IDs to symbols before scoring; ensure",
+      "#       rownames(norm) are gene symbols to reproduce this exactly.")
+  sg <- project$signatures
+  if (is.list(sg) && length(sg) && !is.null(sg$collection)) {
+    cc  <- ENRICH_COLLECTIONS[[sg$collection]]
+    sub <- if (!is.null(cc$sub)) sprintf(', subcollection = "%s"', cc$sub) else ""
+    add(sprintf('gene_sets <- get_gene_sets(organism, collection = "%s"%s)',
+                cc$collection %||% "H", sub),
+        sprintf('scores    <- run_gsva(norm, gene_sets, method = "%s")',
+                sg$method %||% "gsva"),
+        "fig_gsva_heatmap(scores, meta)", "")
+  } else {
+    add("# (no signatures run recorded -- example with Hallmark + GSVA)",
+        'gene_sets <- get_gene_sets(organism, collection = "H")',
+        'scores    <- run_gsva(norm, gene_sets, method = "gsva")',
+        "fig_gsva_heatmap(scores, meta)", "")
+  }
+
+  add("## 7. Session information -----------------------------------------------",
       "sessionInfo()",
       "")
 

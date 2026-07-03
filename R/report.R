@@ -19,7 +19,8 @@ session_manifest <- function() {
   pkgs <- c("RNAflow", "DESeq2", "SummarizedExperiment", "ggplot2", "fgsea",
             "clusterProfiler", "msigdbr", "ReactomePA", "WGCNA", "eulerr",
             "ComplexHeatmap", "pheatmap", "plotly", "crosstalk", "httr2",
-            "decoupleR", "OmnipathR")
+            "decoupleR", "OmnipathR", "GSVA", "uwot", "visNetwork",
+            "ggalluvial", "ggbeeswarm", "ggdist")
   rows <- lapply(pkgs, function(p) {
     v <- tryCatch(as.character(utils::packageVersion(p)),
                   error = function(e) NA_character_)
@@ -202,6 +203,39 @@ build_report_html <- function(project, file, title = "RNAflow analysis report",
             ai_html))
   }
 
+  # ---- Signatures (GSVA / ssGSEA), optional ----
+  sig <- project$signatures
+  sig_section <- NULL
+  if (is.list(sig) && length(sig) && !is.null(sig$n_sets)) {
+    sig_tbl <- h$table(
+      h$tr(h$th("Collection"), h$td(sig$collection %||% "?")),
+      h$tr(h$th("Method"), h$td(toupper(sig$method %||% "gsva"))),
+      h$tr(h$th("Gene sets &times; samples"),
+           h$td(htmltools::HTML(sprintf("%s &times; %s",
+                                        sig$n_sets %||% "?", sig$n_samples %||% "?")))),
+      h$tr(h$th("Organism"), h$td(sig$organism %||% "?")),
+      h$tr(h$th("Generated"), h$td(sig$generated %||% "&mdash;")))
+    # Embed the heatmap only if the score matrix was saved; otherwise say so.
+    sig_fig <- if (is.matrix(sig$scores) && nrow(sig$scores) >= 1 &&
+                   ncol(sig$scores) >= 2) {
+      grp <- if (!is.null(sig$group_by) && !is.na(sig$group_by)) sig$group_by else NULL
+      hm <- tryCatch(fig_gsva_heatmap(sig$scores, meta, group_by = grp,
+                                      n_top = sig$n_top %||% 30),
+                     error = function(e) NULL)
+      if (!is.null(hm)) h$div(class = "figure-block", embed_fig(hm, 6, 6),
+        h$div(class = "caption", "Per-sample gene-set scores (top variable sets)."))
+      else NULL
+    } else {
+      h$p(class = "muted",
+          "The score matrix was not stored -- recompute it with run_gsva() ",
+          "(see the reproducible script).")
+    }
+    sig_section <- section(
+      h$h2("Signatures (GSVA / ssGSEA)"),
+      h$p(class = "muted", "Per-sample gene-set enrichment scores."),
+      sig_tbl, sig_fig)
+  }
+
   # ---- Reproducible script ----
   script <- generate_r_script(project, generated = generated)
 
@@ -229,6 +263,7 @@ build_report_html <- function(project, file, title = "RNAflow analysis report",
               contrast_tbl, volcanoes),
     compare,
     ai_section,
+    sig_section,
     section(h$h2("Reproducible R script"),
             h$p(class = "muted",
                 "A script that reproduces the pipeline with RNAflow (with the ",

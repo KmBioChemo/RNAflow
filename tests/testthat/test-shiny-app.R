@@ -24,12 +24,13 @@ test_that("the app launches and exposes its core tabs", {
   # Brand + stylesheet wiring loaded
   expect_match(html, "rnaflow-brand", fixed = TRUE)
 
-  # All 13 tabs are present in the navbar
+  # All 14 tabs are present in the navbar (Signatures added in 0.14.0)
   for (tab in c("Data", "Volcano", "Explore", "Heatmap", "PCA", "QC",
-                "Compare", "Enrichment", "Network", "Activity", "AI",
-                "Project", "Report")) {
+                "Compare", "Enrichment", "Network", "Activity", "Signatures",
+                "AI", "Project", "Report")) {
     expect_match(html, tab, fixed = TRUE)
   }
+  expect_match(html, "Signatures", fixed = TRUE)
 
   # Fresh launch shows the getting-started guidance, not an error
   expect_match(html, "Getting started", fixed = TRUE)
