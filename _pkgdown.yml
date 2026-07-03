@@ -1,0 +1,153 @@
+url: https://KmBioChemo.github.io/RNAflow/
+
+template:
+  bootstrap: 5
+  bslib:
+    primary: "#1D9E75"
+
+home:
+  title: RNAflow
+  description: End-to-end bulk RNA-seq analysis platform.
+
+reference:
+- title: Application
+  desc: Launch the interactive Shiny app.
+  contents:
+  - run_app
+  - launch_app
+
+- title: Data input & validation
+  desc: Read and strictly validate counts, metadata, and DE results.
+  contents:
+  - read_counts
+  - read_metadata
+  - read_de_results
+  - validate_counts
+  - validate_metadata
+  - validate_de_results
+
+- title: Differential expression
+  contents:
+  - run_deseq2
+  - run_deseq2_all_pairs
+  - normalize_counts
+
+- title: Core figures
+  desc: Volcano, heatmap and PCA, with exploration / publication modes.
+  contents:
+  - fig_volcano
+  - fig_volcano_interactive
+  - fig_heatmap
+  - fig_pca
+  - compute_pca
+  - fig_pca_3d
+  - fig_umap
+  - compute_umap
+  - fig_gene_expression
+
+- title: QC & diagnostics
+  contents:
+  - fig_pval_hist
+  - fig_ma
+  - fig_sample_cor
+  - fig_lib_sizes
+
+- title: Themes & figure export
+  contents:
+  - fig_theme
+  - theme_publication
+  - theme_exploration
+  - save_ggplot
+  - save_pheatmap
+  - save_compare
+
+- title: Multi-contrast comparison
+  desc: Compare significant-gene sets and signatures across contrasts.
+  contents:
+  - contrast_sig_genes
+  - contrast_sig_sets
+  - contrast_lfc_matrix
+  - contrast_direction_table
+  - fig_venn
+  - fig_upset
+  - fig_volcano_grid
+  - fig_lfc_heatmap
+  - fig_contrast_alluvial
+
+- title: Functional enrichment
+  desc: GSEA (fgsea / MSigDB) and ORA (clusterProfiler; GO / KEGG / Reactome).
+  contents:
+  - get_gene_sets
+  - rank_genes
+  - run_gsea
+  - run_ora
+  - fig_enrich_dot
+  - fig_enrich_bar
+  - fig_gsea_curve
+  - fig_enrich_map
+  - fig_enrich_visnet
+  - fig_gsea_ridge
+
+- title: Per-sample signatures (GSVA / ssGSEA)
+  desc: Score every sample against gene sets and view the signature matrix.
+  contents:
+  - run_gsva
+  - fig_gsva_heatmap
+
+- title: Co-expression networks (WGCNA)
+  contents:
+  - wgcna_datexpr
+  - wgcna_pick_power
+  - run_wgcna
+  - build_traits
+  - module_trait_cor
+  - hub_genes
+  - module_gene_list
+  - module_summary
+  - fig_soft_threshold
+  - fig_module_trait
+  - fig_module_sizes
+  - fig_eigengene
+  - fig_module_network
+  - enrich_modules
+  - fig_module_enrichment
+
+- title: Linked explorer
+  desc: crosstalk-linked interactive volcano + table.
+  contents:
+  - linked_volcano_df
+  - fig_linked_volcano
+
+- title: Activity inference
+  desc: Transcription-factor (CollecTRI) and pathway (PROGENy) activity via decoupleR.
+  contents:
+  - get_tf_network
+  - get_pathway_network
+  - run_activity
+  - fig_activity_bar
+
+- title: AI interpretation
+  desc: Build a prompt from a contrast and ask the Claude API to interpret it.
+  contents:
+  - build_interpret_prompt
+  - call_claude
+  - interpret_results
+
+- title: Projects & reproducibility
+  desc: Save/load sessions, export a Methods script and an HTML report.
+  contents:
+  - save_project
+  - load_project
+  - generate_r_script
+  - generate_methods_text
+  - build_report_html
+
+- title: Shiny modules
+  desc: UI + server pairs, one per feature.
+  contents:
+  - starts_with("mod_")
+
+- title: Package overview
+  contents:
+  - RNAflow-package
+  - "%>%"

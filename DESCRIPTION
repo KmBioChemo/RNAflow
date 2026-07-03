@@ -1,0 +1,86 @@
+Package: RNAflow
+Title: An Interactive Shiny Platform for End-to-End RNA-seq Analysis
+Version: 0.16.3
+Authors@R: person("Karim", "Matmat", role = c("aut", "cre"),
+                  email = "karimatmat@gmail.com")
+Description: RNAflow is a modular Shiny application packaged as an R package
+    for end-to-end bulk RNA-seq analysis. It takes raw count matrices and
+    sample metadata as input and provides differential expression analysis
+    (DESeq2), visualization (volcano, heatmap, PCA / UMAP / 3D PCA, a linked
+    volcano-table explorer), quality-control diagnostics, multi-contrast
+    comparison, functional enrichment (GSEA, ORA against MSigDB / GO / KEGG /
+    Reactome), co-expression network analysis (WGCNA), transcription-factor and
+    pathway activity inference (decoupleR), per-sample gene-set signatures
+    (GSVA / ssGSEA), optional AI-assisted interpretation, and reproducible R
+    script and self-contained HTML report generation. Supports human, mouse
+    and rat organisms with publication-ready figure exports.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+Depends:
+    R (>= 4.2.0)
+Imports:
+    shiny (>= 1.8.0),
+    bslib,
+    htmltools,
+    htmlwidgets,
+    xfun,
+    DT,
+    shinycssloaders,
+    ggplot2,
+    ggrepel,
+    plotly,
+    pheatmap,
+    ComplexHeatmap,
+    crosstalk,
+    RColorBrewer,
+    scales,
+    dplyr,
+    readxl,
+    rlang,
+    magrittr,
+    DESeq2,
+    SummarizedExperiment,
+    matrixStats,
+    grid
+Suggests:
+    testthat (>= 3.0.0),
+    shinytest2,
+    chromote,
+    withr,
+    httr2,
+    apeglm,
+    ashr,
+    eulerr,
+    ggraph,
+    igraph,
+    tidygraph,
+    ggridges,
+    ggtext,
+    scico,
+    uwot,
+    visNetwork,
+    ggalluvial,
+    ggbeeswarm,
+    ggdist,
+    fgsea,
+    clusterProfiler,
+    msigdbr,
+    ReactomePA,
+    AnnotationDbi,
+    org.Hs.eg.db,
+    org.Mm.eg.db,
+    org.Rn.eg.db,
+    WGCNA,
+    GSVA,
+    decoupleR,
+    OmnipathR,
+    knitr,
+    rmarkdown,
+    pkgdown
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+URL: https://github.com/KmBioChemo/RNAflow, https://KmBioChemo.github.io/RNAflow/
+BugReports: https://github.com/KmBioChemo/RNAflow/issues
+Config/roxygen2/version: 8.0.0

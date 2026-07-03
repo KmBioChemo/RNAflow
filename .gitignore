@@ -1,0 +1,23 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.DS_Store
+*.Rcheck/
+*.tar.gz
+*.tgz
+docs/
+omnipathr-log/
+
+
+# knitr/vignette build artifacts
+figure/
+vignettes/*.html
+vignettes/*_files/
+*_cache/
+
+# rendered manuscript (regenerable from paper.md)
+paper/paper.html
+paper/paper.docx
+paper/.panel_cache.rds
+paper/figures/plate*.pdf

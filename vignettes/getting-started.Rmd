@@ -1,0 +1,137 @@
+---
+title: "Getting started with RNAflow"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with RNAflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 6,
+                      fig.height = 4)
+have_deseq2 <- requireNamespace("DESeq2", quietly = TRUE)
+```
+
+RNAflow is an end-to-end bulk RNA-seq analysis platform, usable either as an
+interactive Shiny app (`run_app()`) or as a set of pure, scriptable functions.
+This vignette is a **reproducible reference analysis**: the core steps below run
+on a bundled, published dataset so you can reproduce a real result end to end.
+
+```{r setup}
+library(RNAflow)
+```
+
+## The data
+
+The package bundles two real, published human datasets. Here we use
+**airway** (Himes *et al.* 2014): airway smooth-muscle cells treated with
+dexamethasone vs. control across four cell lines.
+
+```{r load}
+counts <- read_counts(system.file("extdata", "demo_airway_counts.csv",
+                                  package = "RNAflow"))
+meta   <- read_metadata(system.file("extdata", "demo_airway_metadata.csv",
+                                    package = "RNAflow"),
+                        counts_samples = colnames(counts))
+dim(counts)
+head(meta)
+```
+
+`read_counts()` and `read_metadata()` run strict validation and fail fast with
+an explicit message on malformed input (negative values, duplicate gene IDs,
+missing rownames, sample mismatch, …).
+
+## Differential expression
+
+We model expression as a function of `condition`, adjusting for the paired
+`cell` line, and contrast dexamethasone (`Dex`) against `Control`.
+
+```{r de, eval = have_deseq2}
+res <- run_deseq2(
+  counts, meta,
+  design   = ~ cell + condition,
+  contrast = c("condition", "Dex", "Control"),
+  shrink   = TRUE            # apeglm LFC shrinkage, Wald stat preserved
+)
+head(res[order(res$padj), ])
+sum(res$padj < 0.05 & abs(res$log2FoldChange) > 1, na.rm = TRUE)  # sig genes
+```
+
+## Visualize
+
+```{r volcano, eval = have_deseq2}
+fig_volcano(res, lfc_thr = 1, padj_thr = 0.05, n_label = 15,
+            mode = "exploration")
+```
+
+Every figure function takes a `mode = c("exploration", "publication")` argument;
+publication mode uses 8-pt Helvetica, strict axes, and no grid, ready for a
+figure panel. Interactive versions (`fig_volcano_interactive()`,
+`fig_pca()`, `fig_umap()`, …) return plotly widgets for exploration.
+
+For a heatmap and a PCA / UMAP sample overview you also need a normalized
+matrix:
+
+```{r norm, eval = FALSE}
+vst <- normalize_counts(counts, meta, method = "vst")
+fig_heatmap(vst, res = res, metadata = meta, n_genes = 40)
+fig_pca(vst, meta, n_top = 500, color_by = "condition")
+fig_umap(vst, meta, color_by = "condition")            # non-linear embedding
+```
+
+## Downstream analyses
+
+The heavier steps depend on optional (Bioconductor) packages and network
+resources, so they are shown here rather than executed. All work from the same
+`res` / `vst` objects and take an `organism` of `"human"`, `"mouse"`, or
+`"rat"`.
+
+```{r downstream, eval = FALSE}
+# Functional enrichment: GSEA (whole ranked list) and ORA (significant genes)
+gene_sets <- get_gene_sets("human", collection = "H")     # MSigDB Hallmark
+gsea <- run_gsea(res, gene_sets, rank_by = "stat")
+fig_enrich_dot(gsea)
+
+sig <- contrast_sig_genes(res, padj_thr = 0.05, lfc_thr = 1)
+ora <- run_ora(sig, "human", db = "GO", ont = "BP", universe = res$gene)
+fig_enrich_bar(ora)
+
+# Co-expression network (WGCNA)
+datExpr <- wgcna_datexpr(vst, n_genes = 3000)
+wg <- run_wgcna(datExpr, power = wgcna_pick_power(datExpr)$suggested)
+fig_module_trait(module_trait_cor(wg$MEs, build_traits(meta, rownames(datExpr))))
+
+# Regulator / pathway activity (decoupleR) and per-sample signatures (GSVA)
+fig_activity_bar(run_activity(res, "human", what = "pathway"))
+fig_gsva_heatmap(run_gsva(vst, gene_sets), meta)
+```
+
+## Sessions and reports
+
+Bundle the whole analysis state into a single `.rnaflow.rds` file, and export a
+reproducible R script and a self-contained HTML report (no pandoc/Quarto
+required):
+
+```{r report, eval = FALSE}
+p <- empty_project("airway_study")
+p$counts     <- counts
+p$metadata   <- meta
+p$organism   <- "human"
+p$contrasts  <- contrast_store_upsert(list(), "Dex vs Control", res)
+save_project(p, "airway_study.rnaflow.rds")
+
+cat(generate_r_script(p), file = "analysis.R")   # runnable Methods script
+build_report_html(p, "report.html")              # one-file HTML report
+```
+
+## Learn more
+
+Everything above is also available point-and-click in the app:
+
+```{r app, eval = FALSE}
+run_app()
+```
+
+See the [package website](https://KmBioChemo.github.io/RNAflow/) for the full
+function reference and the README for the feature overview.
