@@ -147,6 +147,8 @@ inference, per-sample signatures, multi-contrast comparison, and optional
 AI-assisted interpretation) and exports the whole analysis as reproducible
 artefacts. We describe each component in turn.
 
+<!-- Figure 1: replace figures/figure1.png with the BioRender graphical abstract (see paper/GRAPHICAL_ABSTRACT.md); current image is a placeholder schematic. -->
+
 ![](figures/figure1.png){width=100%}
 
 **Figure 1. Overview of RNAflow.** From a count matrix and sample metadata
