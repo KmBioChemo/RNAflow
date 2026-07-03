@@ -1,3 +1,11 @@
+# RNAflow 0.16.2 (2026-07-03)
+
+## Fix
+
+- **QC gene selector.** Force-hide the native `<select>` that selectize
+  replaces (`.selectized { display:none }`), so the gene field no longer shows
+  a second empty box stacked under the widget.
+
 # RNAflow 0.16.1 (2026-07-03)
 
 ## Fixes

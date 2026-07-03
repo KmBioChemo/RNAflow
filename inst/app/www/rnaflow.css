@@ -194,6 +194,11 @@ input[type=number], input[type=text], input[type=color] {
 .selectize-dropdown .optgroup-header {
   color: var(--rf-muted); font-weight: 650; background: var(--rf-surface-2);
 }
+/* selectize replaces the native <select> with a widget and adds `.selectized`
+   to the (now redundant) original -- force it hidden so it can't show as a
+   second box under the widget. */
+select.selectized, .selectized { display: none !important; }
+.selectize-control { margin-bottom: 0 !important; }
 select, select option { font-size: 0.8rem !important; }
 .shiny-input-container { margin-bottom: 8px !important; }
 

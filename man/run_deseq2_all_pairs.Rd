@@ -18,6 +18,8 @@ run_deseq2_all_pairs(
 \arguments{
 \item{counts}{validated counts matrix (genes x samples, integer)}
 
+\item{meta}{sample metadata (first column = sample ID)}
+
 \item{design}{a one-sided formula referring to columns of \code{metadata},
 e.g. \code{~ condition} or \code{~ batch + condition}. The variable of interest
 should be the last term.}

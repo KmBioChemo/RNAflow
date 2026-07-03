@@ -175,6 +175,7 @@ run_deseq2 <- function(counts, metadata,
 #' `treated` / `reference` levels.
 #'
 #' @inheritParams run_deseq2
+#' @param meta sample metadata (first column = sample ID)
 #' @param design_var design variable whose levels are compared pairwise
 #'   (default: the last term of `design`)
 #' @param shrink_type contrast-compatible shrinkage estimator

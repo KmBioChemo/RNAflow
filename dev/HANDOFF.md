@@ -12,12 +12,12 @@ _"Lis dev/HANDOFF.md, NEWS.md et le git log, puis on continue."_
 
 ## Current state (keep this updated)
 
-- **Version 0.15.1** (complex TCGA pan-cancer demo dataset; then 0.15.0 publication-readiness: 2 real demo datasets, community/citation files, reproducible vignette; then 0.14.2 stabilization: Signatures project-state + report/script,
+- **Version 0.16.2** (UI feedback + fixes: PCA label toggle, all-pairwise DESeq2, cleaner dropdowns, 200 MB upload cap; then 0.15.1 complex TCGA pan-cancer demo, 0.15.0 publication-readiness: 2 real demo datasets, community/citation files, reproducible vignette; then 0.14.2 stabilization: Signatures project-state + report/script,
   session manifest, docs/hygiene; then 0.14.1 visual refinements, 0.14.0
   backlog features (UMAP/3D PCA, visNetwork, raincloud/alluvial, GSVA
   Signatures), 0.13.0 repro/UI/tests, 0.12.0 UI overhaul, 0.11.4 bug-fix pass;
   see `NEWS.md`), `git log --oneline` is the record.
-- **431 pass / 0 fail / 1 skip** (`devtools::test()`). The skip is the
+- **445 pass / 0 fail / 1 skip** (`devtools::test()`). The skip is the
   `shinytest2` app smoke test (`test-shiny-app.R`), which needs Chrome/chromote
   -- runs in CI, skips on dev boxes without a browser. decoupleR + OmnipathR
   must be installed for the Activity tests to run for real.
@@ -51,8 +51,7 @@ alluvial) · Enrichment (GSEA/ORA, + interactive visNetwork map) · Network
 (WGCNA) · **Activity** (TF/pathway via decoupleR) · **Signatures** (GSVA/ssGSEA
 per-sample) · **AI** (Claude interpretation) · Project · Report.
 
-Recent additions (this session): AI interpretation tab + report integration;
-decoupleR Activity tab; crosstalk Explore tab. See `NEWS.md` for details.
+See `NEWS.md` for the full per-version changelog.
 
 ## Publication plan (target: bioRxiv, then a peer-reviewed venue)
 
@@ -121,7 +120,7 @@ decoupleR Activity tab; crosstalk Explore tab. See `NEWS.md` for details.
 ```r
 source("dev/install_deps.R")   # one-time per machine (needs Rtools on Windows)
 devtools::load_all()           # load
-devtools::test()               # 431 pass / 0 fail / 1 skip
+devtools::test()               # 445 pass / 0 fail / 1 skip
 devtools::document()           # after any roxygen change
 RNAflow::run_app()             # launch
 ```
