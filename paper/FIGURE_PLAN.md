@@ -127,22 +127,34 @@ the text, not as a panel.
 
 ---
 
-## Known gap — activity inference (decoupleR) has no figure
+## Supplementary Figure S1 — pathway activity (PROGENy), airway
 
-`decoupleR` / PROGENy activity inference is a **breadth claim in the abstract and
-Table 1** but currently has **no main or supplementary figure**. It exists only as
-gallery item `18_pathway_activity` (`fig_activity_bar` + `run_activity`), which
-requires OmniPath online and so is not built in the offline plate pipeline.
+Activity inference is demonstrated in the manuscript through **PROGENy pathway
+activity only**. CollecTRI TF activity stays available in the app but is **not
+featured in the paper**: its live OmniPath fetch is not reliable enough to
+guarantee for a reviewer, and its recovery of known biology is unverified.
+PROGENy, by contrast, recovers the expected glucocorticoid / anti-inflammatory
+signal on the airway contrast (per `dev/HANDOFF.md`).
 
-**To close this before submission**, pick one:
-- **(preferred)** cache one `run_activity` result (fetch OmniPath once, save the
-  regulon/prior locally) and add a **supplementary figure** (TF activity via
-  CollecTRI + pathway activity via PROGENy on the airway or a TCGA contrast); or
-- soften the breadth claim in the text to note that activity inference is
-  demonstrated in the app rather than in a static figure.
+Produced by `Rscript paper/make_supp_activity.R`; saved as
+`paper/figures/figureS1_activity.{png,pdf}`.
 
-Leaving a Table-1 module with zero figure presence weakens the breadth pillar —
-address it consciously either way.
+| Panel | Content | Function |
+|---|---|---|
+| — | PROGENy pathway activity, dexamethasone vs control (airway) | `fig_activity_bar` |
+
+**Two things this script gets right that the old gallery panel got wrong.** The
+retired gallery item `18_pathway_activity` never rendered even with OmniPath up,
+because it called `run_activity(..., by = "stat")` on a PROGENy network with the
+CollecTRI defaults (`method = "ulm"`, `mor_col = "mor"`) — a PROGENy network has a
+`weight` column and needs the multivariate model, so the call errored and the
+`tryCatch` swallowed it. S1 uses `method = "mlm"`, `mor_col = "weight"`, and runs
+on **airway** (where the steroid signal lives), not TCGA. It also caches the
+fetched network to `paper/.activity_cache.rds` so the figure is reproducible
+offline after a single successful fetch.
+
+*After running,* fill the top-pathway names/scores printed by the script into the
+`TODO` in the manuscript's activity paragraph and figure-S1 caption.
 
 *Other supplementary candidates (gallery):* volcano TCGA (`02`), library sizes
 (`05`), sample correlation (`06`), gene-expression raincloud (`08`), GSEA dotplot
