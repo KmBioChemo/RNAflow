@@ -1,6 +1,11 @@
-# Compose RNAflow's own figures into three dense manuscript plates (Figures 1-3),
-# six panels each (balanced 2x3 grids), full descriptive titles. Shows most of
-# the tool's output. Caches the heavy objects. Run from the package root:
+# Compose RNAflow's own figure outputs into the three composed manuscript plates:
+#   figure2 = differential expression & enrichment (airway, 2x3 grid)
+#   figure3 = molecular characterisation (TCGA; GSVA hero + PCA + WGCNA)
+#   figure4 = multi-contrast comparison (TCGA; volcano-grid hero + overlap/flow)
+# See paper/FIGURE_PLAN.md for the panel->figure map and paper.md for the
+# captions (this script must stay in sync with both). figure1 (overview) and
+# figure5 (validation) are produced elsewhere (GRAPHICAL_ABSTRACT.md /
+# make_validation.R). Caches the heavy objects. Run from the package root:
 #   Rscript paper/make_panels.R
 suppressPackageStartupMessages({
   if (!suppressWarnings(require(RNAflow, quietly = TRUE))) devtools::load_all(".", quiet = TRUE)
@@ -68,7 +73,7 @@ save_plate <- function(pl, name, w, h) {
   cat("wrote", name, "\n")
 }
 
-## ---- Figure 1: differential expression & enrichment (airway) ----------
+## ---- figure2: differential expression & enrichment (airway) -----------
 # grouped: DE diagnostics (volcano/MA/p-value) then enrichment (GSEA ridge/ORA)
 sets <- get_gene_sets("human", collection = "H")
 p1 <- wrap_plots(
@@ -86,7 +91,7 @@ p1 <- wrap_plots(
   ncol = 3) + plot_annotation(tag_levels = "A") & tag_theme
 save_plate(p1, "figure2", 17, 10.5)
 
-## ---- Figure 2: molecular landscape & co-expression (TCGA) -------------
+## ---- figure3: molecular landscape & co-expression (TCGA) --------------
 # hero: the per-sample GSVA signature heatmap; supporting: PCA + WGCNA
 sc <- merge(D$pca$scores, D$tm, by = "sample")
 p_pca <- ggplot(sc, aes(PC1, PC2, colour = cancer_type)) +
@@ -111,7 +116,7 @@ p2 <- wrap_plots(
   design = "AABC\nAADE") + plot_annotation(tag_levels = "A") & tag_theme
 save_plate(p2, "figure3", 18, 9.5)
 
-## ---- Figure 3: multi-contrast comparison (TCGA) -----------------------
+## ---- figure4: multi-contrast comparison (TCGA) ------------------------
 # hero: the pairwise volcano grid; supporting: overlap + flow views
 p3 <- wrap_plots(
   gg(fig_volcano_grid(D$dfs, n_label = 2, mode = "publication"),
