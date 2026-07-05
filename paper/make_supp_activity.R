@@ -55,18 +55,9 @@ if (file.exists(cache)) {
                   nrow(D$act), D$net_rows))
 }
 
-## ---- render the supplementary figure ----------------------------------
-p <- fig_activity_bar(D$act, n = 14, mode = "publication") +
-  labs(title = "Pathway activity (PROGENy) — dexamethasone vs control (airway)") +
-  theme(plot.title = element_text(size = 11, face = "bold", margin = margin(b = 4)))
-
-ggsave("paper/figures/figureS1_activity.png", p, width = 7.5, height = 5,
-       dpi = 300, bg = "white")
-tryCatch(ggsave("paper/figures/figureS1_activity.pdf", p, width = 7.5, height = 5, bg = "white"),
-         error = function(e) message("figureS1_activity.pdf skipped: ", conditionMessage(e)))
-cat("wrote figureS1_activity\n")
-
 ## ---- bare panel for the Python plate system (paper/plate/) -----------------
+# The composed supplementary figure (figureS1) is assembled by compose.py from
+# this bare panel; no standalone plate is written here.
 suppressPackageStartupMessages({ library(ragg); library(png) })
 FONT <- { pref <- c("Helvetica","Arial","Liberation Sans","DejaVu Sans")
   fams <- tryCatch(systemfonts::system_fonts()$family, error=function(e) character(0))

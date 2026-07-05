@@ -1,9 +1,10 @@
 # Durable panel exporter for the Python montage system (paper/plate/).
-# Writes each RNAflow figure panel as a BARE, high-DPI PNG (no title, no letter,
-# tight-cropped) into paper/panels/<figure>/. Python (compose.py) owns all
-# lettering/titles/layout so the plates are homogeneous. Panels are the tool's
-# own outputs (fig_volcano, fig_heatmap, ...), never reconstructions.
-# Run:  Rscript paper/export_panels.R            (needs paper/.panel_cache.rds)
+# Writes each RNAflow figure panel (Fig 2-4) as a BARE, high-DPI PNG (no title,
+# no letter, tight-cropped) into paper/panels/<figure>/. Python (compose.py)
+# owns all lettering/titles/layout so the plates are homogeneous. Panels are the
+# tool's own outputs (fig_volcano, fig_heatmap, ...), never reconstructions.
+# Self-contained: builds paper/.panel_cache.rds on first run, then exports.
+# Run:  Rscript paper/export_panels.R
 suppressPackageStartupMessages({
   if (!suppressWarnings(require(RNAflow, quietly = TRUE))) devtools::load_all(".", quiet = TRUE)
   library(ggplot2); library(ragg); library(png)
@@ -14,10 +15,46 @@ FONT <- { pref <- c("Helvetica","Arial","Liberation Sans","DejaVu Sans")
   hit <- pref[pref %in% fams]; if (length(hit)) hit[1] else "sans" }
 DPI <- 400
 OI <- c("#E69F00","#56B4E9","#009E73","#F0E442","#0072B2","#D55E00","#CC79A7","#7F7F7F")
-D <- readRDS("paper/.panel_cache.rds")
-if (exists("get_gene_sets")) sets <- get_gene_sets("human", collection = "H") else
-  sets <- { l <- strsplit(readLines("paper/genesets/h.all.v2023.2.Hs.symbols.gmt"), "\t")
-            setNames(lapply(l, function(x) x[-(1:2)]), vapply(l, `[`, "", 1)) }
+ext   <- function(f) system.file("extdata", f, package = "RNAflow")
+cache <- "paper/.panel_cache.rds"
+# Hallmark sets from the bundled GMT (avoids a msigdbr/msigdbdf download).
+read_gmt <- function(f) { l <- strsplit(readLines(f), "\t")
+  setNames(lapply(l, function(x) x[-(1:2)]), vapply(l, `[`, "", 1)) }
+SETS <- read_gmt("paper/genesets/h.all.v2023.2.Hs.symbols.gmt")
+get_gene_sets <- function(...) SETS
+
+## ---- compute once, cache (heavy: DESeq2 / GSVA / WGCNA on the demo data) ----
+if (file.exists(cache)) { D <- readRDS(cache); message("loaded cache") } else {
+  message("computing (first run, several minutes)...")
+  ac <- read_counts(ext("demo_airway_counts.csv"))
+  am <- read_metadata(ext("demo_airway_metadata.csv"), counts_samples = colnames(ac))
+  a_res <- run_deseq2(ac, am, design = ~ cell + condition,
+                      contrast = c("condition","Dex","Control"), shrink = TRUE)
+  a_vst <- normalize_counts(ac, am, "vst")
+  sets  <- get_gene_sets("human", collection = "H")
+  a_gsea <- run_gsea(a_res, sets, rank_by = "stat")
+  a_ora  <- run_ora(contrast_sig_genes(a_res, 0.05, 1), "human", db = "GO", ont = "BP",
+                    universe = a_res$gene)
+  tc <- read_counts(ext("demo_tcga_counts.csv"))
+  tm <- read_metadata(ext("demo_tcga_metadata.csv"), counts_samples = colnames(tc))
+  vst <- normalize_counts(tc, tm, "vst")
+  pca <- compute_pca(vst, 500)
+  gv  <- run_gsva(vst, sets, method = "gsva")
+  datExpr <- wgcna_datexpr(vst, n_genes = 3500)
+  sft <- wgcna_pick_power(datExpr); wg <- run_wgcna(datExpr, power = sft$suggested)
+  mt  <- module_trait_cor(wg$MEs, build_traits(tm, rownames(datExpr)))
+  mod_enrich <- tryCatch(enrich_modules(wg, "human", db = "GO", ont = "BP", n_per = 3),
+                         error = function(e) NULL)
+  dfs <- list()
+  for (pr in list(c("LGG","LUAD"),c("KIRC","COAD"),c("BRCA","LUAD"),c("PRAD","THCA")))
+    dfs[[paste(pr, collapse=" vs ")]] <- run_deseq2(tc, tm, design = ~ cancer_type,
+      contrast = c("cancer_type", pr[1], pr[2]), shrink = FALSE)
+  setlist <- contrast_sig_sets(dfs, 0.05, 1, "either")
+  D <- list(am=am, a_res=a_res, a_vst=a_vst, a_gsea=a_gsea, a_ora=a_ora,
+            tm=tm, vst=vst, pca=pca, gv=gv, sft=sft, wg=wg, mt=mt,
+            mod_enrich=mod_enrich, dfs=dfs, setlist=setlist)
+  saveRDS(D, cache)
+}
 
 # bare theme: no plot title, tight, uniform text; legend as a compact bottom strip.
 # Fonts are rendered large because panels are scaled down when composed into the
