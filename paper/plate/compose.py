@@ -69,6 +69,15 @@ LAYOUTS = {
             ("figure5/c_concordance.png", (0, 2), "c", "DESeq2 vs limma-voom (airway)"),
         ],
     },
+    # single-panel supplementary: titled, no panel letter
+    "figureS1": {
+        "width": 8.4, "grid": (1, 1),
+        "margins": (0.10, 0.10, 0.40, 0.10), "gap": (0.0, 0.0), "title_h": 0.34,
+        "panels": [
+            ("figureS1/a_activity.png", (0, 0), None,
+             "Pathway activity (PROGENy) — dexamethasone vs control (airway)"),
+        ],
+    },
 }
 
 
