@@ -62,9 +62,13 @@ fig_venn <- function(sets, fill = COMPARE_FILLS, alpha = 0.55,
 #'   [contrast_sig_sets()])
 #' @param min_size minimum intersection size to display
 #' @param sort_by order intersections by "size" (default) or "degree"
+#' @param set_size_width width (cm) of the set-size bar annotation; `NULL`
+#'   (default) uses ComplexHeatmap's default. Increase it when the set-size
+#'   bars look compressed next to a wide intersection matrix.
 #' @return a \pkg{ComplexHeatmap} UpSet object; prints as a figure
 #' @export
-fig_upset <- function(sets, min_size = 1, sort_by = c("size", "degree")) {
+fig_upset <- function(sets, min_size = 1, sort_by = c("size", "degree"),
+                      set_size_width = NULL) {
   if (!requireNamespace("ComplexHeatmap", quietly = TRUE)) {
     stop("Package 'ComplexHeatmap' is required for UpSet plots. ",
          "Install with: BiocManager::install('ComplexHeatmap')", call. = FALSE)
@@ -83,13 +87,18 @@ fig_upset <- function(sets, min_size = 1, sort_by = c("size", "degree")) {
   ord <- switch(sort_by,
                 size   = order(ComplexHeatmap::comb_size(m), decreasing = TRUE),
                 degree = order(ComplexHeatmap::comb_degree(m)))
-  ComplexHeatmap::UpSet(
+  args <- list(
     m,
     comb_order = ord,
     comb_col   = "#1D9E75",
     bg_col     = c("#F2F2F2", "#FFFFFF"),
     pt_size    = grid::unit(3, "mm"), lwd = 2
   )
+  if (!is.null(set_size_width)) {
+    args$right_annotation <- ComplexHeatmap::upset_right_annotation(
+      m, width = grid::unit(set_size_width, "cm"))
+  }
+  do.call(ComplexHeatmap::UpSet, args)
 }
 
 #' Side-by-side volcano grid

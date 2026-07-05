@@ -1,10 +1,10 @@
-# RNAflow manuscript — figure plan
+# RNAflow — figure plan
 
-Five figures, matched to the narrative of `paper/paper.md`. This plan is the
-**spec that follows the manuscript** — the manuscript's Results section is the
-source of truth for what each figure claims, and this file records how the
-panels are laid out and which script produces them. Keep the two in sync: if a
-figure changes here, change the caption in `paper.md` (and vice versa).
+Five main figures (+ one supplementary) that showcase the package on two demo
+datasets. This file records how the panels are laid out and which script
+produces each figure; it is the reproducible spec for the figures committed
+under `paper/figures/`. The manuscript text itself is maintained separately
+(outside this repository).
 
 Sub-panels are produced **directly from the app / the package's own figure
 functions** (Export bar: Format = PDF for vector; W/H in inches; DPI = 300/600),
@@ -59,8 +59,8 @@ biology — canonical glucocorticoid-response genes and the anti-inflammatory
 programme — and its enrichment ranking on the preserved Wald statistic behaves
 correctly. This is the correctness anchor for everything that follows.
 
-Layout: balanced **2 × 3 grid** (`ncol = 3`), all airway. Script: `make_panels.R`
-(writes `figure2`). Plate size ≈ 17 × 10.5 in.
+Layout: balanced **2 × 3 grid**, all airway. Panels: `export_panels.R`;
+plate composed by `paper/plate/compose.py` (writes `figure2`).
 
 | Panel | Content | Function | Gallery |
 |---|---|---|---|
@@ -78,8 +78,8 @@ per-sample signatures, sample separation, and co-expression modules tied to
 phenotype. The **entire WGCNA workflow is kept together** (soft-threshold →
 module–trait → module enrichment) so the reader sees construction before payoff.
 
-Layout: **GSVA heatmap as hero**, `design = "AABC\nAADE"`. Script: `make_panels.R`
-(writes `figure3`). Plate size ≈ 18 × 9.5 in.
+Layout: **GSVA heatmap as hero** (spans the left 2×2). Panels: `export_panels.R`;
+plate composed by `paper/plate/compose.py` (writes `figure3`).
 
 | Panel | Content | Function | Gallery |
 |---|---|---|---|
@@ -97,8 +97,8 @@ Layout: **GSVA heatmap as hero**, `design = "AABC\nAADE"`. Script: `make_panels.
 **Claim:** with eight groups, the all-pairwise mode (one fit → all 28 contrasts)
 turns a pile of separate DE runs into a single comparative picture.
 
-Layout: **volcano grid as hero**, `design = "AABC\nAADE"`. Script: `make_panels.R`
-(writes `figure4`). Plate size ≈ 18 × 9.5 in.
+Layout: **volcano grid + UpSet on top**, overlap/LFC/direction below. Panels:
+`export_panels.R`; plate composed by `paper/plate/compose.py` (writes `figure4`).
 
 | Panel | Content | Function | Gallery |
 |---|---|---|---|
@@ -134,10 +134,10 @@ activity only**. CollecTRI TF activity stays available in the app but is **not
 featured in the paper**: its live OmniPath fetch is not reliable enough to
 guarantee for a reviewer, and its recovery of known biology is unverified.
 PROGENy, by contrast, recovers the expected glucocorticoid / anti-inflammatory
-signal on the airway contrast (per `dev/HANDOFF.md`).
+signal on the airway contrast.
 
 Produced by `Rscript paper/make_supp_activity.R`; saved as
-`paper/figures/figureS1_activity.{png,pdf}`.
+`paper/figures/figureS1.{png,pdf}`.
 
 | Panel | Content | Function |
 |---|---|---|
@@ -170,7 +170,8 @@ mode**.
 
 **Global spec**
 - **Canvas:** full journal width (~180 mm). Sub-panels export as **vector PDF**;
-  plates are composed with `patchwork` in `make_panels.R`.
+  bare panels are exported by `export_panels.R` and composed into plates by
+  `paper/plate/compose.py` (declarative layouts; see `paper/plate/README.md`).
 - **Type:** one sans family (Inter/Helvetica); panel titles ~11 pt bold, axes
   ~8–9 pt.
 - **Tags:** `A B C …` top-left, 18 pt **bold**, accent green `#1D9E75`.
@@ -215,7 +216,7 @@ mode**.
   PNG/TIFF **600 DPI** only if the journal requires flattened raster.
 - Keep panel widths consistent so text sizes match across a plate.
 - Every figure function has a `publication` mode (8-pt font, no grid) — use it.
-- `make_panels.R` caches the heavy objects in `paper/.panel_cache.rds`; delete
-  the cache to force a recompute after changing an upstream analysis.
-- Individual vector panels for hand-assembly: `make_panels_individual.R`
-  (writes `paper/figures/panels/`). Gallery renders: `make_gallery.R`.
+- `export_panels.R` builds & caches the heavy objects in `paper/.panel_cache.rds`
+  (delete the cache to force a recompute), then writes the bare panels.
+- Bare per-panel exports live in `paper/panels/<figure>/` (from `export_panels.R`,
+  `make_validation.R`, `make_supp_activity.R`). Gallery renders: `make_gallery.R`.

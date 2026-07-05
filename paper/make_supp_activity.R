@@ -35,7 +35,18 @@ if (file.exists(cache)) {
   a_res <- run_deseq2(ac, am, design = ~ cell + condition,
                       contrast = c("condition", "Dex", "Control"), shrink = TRUE)
   # PROGENy pathway network (weight column) -> multivariate linear model.
-  progeny_net <- get_pathway_network("human", top = 500)
+  # Prefer the tool's OmniPath fetch; fall back to the offline `progeny` model
+  # (same weights, bundled as package data) when OmnipathR/OmniPath is absent.
+  progeny_net <- tryCatch(get_pathway_network("human", top = 500), error = function(e) {
+    message("OmniPath unavailable (", conditionMessage(e),
+            "); building PROGENy network from the offline progeny model.")
+    mdl <- progeny::getModel("Human", top = 500)
+    do.call(rbind, lapply(colnames(mdl), function(pw) {
+      w <- mdl[, pw]; keep <- w != 0
+      data.frame(source = pw, target = rownames(mdl)[keep],
+                 weight = as.numeric(w[keep]), stringsAsFactors = FALSE)
+    }))
+  })
   act <- run_activity(a_res, progeny_net, method = "mlm",
                       mor_col = "weight", by = "stat", min_size = 5)
   D <- list(act = act, net_rows = nrow(progeny_net))
@@ -44,18 +55,34 @@ if (file.exists(cache)) {
                   nrow(D$act), D$net_rows))
 }
 
-## ---- render the supplementary figure ----------------------------------
-p <- fig_activity_bar(D$act, n = 14, mode = "publication") +
-  labs(title = "Pathway activity (PROGENy) — dexamethasone vs control (airway)") +
-  theme(plot.title = element_text(size = 11, face = "bold", margin = margin(b = 4)))
-
-ggsave("paper/figures/figureS1_activity.png", p, width = 7.5, height = 5,
-       dpi = 300, bg = "white")
-ggsave("paper/figures/figureS1_activity.pdf", p, width = 7.5, height = 5, bg = "white")
-cat("wrote figureS1_activity\n")
+## ---- bare panel for the Python plate system (paper/plate/) -----------------
+# The composed supplementary figure (figureS1) is assembled by compose.py from
+# this bare panel; no standalone plate is written here.
+suppressPackageStartupMessages({ library(ragg); library(png) })
+FONT <- { pref <- c("Helvetica","Arial","Liberation Sans","DejaVu Sans")
+  fams <- tryCatch(systemfonts::system_fonts()$family, error=function(e) character(0))
+  hit <- pref[pref %in% fams]; if (length(hit)) hit[1] else "sans" }
+.trimS <- function(img, tol = 0.985, pad = 5) {
+  d <- dim(img); if (length(d) == 2) img <- array(img, c(d, 1))
+  ch <- min(dim(img)[3], 3); ink <- Reduce(`|`, lapply(seq_len(ch), function(k) img[, , k] < tol))
+  r <- which(rowSums(ink) > 0); c <- which(colSums(ink) > 0)
+  if (!length(r) || !length(c)) return(img)
+  img[max(1,min(r)-pad):min(dim(img)[1],max(r)+pad),
+      max(1,min(c)-pad):min(dim(img)[2],max(c)+pad), , drop = FALSE]
+}
+p_bare <- fig_activity_bar(D$act, n = 14, mode = "publication") +
+  theme_publication() + theme(text = element_text(family = FONT), plot.title = element_blank(),
+    axis.title = element_text(size = 14), axis.text = element_text(size = 11.5),
+    legend.title = element_text(size = 12, face = "bold"), legend.text = element_text(size = 11),
+    plot.margin = margin(3, 4, 3, 4))
+dir.create("paper/panels/figureS1", showWarnings = FALSE, recursive = TRUE)
+f <- "paper/panels/figureS1/a_activity.png"
+ggsave(f, p_bare, width = 7.5, height = 5.0, dpi = 400, bg = "white", device = ragg::agg_png)
+png::writePNG(.trimS(png::readPNG(f)), f)
+cat("wrote figureS1 bare panel\n")
 
 ## ---- report the top pathways so the caption/text can quote real numbers
 top <- head(D$act[order(-abs(D$act$score)), ], 6)
-cat("\nTop pathways by |activity score| (fill these into paper.md TODO):\n")
+cat("\nTop pathways by |activity score| (for the figure caption):\n")
 print(top[, intersect(c("source", "score", "p_value", "padj"), colnames(top))],
       row.names = FALSE)

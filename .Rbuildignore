@@ -20,4 +20,3 @@
 ^renv\.lock$
 ^renv$
 ^\.Rprofile$
-^paper$

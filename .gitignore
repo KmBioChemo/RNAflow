@@ -16,8 +16,10 @@ vignettes/*.html
 vignettes/*_files/
 *_cache/
 
-# rendered manuscript (regenerable from paper.md)
-paper/paper.html
-paper/paper.docx
+# heavy caches + transient render outputs (regenerable from the paper/ scripts)
 paper/.panel_cache.rds
+paper/.activity_cache.rds
 paper/figures/plate*.pdf
+Rplots.pdf
+# example outputs from README / generated-code snippets
+/volcano.pdf
