@@ -4,7 +4,12 @@
 \alias{fig_upset}
 \title{UpSet plot of significant-gene sets}
 \usage{
-fig_upset(sets, min_size = 1, sort_by = c("size", "degree"))
+fig_upset(
+  sets,
+  min_size = 1,
+  sort_by = c("size", "degree"),
+  set_size_width = NULL
+)
 }
 \arguments{
 \item{sets}{a named list of character vectors (e.g. from
@@ -13,6 +18,10 @@ fig_upset(sets, min_size = 1, sort_by = c("size", "degree"))
 \item{min_size}{minimum intersection size to display}
 
 \item{sort_by}{order intersections by "size" (default) or "degree"}
+
+\item{set_size_width}{width (cm) of the set-size bar annotation; \code{NULL}
+(default) uses ComplexHeatmap's default. Increase it when the set-size
+bars look compressed next to a wide intersection matrix.}
 }
 \value{
 a \pkg{ComplexHeatmap} UpSet object; prints as a figure

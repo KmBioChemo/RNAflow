@@ -19,15 +19,17 @@ if (exists("get_gene_sets")) sets <- get_gene_sets("human", collection = "H") el
   sets <- { l <- strsplit(readLines("paper/genesets/h.all.v2023.2.Hs.symbols.gmt"), "\t")
             setNames(lapply(l, function(x) x[-(1:2)]), vapply(l, `[`, "", 1)) }
 
-# bare theme: no plot title, tight, uniform text; legend as a compact bottom strip
-theme_bare <- function(b = 11) theme_publication() + theme(
+# bare theme: no plot title, tight, uniform text; legend as a compact bottom strip.
+# Fonts are rendered large because panels are scaled down when composed into the
+# plate -- larger source text stays legible in the final montage.
+theme_bare <- function(b = 14) theme_publication() + theme(
   text = element_text(family = FONT),
   plot.title = element_blank(),
-  axis.title.x = element_text(size = b - 1.5), axis.title.y = element_text(size = b - 1.5),
-  axis.text = element_text(size = b - 3),
-  legend.title = element_text(size = b - 2.5, face = "bold"),
-  legend.text = element_text(size = b - 3),
-  legend.position = "bottom", legend.key.size = unit(10, "pt"),
+  axis.title.x = element_text(size = b), axis.title.y = element_text(size = b),
+  axis.text = element_text(size = b - 2.5),
+  legend.title = element_text(size = b - 1.5, face = "bold"),
+  legend.text = element_text(size = b - 2.5),
+  legend.position = "bottom", legend.key.size = unit(12, "pt"),
   legend.margin = margin(0, 0, 0, 0), legend.box.spacing = unit(2, "pt"),
   plot.margin = margin(3, 4, 3, 4))
 
@@ -61,16 +63,19 @@ save_hm <- function(obj, dir, name, w, h) {                     # pheatmap/Compl
 ## ===== figure 2 : differential expression & enrichment (airway) =============
 dir2 <- "paper/panels/figure2"; dir.create(dir2, showWarnings = FALSE, recursive = TRUE)
 cat("figure2:\n")
+# top row (a,b,c): square-ish. bottom row (d,e,f) share one aspect so their
+# heights match the heatmap when composed.
 save_gg(fig_volcano(D$a_res, n_label = 8, mode = "publication") + theme_bare(), dir2, "a_volcano", 5.6, 5.0)
 save_gg(fig_ma(D$a_res, mode = "publication") + theme_bare(),                    dir2, "b_ma", 5.6, 5.0)
 save_gg(fig_pval_hist(D$a_res, mode = "publication") + theme_bare(),             dir2, "c_pval", 5.6, 5.0)
 save_hm(fig_heatmap(D$a_vst, D$a_res, D$am, n_genes = 32, show_colnames = FALSE,
                     direction_annotation = TRUE, show_annotation_names = FALSE,
-                    show_title = FALSE),                                          dir2, "d_heatmap", 5.6, 5.0)
-save_gg(fig_gsea_ridge(D$a_res, sets, D$a_gsea, n = 10, mode = "publication") + theme_bare(),
-        dir2, "e_gsea", 5.6, 5.0)
+                    show_title = FALSE),                                          dir2, "d_heatmap", 5.6, 4.9)
+# GSEA as a bubble/dot plot (NES on x, set size = dot size, colour = -log10 FDR)
+save_gg(fig_enrich_dot(D$a_gsea, n = 10, mode = "publication") + theme_bare(),
+        dir2, "e_gsea", 5.6, 4.9)
 save_gg(fig_enrich_bar(D$a_ora, n = 10, mode = "publication") + theme_bare() +
-          theme(legend.position = "none"),                                       dir2, "f_ora", 5.6, 5.0)
+          theme(legend.position = "none"),                                       dir2, "f_ora", 5.6, 4.9)
 
 ## ===== figure 3 : molecular landscape & co-expression (TCGA) ================
 dir3 <- "paper/panels/figure3"; dir.create(dir3, showWarnings = FALSE, recursive = TRUE)
@@ -86,25 +91,35 @@ p_pca <- ggplot(sc, aes(PC1, PC2, colour = cancer_type)) +
   guides(colour = guide_legend(nrow = 2, override.aes = list(size = 2.6))) +
   labs(x = sprintf("PC1 (%.1f%%)", D$pca$pct[1]), y = sprintf("PC2 (%.1f%%)", D$pca$pct[2])) +
   theme_bare()
-save_gg(p_pca, dir3, "b_pca", 4.7, 4.7)
-save_gg(fig_soft_threshold(D$sft, mode = "publication") + theme_bare(), dir3, "c_soft", 4.7, 4.7)
+save_gg(p_pca, dir3, "b_pca", 4.6, 4.7)
+# soft-threshold: two facets -> render wide enough that the power labels breathe
+save_gg(fig_soft_threshold(D$sft, mode = "publication") + theme_bare(), dir3, "c_soft", 5.0, 4.4)
 save_gg(fig_module_trait(D$mt, mode = "publication") + theme_bare() +
-          theme(axis.text.x = element_text(angle = 40, hjust = 1, size = 6.5)),
-        dir3, "d_modtrait", 4.7, 4.7)
+          theme(axis.text.x = element_text(angle = 40, hjust = 1, size = 9)),
+        dir3, "d_modtrait", 4.8, 4.6)
+# module enrichment: dense panel -> smaller base font, rotated coloured module
+# labels, compact legends, rendered wide so nothing is clipped
 p2E <- if (!is.null(D$mod_enrich))
-  fig_module_enrichment(D$mod_enrich, max_terms = 15, mode = "publication") + theme_bare() +
-    theme(axis.text.x = ggtext::element_markdown(size = 7)) else
+  fig_module_enrichment(D$mod_enrich, max_terms = 14, mode = "publication") + theme_bare(11) +
+    theme(axis.text.x = ggtext::element_markdown(size = 9, angle = 30, hjust = 1),
+          axis.text.y = element_text(size = 9),
+          legend.text = element_text(size = 8), legend.title = element_text(size = 9, face = "bold"),
+          legend.key.size = unit(9, "pt")) else
   fig_module_sizes(D$wg, mode = "publication") + theme_bare()
-save_gg(p2E, dir3, "e_modenrich", 4.7, 4.7)
+save_gg(p2E, dir3, "e_modenrich", 6.2, 5.0)
 
 ## ===== figure 4 : multi-contrast comparison (TCGA) ==========================
 dir4 <- "paper/panels/figure4"; dir.create(dir4, showWarnings = FALSE, recursive = TRUE)
 cat("figure4:\n")
 save_gg(fig_volcano_grid(D$dfs, n_label = 2, ncol = 2, mode = "publication") + theme_bare(),
         dir4, "a_volcgrid", 7.6, 4.6)
-save_hm(fig_upset(D$setlist, min_size = 1), dir4, "b_upset", 7.6, 4.4)
-save_hm(fig_venn(D$setlist[1:3]), dir4, "c_venn", 4.9, 4.5)
-save_hm(fig_lfc_heatmap(D$dfs, n_genes = 40, show_title = FALSE), dir4, "d_lfc", 4.9, 4.6)
-save_gg(fig_contrast_alluvial(D$dfs, mode = "publication") + theme_bare(), dir4, "e_alluvial", 5.4, 4.6)
+# UpSet: wider set-size bars so they breathe next to the intersection matrix
+save_hm(fig_upset(D$setlist, min_size = 1, set_size_width = 3.2), dir4, "b_upset", 6.8, 4.6)
+# Venn: render on a larger canvas -> more air around the circles
+save_hm(fig_venn(D$setlist[1:3]), dir4, "c_venn", 5.2, 5.0)
+save_hm(fig_lfc_heatmap(D$dfs, n_genes = 40, show_title = FALSE), dir4, "d_lfc", 4.9, 4.8)
+save_gg(fig_contrast_alluvial(D$dfs, mode = "publication") + theme_bare() +
+          theme(axis.text.x = element_text(angle = 20, hjust = 1, size = 10)),
+        dir4, "e_alluvial", 5.4, 4.8)
 
 cat("done: panels in paper/panels/\n")

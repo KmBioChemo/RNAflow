@@ -39,14 +39,14 @@ LAYOUTS = {
         ],
     },
     "figure3": {
-        "width": 15.5, "grid": (2, 4),
-        "margins": (0.10, 0.10, 0.34, 0.10), "gap": (0.28, 0.26), "title_h": 0.30,
+        "width": 15.5, "grid": (2, 3), "col_ratios": [1.45, 1, 1],
+        "margins": (0.10, 0.10, 0.34, 0.10), "gap": (0.30, 0.28), "title_h": 0.30,
         "panels": [
-            ("figure3/a_gsva.png",      (0, 0, 2, 2), "a", "Per-sample GSVA signatures (Hallmark)"),
-            ("figure3/b_pca.png",       (0, 2), "b", "Principal-component analysis"),
-            ("figure3/c_soft.png",      (0, 3), "c", "Soft-threshold selection"),
-            ("figure3/d_modtrait.png",  (1, 2), "d", "Module-trait correlation"),
-            ("figure3/e_modenrich.png", (1, 3), "e", "Module enrichment (GO BP)"),
+            ("figure3/a_gsva.png",      (0, 0, 2, 1), "a", "Per-sample GSVA signatures (Hallmark)"),
+            ("figure3/b_pca.png",       (0, 1), "b", "Principal-component analysis"),
+            ("figure3/c_soft.png",      (0, 2), "c", "Soft-threshold selection"),
+            ("figure3/d_modtrait.png",  (1, 1), "d", "Module-trait correlation"),
+            ("figure3/e_modenrich.png", (1, 2), "e", "Module enrichment (GO BP)"),
         ],
     },
     "figure4": {
@@ -87,21 +87,28 @@ def compose(name):
         panels.append((img, r, c, rs, cs,
                        p[2] if len(p) > 2 else None, p[3] if len(p) > 3 else None))
 
-    # uniform column width; each row's image height is set by its non-spanning
-    # panels (a rowspan>1 hero simply fills the rows it covers).
-    wc = (W - ml - mr - (cols - 1) * gx) / cols
+    # column widths from optional ratios (default uniform); a rowspan>1 hero
+    # simply fills the rows it covers, and each row's height is set by its
+    # non-spanning panels.
+    ratios = L.get("col_ratios", [1.0] * cols)
+    avail = W - ml - mr - (cols - 1) * gx
+    col_w = [avail * rr / sum(ratios) for rr in ratios]
+    col_x = [ml + sum(col_w[:c]) + c * gx for c in range(cols)]
+
+    def span_w(c, cs):
+        return sum(col_w[c:c + cs]) + (cs - 1) * gx
+
     row_h = [0.0] * rows
     for img, r, c, rs, cs, *_ in panels:
         if rs == 1:
-            w = cs * wc + (cs - 1) * gx
-            row_h[r] = max(row_h[r], w / (img.shape[1] / img.shape[0]))
+            row_h[r] = max(row_h[r], span_w(c, cs) / (img.shape[1] / img.shape[0]))
     for r in range(rows):
         if row_h[r] == 0:
-            row_h[r] = wc
+            row_h[r] = col_w[0]
     H = mt + mb + sum(row_h) + (rows - 1) * gy + rows * th
 
     # row top/bottom edges in inches (from figure bottom)
-    row_top, row_bot, y = [0.0] * rows, [0.0] * rows, mt
+    row_top, row_bot = [0.0] * rows, [0.0] * rows
     yy = H - mt
     for r in range(rows):
         row_top[r] = yy
@@ -112,10 +119,8 @@ def compose(name):
     fig = plt.figure(figsize=(W, H))
     fig.patch.set_facecolor("white")
     for img, r, c, rs, cs, letter, title in panels:
-        x = ml + c * (wc + gx)
-        w = cs * wc + (cs - 1) * gx
         top, bot = row_top[r], row_bot[r + rs - 1]
-        place_panel(fig, W, H, (x, bot, w, top - bot), img,
+        place_panel(fig, W, H, (col_x[c], bot, span_w(c, cs), top - bot), img,
                     letter=letter, title=title, title_h=th, valign="top")
 
     os.makedirs(OUT, exist_ok=True)
