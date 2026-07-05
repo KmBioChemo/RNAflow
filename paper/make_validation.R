@@ -120,17 +120,60 @@ pC <- ggplot(mc, aes(logFC, log2FoldChange)) + idline +
 fig4 <- (pA | pB | pC) + patchwork::plot_annotation(tag_levels = "A") & tag_theme
 ggsave("paper/figures/figure5.png", fig4, width = 14, height = 4.6, dpi = 300, bg = "white",
        device = ragg::agg_png)
-ggsave("paper/figures/figure5.pdf", fig4, width = 14, height = 4.6, bg = "white",
-       device = grDevices::cairo_pdf)
+tryCatch(ggsave("paper/figures/figure5.pdf", fig4, width = 14, height = 4.6, bg = "white",
+                device = grDevices::cairo_pdf),
+         error = function(e) message("figure5.pdf skipped: ", conditionMessage(e)))
 cat("Wrote figure5\n")
 
 # individual plot PDFs (one plot per file)
 dir.create("paper/figures/panels", showWarnings = FALSE, recursive = TRUE)
 ind <- list(F5A_reproducibility_roundtrip = pA, F5B_allpairwise_consistency = pB, F5C_concordance_limma = pC)
 for (nm in names(ind)) {
-  ggsave(paste0("paper/figures/panels/", nm, ".pdf"), ind[[nm]], width = 5.2, height = 4.6,
-         device = grDevices::cairo_pdf)
+  tryCatch(ggsave(paste0("paper/figures/panels/", nm, ".pdf"), ind[[nm]], width = 5.2, height = 4.6,
+                  device = grDevices::cairo_pdf),
+           error = function(e) message(nm, ".pdf skipped: ", conditionMessage(e)))
   ggsave(paste0("paper/figures/panels/", nm, ".png"), ind[[nm]], width = 5.2, height = 4.6,
          dpi = 300, bg = "white", device = ragg::agg_png)
 }
 cat("Wrote validation panels\n")
+
+## ===== bare panels for the Python plate system (paper/plate/) ===============
+# Rebuild the three scatters with no titles (Python owns lettering/titles),
+# larger axis fonts, and export tight-cropped like the other figures' panels.
+theme_bare5 <- theme_publication() + theme(
+  text = element_text(family = FONT),
+  plot.title = element_blank(), plot.subtitle = element_blank(),
+  axis.title = element_text(size = 14), axis.text = element_text(size = 11.5),
+  plot.margin = margin(3, 4, 3, 4))
+annot_b <- function(lbl) annotate("label", x = -Inf, y = Inf, hjust = -0.05, vjust = 1.06,
+  label = lbl, size = 4.4, label.size = 0, fill = "#ffffffcc", colour = "#2b2f36", lineheight = 0.98)
+.trim5 <- function(img, tol = 0.985, pad = 5) {
+  d <- dim(img); if (length(d) == 2) img <- array(img, c(d, 1))
+  ch <- min(dim(img)[3], 3); ink <- Reduce(`|`, lapply(seq_len(ch), function(k) img[, , k] < tol))
+  r <- which(rowSums(ink) > 0); c <- which(colSums(ink) > 0)
+  if (!length(r) || !length(c)) return(img)
+  img[max(1,min(r)-pad):min(dim(img)[1],max(r)+pad),
+      max(1,min(c)-pad):min(dim(img)[2],max(c)+pad), , drop = FALSE]
+}
+save_bare5 <- function(p, name, w = 4.9, h = 4.8) {
+  dir.create("paper/panels/figure5", showWarnings = FALSE, recursive = TRUE)
+  f <- file.path("paper/panels/figure5", paste0(name, ".png"))
+  ggsave(f, p, width = w, height = h, dpi = 400, bg = "white", device = ragg::agg_png)
+  png::writePNG(.trim5(png::readPNG(f)), f); cat("  fig5", name, "\n")
+}
+pA_b <- ggplot(m1, aes(log2FoldChange.o, log2FoldChange.r)) + idline +
+  geom_point(size = 1.2, alpha = .4, colour = "#1D9E75") +
+  annot_b(sprintf("r = %.4f\nmax abs diff = %.0e\nn = %s genes", rt_cor, rt_maxdiff, comma(nrow(m1)))) +
+  labs(x = "log2FC (interactive)", y = "log2FC (re-run script)") + theme_bare5
+pB_b <- ggplot(ap_df, aes(log2FoldChange.i, log2FoldChange.s)) + idline +
+  geom_point(size = 1.2, alpha = .4, colour = "#0072B2") +
+  annot_b(sprintf("r = %.4f\nmax abs diff = %.0f\n3 contrasts", ap_cor, maxd)) +
+  labs(x = "log2FC (independent fit)", y = "log2FC (shared fit)") + theme_bare5
+pC_b <- ggplot(mc, aes(logFC, log2FoldChange)) + idline +
+  geom_point(size = 1.2, alpha = .4, colour = "#D55E00") +
+  annot_b(sprintf("Pearson r = %.3f\nSpearman = %.3f\nJaccard(sig) = %.2f\nn = %s genes",
+                  co_r, co_rs, jac, comma(nrow(mc)))) +
+  labs(x = "log2FC (limma-voom)", y = "log2FC (RNAflow / DESeq2)") + theme_bare5
+suppressPackageStartupMessages(library(png))
+save_bare5(pA_b, "a_roundtrip"); save_bare5(pB_b, "b_allpairwise"); save_bare5(pC_b, "c_concordance")
+cat("Wrote figure5 bare panels\n")

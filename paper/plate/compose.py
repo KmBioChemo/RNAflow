@@ -60,6 +60,15 @@ LAYOUTS = {
             ("figure4/e_alluvial.png", (1, 4, 1, 2), "e", "Direction of change across contrasts"),
         ],
     },
+    "figure5": {
+        "width": 13.0, "grid": (1, 3),
+        "margins": (0.10, 0.10, 0.40, 0.10), "gap": (0.32, 0.26), "title_h": 0.34,
+        "panels": [
+            ("figure5/a_roundtrip.png",   (0, 0), "a", "Reproducibility round-trip"),
+            ("figure5/b_allpairwise.png", (0, 1), "b", "All-pairwise = single shared fit"),
+            ("figure5/c_concordance.png", (0, 2), "c", "DESeq2 vs limma-voom (airway)"),
+        ],
+    },
 }
 
 
