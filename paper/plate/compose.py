@@ -26,9 +26,9 @@ OUT = os.path.join(HERE, "..", "figures")
 LAYOUTS = {
     "figure2": {
         "width": 13.0, "grid": (2, 3),
-        "margins": (0.12, 0.12, 0.42, 0.12),   # left, right, top, bottom
-        "gap": (0.34, 0.40),                    # x, y between cells
-        "title_h": 0.34,                        # strip above each panel for letter+title
+        "margins": (0.10, 0.10, 0.34, 0.10),   # left, right, top, bottom
+        "gap": (0.28, 0.26),                    # x, y between cells
+        "title_h": 0.30,                        # strip above each panel for letter+title
         "panels": [
             ("figure2/a_volcano.png", (0, 0), "a", "Differential expression"),
             ("figure2/b_ma.png",      (0, 1), "b", "MA plot"),
