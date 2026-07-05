@@ -83,6 +83,6 @@ cat("wrote figureS1 bare panel\n")
 
 ## ---- report the top pathways so the caption/text can quote real numbers
 top <- head(D$act[order(-abs(D$act$score)), ], 6)
-cat("\nTop pathways by |activity score| (fill these into paper.md TODO):\n")
+cat("\nTop pathways by |activity score| (for the figure caption):\n")
 print(top[, intersect(c("source", "score", "p_value", "padj"), colnames(top))],
       row.names = FALSE)

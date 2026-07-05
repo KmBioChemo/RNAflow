@@ -1,10 +1,10 @@
-# RNAflow manuscript — figure plan
+# RNAflow — figure plan
 
-Five figures, matched to the narrative of `paper/paper.md`. This plan is the
-**spec that follows the manuscript** — the manuscript's Results section is the
-source of truth for what each figure claims, and this file records how the
-panels are laid out and which script produces them. Keep the two in sync: if a
-figure changes here, change the caption in `paper.md` (and vice versa).
+Five main figures (+ one supplementary) that showcase the package on two demo
+datasets. This file records how the panels are laid out and which script
+produces each figure; it is the reproducible spec for the figures committed
+under `paper/figures/`. The manuscript text itself is maintained separately
+(outside this repository).
 
 Sub-panels are produced **directly from the app / the package's own figure
 functions** (Export bar: Format = PDF for vector; W/H in inches; DPI = 300/600),
@@ -134,7 +134,7 @@ activity only**. CollecTRI TF activity stays available in the app but is **not
 featured in the paper**: its live OmniPath fetch is not reliable enough to
 guarantee for a reviewer, and its recovery of known biology is unverified.
 PROGENy, by contrast, recovers the expected glucocorticoid / anti-inflammatory
-signal on the airway contrast (per `dev/HANDOFF.md`).
+signal on the airway contrast.
 
 Produced by `Rscript paper/make_supp_activity.R`; saved as
 `paper/figures/figureS1.{png,pdf}`.
