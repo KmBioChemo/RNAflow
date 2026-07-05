@@ -13,6 +13,7 @@ FONT <- { pref <- c("Helvetica","Arial","Liberation Sans","DejaVu Sans")
   fams <- tryCatch(systemfonts::system_fonts()$family, error=function(e) character(0))
   hit <- pref[pref %in% fams]; if (length(hit)) hit[1] else "sans" }
 DPI <- 400
+OI <- c("#E69F00","#56B4E9","#009E73","#F0E442","#0072B2","#D55E00","#CC79A7","#7F7F7F")
 D <- readRDS("paper/.panel_cache.rds")
 if (exists("get_gene_sets")) sets <- get_gene_sets("human", collection = "H") else
   sets <- { l <- strsplit(readLines("paper/genesets/h.all.v2023.2.Hs.symbols.gmt"), "\t")
@@ -70,4 +71,40 @@ save_gg(fig_gsea_ridge(D$a_res, sets, D$a_gsea, n = 10, mode = "publication") + 
         dir2, "e_gsea", 5.6, 5.0)
 save_gg(fig_enrich_bar(D$a_ora, n = 10, mode = "publication") + theme_bare() +
           theme(legend.position = "none"),                                       dir2, "f_ora", 5.6, 5.0)
+
+## ===== figure 3 : molecular landscape & co-expression (TCGA) ================
+dir3 <- "paper/panels/figure3"; dir.create(dir3, showWarnings = FALSE, recursive = TRUE)
+cat("figure3:\n")
+# GSVA hero rendered near-square to fill the 2x2 hero cell (many rows + samples)
+save_hm(fig_gsva_heatmap(D$gv, D$tm, group_by = "cancer_type", n_top = 45, title = "",
+                         show_annotation_names = FALSE),
+        dir3, "a_gsva", 7.8, 7.3)
+sc <- merge(D$pca$scores, D$tm, by = "sample")
+p_pca <- ggplot(sc, aes(PC1, PC2, colour = cancer_type)) +
+  geom_point(size = 2.4, alpha = .92, stroke = 0) +
+  scale_colour_manual(values = OI, name = "Cancer type") +
+  guides(colour = guide_legend(nrow = 2, override.aes = list(size = 2.6))) +
+  labs(x = sprintf("PC1 (%.1f%%)", D$pca$pct[1]), y = sprintf("PC2 (%.1f%%)", D$pca$pct[2])) +
+  theme_bare()
+save_gg(p_pca, dir3, "b_pca", 4.7, 4.7)
+save_gg(fig_soft_threshold(D$sft, mode = "publication") + theme_bare(), dir3, "c_soft", 4.7, 4.7)
+save_gg(fig_module_trait(D$mt, mode = "publication") + theme_bare() +
+          theme(axis.text.x = element_text(angle = 40, hjust = 1, size = 6.5)),
+        dir3, "d_modtrait", 4.7, 4.7)
+p2E <- if (!is.null(D$mod_enrich))
+  fig_module_enrichment(D$mod_enrich, max_terms = 15, mode = "publication") + theme_bare() +
+    theme(axis.text.x = ggtext::element_markdown(size = 7)) else
+  fig_module_sizes(D$wg, mode = "publication") + theme_bare()
+save_gg(p2E, dir3, "e_modenrich", 4.7, 4.7)
+
+## ===== figure 4 : multi-contrast comparison (TCGA) ==========================
+dir4 <- "paper/panels/figure4"; dir.create(dir4, showWarnings = FALSE, recursive = TRUE)
+cat("figure4:\n")
+save_gg(fig_volcano_grid(D$dfs, n_label = 2, ncol = 2, mode = "publication") + theme_bare(),
+        dir4, "a_volcgrid", 7.6, 4.6)
+save_hm(fig_upset(D$setlist, min_size = 1), dir4, "b_upset", 7.6, 4.4)
+save_hm(fig_venn(D$setlist[1:3]), dir4, "c_venn", 4.9, 4.5)
+save_hm(fig_lfc_heatmap(D$dfs, n_genes = 40, show_title = FALSE), dir4, "d_lfc", 4.9, 4.6)
+save_gg(fig_contrast_alluvial(D$dfs, mode = "publication") + theme_bare(), dir4, "e_alluvial", 5.4, 4.6)
+
 cat("done: panels in paper/panels/\n")

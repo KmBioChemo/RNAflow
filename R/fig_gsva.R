@@ -19,11 +19,13 @@ NULL
 #' @param show_samples show per-sample (column) labels; `NULL` (default) shows
 #'   them only for small cohorts (<= 40 samples), since long sample identifiers
 #'   are illegible for large cohorts where the group annotation suffices
+#' @param show_annotation_names show the annotation track name (e.g. the group
+#'   column) beside the track; when FALSE it appears only in the legend
 #' @return a pheatmap object
 #' @export
 fig_gsva_heatmap <- function(scores, metadata = NULL, group_by = NULL,
                              n_top = 40, scale_rows = TRUE, title = NULL,
-                             show_samples = NULL) {
+                             show_samples = NULL, show_annotation_names = TRUE) {
   if (!requireNamespace("pheatmap", quietly = TRUE)) {
     stop("Package 'pheatmap' is required for the score heatmap.", call. = FALSE)
   }
@@ -53,6 +55,7 @@ fig_gsva_heatmap <- function(scores, metadata = NULL, group_by = NULL,
     m,
     scale = if (isTRUE(scale_rows)) "row" else "none",
     annotation_col = ann,
+    annotation_names_col = isTRUE(show_annotation_names),
     show_rownames = nrow(m) <= 60,
     show_colnames = show_samples %||% (ncol(m) <= 40),
     color = grDevices::colorRampPalette(

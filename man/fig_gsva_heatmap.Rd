@@ -11,11 +11,12 @@ fig_gsva_heatmap(
   n_top = 40,
   scale_rows = TRUE,
   title = NULL,
-  show_samples = NULL
+  show_samples = NULL,
+  show_annotation_names = TRUE
 )
 }
 \arguments{
-\item{scores}{a numeric matrix (gene sets x samples) from \code{\link[=run_gsva]{run_gsva()}}}
+\item{scores}{a numeric matrix (gene sets x samples) from \code{\link[decoupleR:run_gsva]{decoupleR::run_gsva()}}}
 
 \item{metadata}{optional sample metadata (column 1 = sample)}
 
@@ -30,12 +31,15 @@ fig_gsva_heatmap(
 \item{show_samples}{show per-sample (column) labels; \code{NULL} (default) shows
 them only for small cohorts (<= 40 samples), since long sample identifiers
 are illegible for large cohorts where the group annotation suffices}
+
+\item{show_annotation_names}{show the annotation track name (e.g. the group
+column) beside the track; when FALSE it appears only in the legend}
 }
 \value{
 a pheatmap object
 }
 \description{
-Draws the \code{\link[=run_gsva]{run_gsva()}} score matrix (gene sets x samples) as a clustered
+Draws the \code{\link[decoupleR:run_gsva]{decoupleR::run_gsva()}} score matrix (gene sets x samples) as a clustered
 heatmap, keeping the most variable sets and optionally annotating samples by
 a metadata group.
 }

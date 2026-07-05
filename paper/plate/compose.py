@@ -38,7 +38,37 @@ LAYOUTS = {
             ("figure2/f_ora.png",     (1, 2), "f", "Over-representation (GO BP)"),
         ],
     },
+    "figure3": {
+        "width": 15.5, "grid": (2, 4),
+        "margins": (0.10, 0.10, 0.34, 0.10), "gap": (0.28, 0.26), "title_h": 0.30,
+        "panels": [
+            ("figure3/a_gsva.png",      (0, 0, 2, 2), "a", "Per-sample GSVA signatures (Hallmark)"),
+            ("figure3/b_pca.png",       (0, 2), "b", "Principal-component analysis"),
+            ("figure3/c_soft.png",      (0, 3), "c", "Soft-threshold selection"),
+            ("figure3/d_modtrait.png",  (1, 2), "d", "Module-trait correlation"),
+            ("figure3/e_modenrich.png", (1, 3), "e", "Module enrichment (GO BP)"),
+        ],
+    },
+    "figure4": {
+        "width": 15.5, "grid": (2, 6),
+        "margins": (0.10, 0.10, 0.34, 0.10), "gap": (0.28, 0.26), "title_h": 0.30,
+        "panels": [
+            ("figure4/a_volcgrid.png", (0, 0, 1, 3), "a", "Pairwise differential expression"),
+            ("figure4/b_upset.png",    (0, 3, 1, 3), "b", "Significant-gene overlap (UpSet)"),
+            ("figure4/c_venn.png",     (1, 0, 1, 2), "c", "Significant-gene overlap (Venn)"),
+            ("figure4/d_lfc.png",      (1, 2, 1, 2), "d", "Log2 fold-change across contrasts"),
+            ("figure4/e_alluvial.png", (1, 4, 1, 2), "e", "Direction of change across contrasts"),
+        ],
+    },
 }
+
+
+def _cell(spec):
+    """(row, col) or (row, col, rowspan, colspan) -> (r, c, rowspan, colspan)."""
+    r, c = spec[0], spec[1]
+    rs = spec[2] if len(spec) > 2 else 1
+    cs = spec[3] if len(spec) > 3 else 1
+    return r, c, rs, cs
 
 
 def compose(name):
@@ -50,38 +80,43 @@ def compose(name):
     th = L["title_h"]
     set_style()
 
-    # load panels, remember aspect (W/H) per cell
-    imgs, aspect = {}, {}
+    panels = []                                     # (img, r, c, rs, cs, letter, title)
     for p in L["panels"]:
+        r, c, rs, cs = _cell(p[1])
         img = load_trim(os.path.join(PANELS, p[0]))
-        imgs[p[1]] = img
-        aspect[p[1]] = img.shape[1] / img.shape[0]
+        panels.append((img, r, c, rs, cs,
+                       p[2] if len(p) > 2 else None, p[3] if len(p) > 3 else None))
 
-    # content width of one cell, then each row's image height = max(wc / aspect)
+    # uniform column width; each row's image height is set by its non-spanning
+    # panels (a rowspan>1 hero simply fills the rows it covers).
     wc = (W - ml - mr - (cols - 1) * gx) / cols
-    row_h = []
+    row_h = [0.0] * rows
+    for img, r, c, rs, cs, *_ in panels:
+        if rs == 1:
+            w = cs * wc + (cs - 1) * gx
+            row_h[r] = max(row_h[r], w / (img.shape[1] / img.shape[0]))
     for r in range(rows):
-        hs = [wc / aspect[(r, c)] for c in range(cols) if (r, c) in aspect]
-        row_h.append(max(hs) if hs else wc)
+        if row_h[r] == 0:
+            row_h[r] = wc
     H = mt + mb + sum(row_h) + (rows - 1) * gy + rows * th
+
+    # row top/bottom edges in inches (from figure bottom)
+    row_top, row_bot, y = [0.0] * rows, [0.0] * rows, mt
+    yy = H - mt
+    for r in range(rows):
+        row_top[r] = yy
+        yy -= row_h[r] + th
+        row_bot[r] = yy
+        yy -= gy
 
     fig = plt.figure(figsize=(W, H))
     fig.patch.set_facecolor("white")
-
-    y_top = H - mt                                  # inches from bottom
-    for r in range(rows):
-        cell_h = row_h[r] + th
-        for c in range(cols):
-            if (r, c) not in imgs:
-                continue
-            x = ml + c * (wc + gx)
-            cell = (x, y_top - cell_h, wc, cell_h)          # inches, y = bottom
-            p = next(q for q in L["panels"] if q[1] == (r, c))
-            place_panel(fig, W, H, cell, imgs[(r, c)],
-                        letter=p[2] if len(p) > 2 else None,
-                        title=p[3] if len(p) > 3 else None,
-                        title_h=th, valign="top")
-        y_top -= cell_h + gy
+    for img, r, c, rs, cs, letter, title in panels:
+        x = ml + c * (wc + gx)
+        w = cs * wc + (cs - 1) * gx
+        top, bot = row_top[r], row_bot[r + rs - 1]
+        place_panel(fig, W, H, (x, bot, w, top - bot), img,
+                    letter=letter, title=title, title_h=th, valign="top")
 
     os.makedirs(OUT, exist_ok=True)
     for ext in ("png", "pdf"):
