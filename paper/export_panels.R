@@ -120,10 +120,11 @@ save_gg(fig_enrich_bar(D$a_ora, n = 10, mode = "publication") + theme_bare() +
 ## ===== figure 3 : molecular landscape & co-expression (TCGA) ================
 dir3 <- "paper/panels/figure3"; dir.create(dir3, showWarnings = FALSE, recursive = TRUE)
 cat("figure3:\n")
-# GSVA hero rendered near-square to fill the 2x2 hero cell (many rows + samples)
+# GSVA hero: rendered TALL (aspect ~ the tall hero cell) so the heatmap fills the
+# full height of its panel instead of letterboxing.
 save_hm(fig_gsva_heatmap(D$gv, D$tm, group_by = "cancer_type", n_top = 45, title = "",
                          show_annotation_names = FALSE),
-        dir3, "a_gsva", 7.8, 7.3)
+        dir3, "a_gsva", 6.4, 9.3)
 sc <- merge(D$pca$scores, D$tm, by = "sample")
 p_pca <- ggplot(sc, aes(PC1, PC2, colour = cancer_type)) +
   geom_point(size = 2.4, alpha = .92, stroke = 0) +
