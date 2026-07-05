@@ -59,14 +59,23 @@ if (file.exists(cache)) { D <- readRDS(cache); message("loaded cache") } else {
 ## ---- theme + helpers --------------------------------------------------
 theme_2026 <- function(b = 11.5) theme_publication() + theme(
   text = element_text(family = FONT),
-  plot.title = element_text(size = b - 0.5, face = "bold", margin = margin(b = 4)),
-  axis.title.x = element_text(size = b - 2, margin = margin(t = 2)),
-  axis.title.y = element_text(size = b - 2, margin = margin(r = 2)),
+  plot.title = element_text(size = b - 0.5, face = "bold", margin = margin(b = 2)),
+  axis.title.x = element_text(size = b - 2, margin = margin(t = 1)),
+  axis.title.y = element_text(size = b - 2, margin = margin(r = 1)),
   axis.text = element_text(size = b - 3.5),
   legend.title = element_text(size = b - 3, face = "bold"),
-  legend.text = element_text(size = b - 4), plot.margin = margin(7, 9, 7, 7))
+  legend.text = element_text(size = b - 4),
+  legend.key.size = unit(9, "pt"), legend.margin = margin(0, 0, 0, 0),
+  legend.box.spacing = unit(3, "pt"), legend.spacing = unit(2, "pt"),
+  plot.margin = margin(3, 4, 3, 4))
 tag_theme <- theme(plot.tag = element_text(size = 16, face = "bold", colour = "black"))
 gg <- function(p, title) p + labs(title = title) + theme_2026()
+# same, but the legend sits as a compact strip under the plot so the plot fills
+# the full cell width instead of ceding a white right-hand legend column.
+gg_b <- function(p, title) p + labs(title = title) + theme_2026() +
+  theme(legend.position = "bottom", legend.title = element_text(size = 8, face = "bold"),
+        legend.text = element_text(size = 7.5), legend.key.size = unit(9, "pt"),
+        legend.margin = margin(0, 0, 0, 0), legend.box.spacing = unit(2, "pt"))
 titled <- function(g, t) g + labs(title = t) +
   theme(plot.title = element_text(size = 11, face = "bold", margin = margin(b = 4)))
 # Render a heatmap object (pheatmap / ComplexHeatmap / grid grob) to a PNG sized
@@ -87,7 +96,7 @@ hm_panel <- function(obj, w, h, title = NULL, dpi = 320) {
     coord_cartesian(expand = FALSE) + theme_void() + theme(plot.margin = margin(2, 2, 2, 2))
   if (!is.null(title)) g <- g + ggtitle(title) +
     theme(plot.title = element_text(size = 11, face = "bold", family = FONT,
-                                    hjust = 0, margin = margin(b = 3)))
+                                    hjust = 0, margin = margin(b = 2)))
   g
 }
 save_plate <- function(pl, name, w, h) {
@@ -102,18 +111,19 @@ save_plate <- function(pl, name, w, h) {
 # grouped: DE diagnostics (volcano/MA/p-value) then enrichment (GSEA ridge/ORA)
 sets <- get_gene_sets("human", collection = "H")
 # 16 x 10, 2x3 grid -> each cell ~ 5.33w x 5.0h; heatmap rendered to fill its cell (minus title)
-pD2 <- hm_panel(fig_heatmap(D$a_vst, D$a_res, D$am, n_genes = 30, show_colnames = FALSE,
+pD2 <- hm_panel(fig_heatmap(D$a_vst, D$a_res, D$am, n_genes = 32, show_colnames = FALSE,
                             direction_annotation = TRUE, show_title = FALSE),
-                w = 5.3, h = 4.55, title = "Top differential genes")
+                w = 5.5, h = 4.8, title = "Top differential genes")
 p1 <- wrap_plots(
-  gg(fig_volcano(D$a_res, n_label = 8, mode = "publication"), "Differential expression"),
-  gg(fig_ma(D$a_res, mode = "publication"), "MA plot"),
+  gg_b(fig_volcano(D$a_res, n_label = 8, mode = "publication"), "Differential expression"),
+  gg_b(fig_ma(D$a_res, mode = "publication"), "MA plot"),
   gg(fig_pval_hist(D$a_res, mode = "publication"), "P-value histogram"),
   pD2,
-  gg(fig_gsea_ridge(D$a_res, sets, D$a_gsea, n = 10, mode = "publication"),
+  gg_b(fig_gsea_ridge(D$a_res, sets, D$a_gsea, n = 10, mode = "publication"),
      "Gene-set enrichment (GSEA)"),
+  # the ORA bars are all one category ("Enriched") -> drop the redundant legend, reclaim its width
   gg(fig_enrich_bar(D$a_ora, n = 10, mode = "publication"),
-     "Over-representation (GO BP)"),
+     "Over-representation (GO BP)") + theme(legend.position = "none"),
   ncol = 3) + plot_annotation(tag_levels = "A") & tag_theme
 save_plate(p1, "figure2", 16, 10)
 
@@ -123,9 +133,12 @@ sc <- merge(D$pca$scores, D$tm, by = "sample")
 p_pca <- ggplot(sc, aes(PC1, PC2, colour = cancer_type)) +
   geom_point(size = 2.4, alpha = .92, stroke = 0) +
   scale_colour_manual(values = OI, name = "Cancer type") +
+  guides(colour = guide_legend(nrow = 2, override.aes = list(size = 2.6))) +
   labs(title = "Principal-component analysis",
        x = sprintf("PC1 (%.1f%%)", D$pca$pct[1]), y = sprintf("PC2 (%.1f%%)", D$pca$pct[2])) +
-  theme_2026()
+  theme_2026() +
+  theme(legend.position = "bottom", legend.title = element_text(size = 8, face = "bold"),
+        legend.text = element_text(size = 7.5), legend.box.spacing = unit(2, "pt"))
 p2E <- if (!is.null(D$mod_enrich))
   (gg(fig_module_enrichment(D$mod_enrich, max_terms = 15, mode = "publication"),
       "Module enrichment (GO BP)") +
@@ -134,7 +147,7 @@ p2E <- if (!is.null(D$mod_enrich))
 # 16.5 x 9.5, design AABC/AADE (4 cols, 2 rows): A = GSVA hero (cols1-2, both rows)
 # -> ~8.0w x 9.0h; rendered to fill that tall cell. B..E are single ~4.0 x 4.5 cells.
 pA3 <- hm_panel(fig_gsva_heatmap(D$gv, D$tm, group_by = "cancer_type", n_top = 45, title = ""),
-                w = 7.9, h = 8.6, title = "Per-sample GSVA signatures (Hallmark)")
+                w = 8.1, h = 9.0, title = "Per-sample GSVA signatures (Hallmark)")
 p2 <- wrap_plots(
   pA3,
   p_pca,
@@ -150,17 +163,17 @@ save_plate(p2, "figure3", 16.5, 9.5)
 # hero: the pairwise volcano grid; supporting: overlap + flow views
 # 16 x 9.5, design AAABBB/CCDDEE (6 cols, 2 rows): top row A|B halves (~8 x 4.6),
 # bottom row C|D|E thirds (~5.3 x 4.6). Overlap heatmaps rendered to fill their cells.
-pB4 <- hm_panel(fig_upset(D$setlist, min_size = 1), w = 7.7, h = 4.3,
+pB4 <- hm_panel(fig_upset(D$setlist, min_size = 1), w = 7.9, h = 4.5,
                 title = "Significant-gene overlap (UpSet)")
-pC4 <- hm_panel(fig_venn(D$setlist[1:3]), w = 5.1, h = 4.2,
+pC4 <- hm_panel(fig_venn(D$setlist[1:3]), w = 5.3, h = 4.4,
                 title = "Significant-gene overlap (Venn)")
-pD4 <- hm_panel(fig_lfc_heatmap(D$dfs, n_genes = 40, show_title = FALSE), w = 5.1, h = 4.2,
+pD4 <- hm_panel(fig_lfc_heatmap(D$dfs, n_genes = 40, show_title = FALSE), w = 5.3, h = 4.4,
                 title = "Log2 fold-change across contrasts")
 p3 <- wrap_plots(
-  gg(fig_volcano_grid(D$dfs, n_label = 2, ncol = 2, mode = "publication"),
+  gg_b(fig_volcano_grid(D$dfs, n_label = 2, ncol = 2, mode = "publication"),
      "Pairwise differential expression"),
   pB4, pC4, pD4,
-  gg(fig_contrast_alluvial(D$dfs, mode = "publication"),
+  gg_b(fig_contrast_alluvial(D$dfs, mode = "publication"),
      "Direction of change across contrasts"),
   design = "AAABBB\nCCDDEE", heights = c(1, 1)) + plot_annotation(tag_levels = "A") & tag_theme
 save_plate(p3, "figure4", 16, 9.5)
