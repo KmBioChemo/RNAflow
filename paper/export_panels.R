@@ -108,8 +108,11 @@ save_gg(fig_pval_hist(D$a_res, mode = "publication") + theme_bare(),            
 save_hm(fig_heatmap(D$a_vst, D$a_res, D$am, n_genes = 32, show_colnames = FALSE,
                     direction_annotation = TRUE, show_annotation_names = FALSE,
                     show_title = FALSE),                                          dir2, "d_heatmap", 5.6, 4.9)
-# GSEA as a bubble/dot plot (NES on x, set size = dot size, colour = -log10 FDR)
-save_gg(fig_enrich_dot(D$a_gsea, n = 10, mode = "publication") + theme_bare(),
+# GSEA as a bubble/dot plot (NES on x, set size = dot size, colour = -log10 FDR);
+# legends stacked vertically on the right
+save_gg(fig_enrich_dot(D$a_gsea, n = 10, mode = "publication") + theme_bare() +
+          theme(legend.position = "right", legend.box = "vertical",
+                legend.direction = "vertical"),
         dir2, "e_gsea", 5.6, 4.9)
 save_gg(fig_enrich_bar(D$a_ora, n = 10, mode = "publication") + theme_bare() +
           theme(legend.position = "none"),                                       dir2, "f_ora", 5.6, 4.9)
@@ -132,7 +135,8 @@ save_gg(p_pca, dir3, "b_pca", 4.6, 4.7)
 # soft-threshold: two facets -> render wide enough that the power labels breathe
 save_gg(fig_soft_threshold(D$sft, mode = "publication") + theme_bare(), dir3, "c_soft", 5.0, 4.4)
 save_gg(fig_module_trait(D$mt, mode = "publication") + theme_bare() +
-          theme(axis.text.x = element_text(angle = 40, hjust = 1, size = 9)),
+          theme(axis.text.x = element_text(angle = 40, hjust = 1, size = 9),
+                legend.position = "right", legend.direction = "vertical"),
         dir3, "d_modtrait", 4.8, 4.6)
 # module enrichment: dense panel -> smaller base font, rotated coloured module
 # labels, compact legends, rendered wide so nothing is clipped
@@ -140,10 +144,11 @@ p2E <- if (!is.null(D$mod_enrich))
   fig_module_enrichment(D$mod_enrich, max_terms = 14, mode = "publication") + theme_bare(11) +
     theme(axis.text.x = ggtext::element_markdown(size = 9, angle = 30, hjust = 1),
           axis.text.y = element_text(size = 9),
+          legend.position = "right", legend.box = "vertical", legend.direction = "vertical",
           legend.text = element_text(size = 8), legend.title = element_text(size = 9, face = "bold"),
           legend.key.size = unit(9, "pt")) else
   fig_module_sizes(D$wg, mode = "publication") + theme_bare()
-save_gg(p2E, dir3, "e_modenrich", 6.2, 5.0)
+save_gg(p2E, dir3, "e_modenrich", 6.0, 4.8)
 
 ## ===== figure 4 : multi-contrast comparison (TCGA) ==========================
 dir4 <- "paper/panels/figure4"; dir.create(dir4, showWarnings = FALSE, recursive = TRUE)
