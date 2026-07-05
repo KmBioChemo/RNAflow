@@ -78,11 +78,24 @@ gg_b <- function(p, title) p + labs(title = title) + theme_2026() +
         legend.margin = margin(0, 0, 0, 0), legend.box.spacing = unit(2, "pt"))
 titled <- function(g, t) g + labs(title = t) +
   theme(plot.title = element_text(size = 11, face = "bold", margin = margin(b = 4)))
+# Crop the uniform white border off a rendered raster so the actual content
+# (heatmap body, dendrograms, legend, venn circles...) reaches the edges -> the
+# panel is ENLARGED, not stretched.
+.trim_white <- function(img, tol = 0.985, pad = 5) {
+  d <- dim(img)
+  if (length(d) == 2) img <- array(img, c(d, 1))
+  ch <- min(dim(img)[3], 3)
+  ink <- Reduce(`|`, lapply(seq_len(ch), function(k) img[, , k] < tol))
+  rows <- which(rowSums(ink) > 0); cols <- which(colSums(ink) > 0)
+  if (!length(rows) || !length(cols)) return(img)
+  r1 <- max(1, min(rows) - pad); r2 <- min(dim(img)[1], max(rows) + pad)
+  c1 <- max(1, min(cols) - pad); c2 <- min(dim(img)[2], max(cols) + pad)
+  img[r1:r2, c1:c2, , drop = FALSE]
+}
 # Render a heatmap object (pheatmap / ComplexHeatmap / grid grob) to a PNG sized
-# to its target cell, then embed it FILLING the panel. pheatmap & ComplexHeatmap
-# reflow to fill whatever device size they are drawn to, so this uses all the
-# available space with no letterboxing and no deformation (unlike as.ggplot(),
-# which preserves the object's own fixed-unit layout and leaves white margins).
+# to its target cell, trim the surrounding white, then embed it with its aspect
+# LOCKED (coord_fixed): the content is scaled as large as the cell allows and can
+# never be stretched. Rendering near the cell's aspect keeps letterboxing tiny.
 hm_panel <- function(obj, w, h, title = NULL, dpi = 320) {
   f <- tempfile(fileext = ".png")
   ragg::agg_png(f, width = w, height = h, units = "in", res = dpi, background = "white")
@@ -90,10 +103,13 @@ hm_panel <- function(obj, w, h, title = NULL, dpi = 320) {
   else if (inherits(obj, c("Heatmap", "HeatmapList"))) ComplexHeatmap::draw(obj)
   else grid::grid.draw(obj)
   grDevices::dev.off()
-  img <- png::readPNG(f)
+  img <- .trim_white(png::readPNG(f))
+  W <- dim(img)[2]; H <- dim(img)[1]
   g <- ggplot() +
-    annotation_custom(grid::rasterGrob(img, width = unit(1, "npc"), height = unit(1, "npc"))) +
-    coord_cartesian(expand = FALSE) + theme_void() + theme(plot.margin = margin(2, 2, 2, 2))
+    annotation_custom(grid::rasterGrob(img, width = unit(1, "npc"), height = unit(1, "npc")),
+                      0, W, 0, H) +
+    coord_fixed(1, xlim = c(0, W), ylim = c(0, H), expand = FALSE, clip = "off") +
+    theme_void() + theme(plot.margin = margin(1, 1, 1, 1))
   if (!is.null(title)) g <- g + ggtitle(title) +
     theme(plot.title = element_text(size = 11, face = "bold", family = FONT,
                                     hjust = 0, margin = margin(b = 2)))
