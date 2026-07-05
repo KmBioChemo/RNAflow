@@ -25,6 +25,8 @@ NULL
 #' @param show_rownames,show_colnames display row / column labels
 #' @param show_dend_rows,show_dend_cols display dendrograms
 #' @param show_legend,annotation_legend display legends
+#' @param show_annotation_names show the annotation track names (e.g. "condition",
+#'   "Direction") beside the tracks; when FALSE they appear only in the legend
 #' @param direction_annotation add up/down row annotation
 #' @param col_dir_up,col_dir_down colors for direction annotation
 #' @param ann_title custom column annotation header (e.g. "Group")
@@ -40,6 +42,7 @@ fig_heatmap <- function(counts_mat, res, metadata,
                         show_rownames = TRUE, show_colnames = TRUE,
                         show_dend_rows = TRUE, show_dend_cols = TRUE,
                         show_legend = TRUE, annotation_legend = TRUE,
+                        show_annotation_names = TRUE,
                         direction_annotation = FALSE,
                         col_dir_up = "#C0392B", col_dir_down = "#2980B9",
                         ann_title = "") {
@@ -115,6 +118,8 @@ fig_heatmap <- function(counts_mat, res, metadata,
     annotation_row = ann_row,
     annotation_colors = if (length(ann_clr) > 0) ann_clr else NULL,
     annotation_legend = isTRUE(annotation_legend),
+    annotation_names_col = isTRUE(show_annotation_names),
+    annotation_names_row = isTRUE(show_annotation_names),
     fontsize_row = max(5, 8 - floor(length(top) / 20)),
     fontsize_col = 9, fontsize = 9,
     border_color = NA,
