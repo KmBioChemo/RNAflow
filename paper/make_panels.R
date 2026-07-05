@@ -9,7 +9,7 @@
 #   Rscript paper/make_panels.R
 suppressPackageStartupMessages({
   if (!suppressWarnings(require(RNAflow, quietly = TRUE))) devtools::load_all(".", quiet = TRUE)
-  library(ggplot2); library(patchwork); library(ragg)
+  library(ggplot2); library(patchwork); library(ragg); library(png)
 })
 set.seed(1)
 # Portable Helvetica-metric font: Helvetica/Arial on macOS/Windows, Liberation Sans on Linux.
@@ -69,10 +69,26 @@ tag_theme <- theme(plot.tag = element_text(size = 16, face = "bold", colour = "b
 gg <- function(p, title) p + labs(title = title) + theme_2026()
 titled <- function(g, t) g + labs(title = t) +
   theme(plot.title = element_text(size = 11, face = "bold", margin = margin(b = 4)))
-hm <- function(obj) {
-  if (inherits(obj, "pheatmap")) ggplotify::as.ggplot(obj$gtable)
-  else ggplotify::as.ggplot(grid::grid.grabExpr(
-    if (inherits(obj, c("Heatmap","HeatmapList"))) ComplexHeatmap::draw(obj) else grid::grid.draw(obj)))
+# Render a heatmap object (pheatmap / ComplexHeatmap / grid grob) to a PNG sized
+# to its target cell, then embed it FILLING the panel. pheatmap & ComplexHeatmap
+# reflow to fill whatever device size they are drawn to, so this uses all the
+# available space with no letterboxing and no deformation (unlike as.ggplot(),
+# which preserves the object's own fixed-unit layout and leaves white margins).
+hm_panel <- function(obj, w, h, title = NULL, dpi = 320) {
+  f <- tempfile(fileext = ".png")
+  ragg::agg_png(f, width = w, height = h, units = "in", res = dpi, background = "white")
+  if (inherits(obj, "pheatmap")) grid::grid.draw(obj$gtable)
+  else if (inherits(obj, c("Heatmap", "HeatmapList"))) ComplexHeatmap::draw(obj)
+  else grid::grid.draw(obj)
+  grDevices::dev.off()
+  img <- png::readPNG(f)
+  g <- ggplot() +
+    annotation_custom(grid::rasterGrob(img, width = unit(1, "npc"), height = unit(1, "npc"))) +
+    coord_cartesian(expand = FALSE) + theme_void() + theme(plot.margin = margin(2, 2, 2, 2))
+  if (!is.null(title)) g <- g + ggtitle(title) +
+    theme(plot.title = element_text(size = 11, face = "bold", family = FONT,
+                                    hjust = 0, margin = margin(b = 3)))
+  g
 }
 save_plate <- function(pl, name, w, h) {
   ggsave(paste0("paper/figures/", name, ".png"), pl, width = w, height = h, dpi = 300,
@@ -85,20 +101,21 @@ save_plate <- function(pl, name, w, h) {
 ## ---- figure2: differential expression & enrichment (airway) -----------
 # grouped: DE diagnostics (volcano/MA/p-value) then enrichment (GSEA ridge/ORA)
 sets <- get_gene_sets("human", collection = "H")
+# 16 x 10, 2x3 grid -> each cell ~ 5.33w x 5.0h; heatmap rendered to fill its cell (minus title)
+pD2 <- hm_panel(fig_heatmap(D$a_vst, D$a_res, D$am, n_genes = 30, show_colnames = FALSE,
+                            direction_annotation = TRUE, show_title = FALSE),
+                w = 5.3, h = 4.55, title = "Top differential genes")
 p1 <- wrap_plots(
-  gg(fig_volcano(D$a_res, n_label = 8, mode = "publication"),
-     "Differential expression (airway)"),
-  gg(fig_ma(D$a_res, mode = "publication"), "MA plot (airway)"),
-  gg(fig_pval_hist(D$a_res, mode = "publication"), "P-value distribution (airway)"),
-  titled(hm(fig_heatmap(D$a_vst, D$a_res, D$am, n_genes = 30, show_colnames = FALSE,
-                        direction_annotation = TRUE, show_title = FALSE)),
-         "Top differential genes (airway)"),
+  gg(fig_volcano(D$a_res, n_label = 8, mode = "publication"), "Differential expression"),
+  gg(fig_ma(D$a_res, mode = "publication"), "MA plot"),
+  gg(fig_pval_hist(D$a_res, mode = "publication"), "P-value histogram"),
+  pD2,
   gg(fig_gsea_ridge(D$a_res, sets, D$a_gsea, n = 10, mode = "publication"),
-     "Gene-set enrichment (Hallmark)"),
+     "Gene-set enrichment (GSEA)"),
   gg(fig_enrich_bar(D$a_ora, n = 10, mode = "publication"),
      "Over-representation (GO BP)"),
   ncol = 3) + plot_annotation(tag_levels = "A") & tag_theme
-save_plate(p1, "figure2", 17, 11)
+save_plate(p1, "figure2", 16, 10)
 
 ## ---- figure3: molecular landscape & co-expression (TCGA) --------------
 # hero: the per-sample GSVA signature heatmap; supporting: PCA + WGCNA
@@ -106,20 +123,23 @@ sc <- merge(D$pca$scores, D$tm, by = "sample")
 p_pca <- ggplot(sc, aes(PC1, PC2, colour = cancer_type)) +
   geom_point(size = 2.4, alpha = .92, stroke = 0) +
   scale_colour_manual(values = OI, name = "Cancer type") +
-  labs(title = "Principal-component analysis (TCGA)",
+  labs(title = "Principal-component analysis",
        x = sprintf("PC1 (%.1f%%)", D$pca$pct[1]), y = sprintf("PC2 (%.1f%%)", D$pca$pct[2])) +
   theme_2026()
 p2E <- if (!is.null(D$mod_enrich))
   (gg(fig_module_enrichment(D$mod_enrich, max_terms = 15, mode = "publication"),
-      "Enrichment of co-expression modules (GO BP)") +
+      "Module enrichment (GO BP)") +
      theme(axis.text.x = ggtext::element_markdown(size = 7))) else
-  gg(fig_module_sizes(D$wg, mode = "publication"), "WGCNA module sizes")
+  gg(fig_module_sizes(D$wg, mode = "publication"), "Module sizes")
+# 16.5 x 9.5, design AABC/AADE (4 cols, 2 rows): A = GSVA hero (cols1-2, both rows)
+# -> ~8.0w x 9.0h; rendered to fill that tall cell. B..E are single ~4.0 x 4.5 cells.
+pA3 <- hm_panel(fig_gsva_heatmap(D$gv, D$tm, group_by = "cancer_type", n_top = 45, title = ""),
+                w = 7.9, h = 8.6, title = "Per-sample GSVA signatures (Hallmark)")
 p2 <- wrap_plots(
-  titled(hm(fig_gsva_heatmap(D$gv, D$tm, group_by = "cancer_type", n_top = 45, title = "")),
-         "Per-sample GSVA signatures (Hallmark; TCGA)"),
+  pA3,
   p_pca,
-  gg(fig_soft_threshold(D$sft, mode = "publication"), "WGCNA soft-threshold selection"),
-  gg(fig_module_trait(D$mt, mode = "publication"), "WGCNA module-trait correlation") +
+  gg(fig_soft_threshold(D$sft, mode = "publication"), "Soft-threshold selection"),
+  gg(fig_module_trait(D$mt, mode = "publication"), "Module-trait correlation") +
     theme(axis.text.x = element_text(angle = 40, hjust = 1, size = 6.5)),
   p2E,
   # GSVA heatmap needs many rows -> tall hero on the left; four uniform-height panels on the right
@@ -128,15 +148,19 @@ save_plate(p2, "figure3", 16.5, 9.5)
 
 ## ---- figure4: multi-contrast comparison (TCGA) ------------------------
 # hero: the pairwise volcano grid; supporting: overlap + flow views
+# 16 x 9.5, design AAABBB/CCDDEE (6 cols, 2 rows): top row A|B halves (~8 x 4.6),
+# bottom row C|D|E thirds (~5.3 x 4.6). Overlap heatmaps rendered to fill their cells.
+pB4 <- hm_panel(fig_upset(D$setlist, min_size = 1), w = 7.7, h = 4.3,
+                title = "Significant-gene overlap (UpSet)")
+pC4 <- hm_panel(fig_venn(D$setlist[1:3]), w = 5.1, h = 4.2,
+                title = "Significant-gene overlap (Venn)")
+pD4 <- hm_panel(fig_lfc_heatmap(D$dfs, n_genes = 40, show_title = FALSE), w = 5.1, h = 4.2,
+                title = "Log2 fold-change across contrasts")
 p3 <- wrap_plots(
   gg(fig_volcano_grid(D$dfs, n_label = 2, ncol = 2, mode = "publication"),
-     "Pairwise differential expression (TCGA)"),
-  titled(hm(fig_upset(D$setlist, min_size = 1)), "Significant-gene overlap (UpSet)"),
-  titled(hm(fig_venn(D$setlist[1:3])), "Significant-gene overlap (Venn)"),
-  titled(hm(fig_lfc_heatmap(D$dfs, n_genes = 40, show_title = FALSE)),
-         "Log2 fold-change across contrasts"),
+     "Pairwise differential expression"),
+  pB4, pC4, pD4,
   gg(fig_contrast_alluvial(D$dfs, mode = "publication"),
      "Direction of change across contrasts"),
-  # two rows of equal height; the 4-column LFC heatmap (D) gets a narrow slot so it is not stretched
-  design = "AAABBB\nCCDEEE", heights = c(1, 1)) + plot_annotation(tag_levels = "A") & tag_theme
-save_plate(p3, "figure4", 15.5, 9)
+  design = "AAABBB\nCCDDEE", heights = c(1, 1)) + plot_annotation(tag_levels = "A") & tag_theme
+save_plate(p3, "figure4", 16, 9.5)
