@@ -7,12 +7,17 @@
 # Run from the package root:  Rscript paper/make_validation.R
 suppressPackageStartupMessages({
   if (!suppressWarnings(require(RNAflow, quietly = TRUE))) devtools::load_all(".", quiet = TRUE)
-  library(ggplot2); library(patchwork)
+  library(ggplot2); library(patchwork); library(ragg)
 })
 set.seed(1)
+FONT <- { pref <- c("Helvetica","Arial","Liberation Sans","DejaVu Sans")
+  fams <- tryCatch(systemfonts::system_fonts()$family, error=function(e) character(0))
+  hit <- pref[pref %in% fams]; if (length(hit)) hit[1] else "sans" }
+tag_theme <- theme(plot.tag = element_text(size = 16, face = "bold", colour = "black"))
 ext <- function(f) system.file("extdata", f, package = "RNAflow")
 
-theme_v <- theme_publication() + theme(plot.title = element_text(size = 12, face = "bold"))
+theme_v <- theme_publication() + theme(text = element_text(family = FONT),
+             plot.title = element_text(size = 12, face = "bold"))
 idline <- geom_abline(slope = 1, intercept = 0, linetype = 2, colour = "#B0B7C0")
 
 ac <- read_counts(ext("demo_airway_counts.csv"))
@@ -37,7 +42,7 @@ tmpR <- tempfile(fileext = ".R")
 writeLines(c(script,
              'robj <- mget(ls(pattern="^res_"))[[1]]',
              sprintf('write.csv(robj, "%s", row.names=FALSE)', out_csv)), tmpR)
-rc <- system2("Rscript", tmpR, stdout = FALSE, stderr = FALSE)
+rc <- system2(file.path(R.home("bin"), "Rscript"), tmpR, stdout = FALSE, stderr = FALSE)
 res_rep <- read.csv(out_csv, stringsAsFactors = FALSE)
 m1 <- merge(res_orig[, c("gene", "log2FoldChange", "padj")],
             res_rep[, c("gene", "log2FoldChange", "padj")], by = "gene",
@@ -112,16 +117,20 @@ pC <- ggplot(mc, aes(logFC, log2FoldChange)) + idline +
   labs(title = "DESeq2 vs limma-voom (airway)",
        subtitle = "concordance with an independent method",
        x = "log2FC (limma-voom)", y = "log2FC (RNAflow / DESeq2)") + theme_v
-fig4 <- (pA | pB | pC) + patchwork::plot_annotation(tag_levels = "A")
-ggsave("paper/figures/figure5.png", fig4, width = 14, height = 4.6, dpi = 300, bg = "white")
-ggsave("paper/figures/figure5.pdf", fig4, width = 14, height = 4.6, bg = "white")
+fig4 <- (pA | pB | pC) + patchwork::plot_annotation(tag_levels = "A") & tag_theme
+ggsave("paper/figures/figure5.png", fig4, width = 14, height = 4.6, dpi = 300, bg = "white",
+       device = ragg::agg_png)
+ggsave("paper/figures/figure5.pdf", fig4, width = 14, height = 4.6, bg = "white",
+       device = grDevices::cairo_pdf)
 cat("Wrote figure5\n")
 
 # individual plot PDFs (one plot per file)
 dir.create("paper/figures/panels", showWarnings = FALSE, recursive = TRUE)
 ind <- list(F5A_reproducibility_roundtrip = pA, F5B_allpairwise_consistency = pB, F5C_concordance_limma = pC)
 for (nm in names(ind)) {
-  ggsave(paste0("paper/figures/panels/", nm, ".pdf"), ind[[nm]], width = 5.2, height = 4.6)
-  ggsave(paste0("paper/figures/panels/", nm, ".png"), ind[[nm]], width = 5.2, height = 4.6, dpi = 300, bg = "white")
+  ggsave(paste0("paper/figures/panels/", nm, ".pdf"), ind[[nm]], width = 5.2, height = 4.6,
+         device = grDevices::cairo_pdf)
+  ggsave(paste0("paper/figures/panels/", nm, ".png"), ind[[nm]], width = 5.2, height = 4.6,
+         dpi = 300, bg = "white", device = ragg::agg_png)
 }
 cat("Wrote validation panels\n")
