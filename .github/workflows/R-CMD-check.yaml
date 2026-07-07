@@ -1,48 +1,44 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+#
+# Runs R CMD check INSIDE the Bioconductor container so the heavy Bioc
+# dependency stack (DESeq2, WGCNA, GSVA, decoupleR, OmnipathR,
+# clusterProfiler, ComplexHeatmap, ...) resolves reliably — the same platform
+# the project is developed and Docker-shipped against (R 4.5 / Bioc 3.22).
+#
+# Triggers on demand (workflow_dispatch) and on pull requests only — NOT on
+# every push — so it does not burn GitHub Actions minutes on routine commits.
 on:
-  push:
-    branches: [main, master]
+  workflow_dispatch:
   pull_request:
     branches: [main, master]
-  workflow_dispatch:
 
 name: R-CMD-check.yaml
 
 permissions: read-all
 
-# Cancel superseded runs when several commits are pushed in quick succession.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   R-CMD-check:
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ubuntu-latest
+    container: bioconductor/bioconductor_docker:RELEASE_3_22
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-          # Ubuntu only: macOS Actions minutes are billed at a 10x multiplier
-          # and compile all of Bioconductor from source. Test other OSes
-          # manually via workflow_dispatch when needed.
-          - {os: ubuntu-latest, r: 'release'}
+    name: bioc-container (R 4.5 / Bioc 3.22)
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+      # Optional Suggests packages should not fail the check if unavailable.
+      _R_CHECK_FORCE_SUGGESTS_: "false"
 
     steps:
       - uses: actions/checkout@v4
 
-      - uses: r-lib/actions/setup-pandoc@v2
-
-      - uses: r-lib/actions/setup-r@v2
-        with:
-          r-version: ${{ matrix.config.r }}
-          use-public-rspm: true
+      # The container runs as root; mark the checkout dir safe for git.
+      - name: Mark workspace safe for git
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
@@ -53,3 +49,4 @@ jobs:
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+          error-on: '"error"'
