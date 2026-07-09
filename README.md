@@ -13,6 +13,22 @@
 
 Supported organisms: **human**, **mouse**, **rat**.
 
+![RNAflow overview — from counts to interpretable biology](paper/figures/figure1.png)
+
+## Gallery
+
+**Differential expression** — volcano, MA plot, p-value diagnostics, top-gene
+heatmap and functional enrichment (GSEA + GO), from the bundled *airway* demo
+(dexamethasone vs control).
+
+![Differential expression and enrichment](paper/figures/figure2.png)
+
+**Sample overview & networks** — per-sample GSVA signatures, PCA, and WGCNA
+co-expression (soft-threshold selection, module–trait correlation, module
+enrichment), on the 8-cancer-type TCGA demo.
+
+![GSVA, PCA and WGCNA](paper/figures/figure3.png)
+
 ## Why RNAflow?
 
 Most exploratory RNA-seq tools are either notebook-stuck (great for one project, awful to reuse) or Shiny one-shots (everything in `app.R`, no tests, no reuse). RNAflow is structured as a proper R package with:
