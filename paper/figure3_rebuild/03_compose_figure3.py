@@ -1,9 +1,12 @@
-import os, matplotlib.pyplot as plt
+import os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "plate"))
+import matplotlib.pyplot as plt
 from style import set_style, load_trim, place_panel
-H="/tmp/claude-0/-home-user-qPCR-Analyst/d6318127-0541-5899-b8ef-8af0599e09a0/scratchpad/plate_exp"
-REPO="/workspace/rnaflow/paper/figures"
+HERE = os.path.dirname(os.path.abspath(__file__))
+PAN = os.path.join(HERE, "panels")
+REPO = os.path.join(HERE, "..", "figures")
 set_style()
-banner=load_trim(os.path.join(H,"a_gsva_b25.png")); strip=load_trim(os.path.join(H,"fig3_strip.png"))
+banner=load_trim(os.path.join(PAN,"a_gsva_b25.png")); strip=load_trim(os.path.join(PAN,"fig3_strip.png"))
 W=15.0; ml=mr=0.12; mt=0.30; mb=0.10; gy=0.30; th=0.30
 bw=W-ml-mr
 bh=bw/(banner.shape[1]/banner.shape[0]); sh=bw/(strip.shape[1]/strip.shape[0])

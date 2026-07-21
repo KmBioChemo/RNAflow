@@ -8,9 +8,14 @@ under `paper/figures/`. The manuscript text itself is maintained separately
 
 Sub-panels are produced **directly from the app / the package's own figure
 functions** (Export bar: Format = PDF for vector; W/H in inches; DPI = 300/600),
-then composed into plates. Reference renders of every individual panel are in
-`paper/figures/gallery/` (numbers referenced below); the composed plates live in
-`paper/figures/figure2–5.{png,pdf}`.
+then composed into plates. The composed figures live in
+`paper/figures/figure1–5.{png,pdf}` (+ `figureS1`).
+
+> **Authoritative build.** Each figure is now rebuilt by its own
+> `paper/figureN_rebuild/` pipeline (see `paper/README.md`); the layout notes and
+> the `Gallery` panel-ID column below are the **original planning spec** and are
+> kept for provenance — the retired `paper/figures/gallery/` reference renders and
+> the old Python composer have since been removed.
 
 ## The narrative these figures must carry
 
@@ -49,8 +54,7 @@ Export type: **ggplot/pheatmap** tabs export true 300 DPI + vector PDF directly;
 Schematic, built separately — see `paper/GRAPHICAL_ABSTRACT.md` for the full
 brief and the ready-to-use image prompt. One tool, from a count matrix to a
 reproducible multi-layered interpretation. Saved as `paper/figures/figure1.png`
-(+ `figure1.pdf`). The placeholder schematic from `paper/make_overview.R` is a
-stand-in until the final artwork is dropped in.
+(+ `figure1.pdf`) — author-supplied artwork.
 
 ## Figure 2 — Differential expression & enrichment on a known study (airway)
 
@@ -59,8 +63,8 @@ biology — canonical glucocorticoid-response genes and the anti-inflammatory
 programme — and its enrichment ranking on the preserved Wald statistic behaves
 correctly. This is the correctness anchor for everything that follows.
 
-Layout: balanced **2 × 3 grid**, all airway. Panels: `export_panels.R`;
-plate composed by `paper/plate/compose.py` (writes `figure2`).
+Layout: balanced **2 × 3 grid**, all airway. Built by `paper/figure2_rebuild/`
+(panels rebuilt from the `export_panels.R` cache, then composed).
 
 | Panel | Content | Function | Gallery |
 |---|---|---|---|
@@ -78,8 +82,9 @@ per-sample signatures, sample separation, and co-expression modules tied to
 phenotype. The **entire WGCNA workflow is kept together** (soft-threshold →
 module–trait → module enrichment) so the reader sees construction before payoff.
 
-Layout: **GSVA heatmap as hero** (spans the left 2×2). Panels: `export_panels.R`;
-plate composed by `paper/plate/compose.py` (writes `figure3`).
+Layout: **GSVA signatures as a landscape banner on top**, with the aligned
+analysis row (PCA · soft-threshold · module–trait · module enrichment) below.
+Built by `paper/figure3_rebuild/` (from the `export_panels.R` cache).
 
 | Panel | Content | Function | Gallery |
 |---|---|---|---|
@@ -97,8 +102,9 @@ plate composed by `paper/plate/compose.py` (writes `figure3`).
 **Claim:** with eight groups, the all-pairwise mode (one fit → all 28 contrasts)
 turns a pile of separate DE runs into a single comparative picture.
 
-Layout: **volcano grid + UpSet on top**, overlap/LFC/direction below. Panels:
-`export_panels.R`; plate composed by `paper/plate/compose.py` (writes `figure4`).
+Layout: two height-matched bands — **volcano grid | UpSet** on top, then
+**Venn | log2FC heatmap | direction** below. Built by `paper/figure4_rebuild/`
+(reuses the `export_panels.R` panels; the UpSet is a clean ggplot rebuild).
 
 | Panel | Content | Function | Gallery |
 |---|---|---|---|
@@ -170,8 +176,8 @@ mode**.
 
 **Global spec**
 - **Canvas:** full journal width (~180 mm). Sub-panels export as **vector PDF**;
-  bare panels are exported by `export_panels.R` and composed into plates by
-  `paper/plate/compose.py` (declarative layouts; see `paper/plate/README.md`).
+  bare panels are exported by `export_panels.R` and composed into plates by the
+  per-figure `paper/figureN_rebuild/` pipelines (shared style in `paper/plate/style.py`).
 - **Type:** one sans family (Inter/Helvetica); panel titles ~11 pt bold, axes
   ~8–9 pt.
 - **Tags:** `A B C …` top-left, 18 pt **bold**, accent green `#1D9E75`.
@@ -218,5 +224,5 @@ mode**.
 - Every figure function has a `publication` mode (8-pt font, no grid) — use it.
 - `export_panels.R` builds & caches the heavy objects in `paper/.panel_cache.rds`
   (delete the cache to force a recompute), then writes the bare panels.
-- Bare per-panel exports live in `paper/panels/<figure>/` (from `export_panels.R`,
-  `make_validation.R`, `make_supp_activity.R`). Gallery renders: `make_gallery.R`.
+- Bare per-panel exports reused by the rebuilds live in `paper/panels/figure4/`
+  and `paper/panels/figure5/` (from `export_panels.R` and `make_validation.R`).

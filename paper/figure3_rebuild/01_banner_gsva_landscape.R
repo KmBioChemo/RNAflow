@@ -1,5 +1,5 @@
 suppressWarnings(suppressMessages({ library(pheatmap); library(matrixStats); library(RColorBrewer); library(grid) }))
-OUT <- "/tmp/claude-0/-home-user-qPCR-Analyst/d6318127-0541-5899-b8ef-8af0599e09a0/scratchpad/plate_exp"
+OUT <- "paper/figure3_rebuild/panels"; dir.create(OUT, showWarnings = FALSE, recursive = TRUE)
 clean_term <- function(x){ x<-sub("^HALLMARK_","",x); gsub("_"," ",x) }
 D <- readRDS("paper/.panel_cache.rds")
 render_hm <- function(n_top,w,h,tag){

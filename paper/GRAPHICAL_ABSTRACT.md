@@ -59,5 +59,4 @@ Input conveys "reproducible / re-runnable".
 
 ## Slot it in
 Save the final artwork as **`paper/figures/figure1.png`** (and ideally a vector
-`figure1.pdf`). The placeholder schematic currently at that path (from
-`paper/make_overview.R`) is only a stand-in.
+`figure1.pdf`). The author-supplied graphical abstract currently lives at that path.
