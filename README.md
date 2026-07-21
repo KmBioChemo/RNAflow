@@ -1,7 +1,6 @@
 # RNAflow
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/KmBioChemo/RNAflow/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/KmBioChemo/RNAflow/actions/workflows/R-CMD-check.yaml)
 [![pkgdown](https://github.com/KmBioChemo/RNAflow/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/KmBioChemo/RNAflow/actions/workflows/pkgdown.yaml)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -14,6 +13,19 @@
 Supported organisms: **human**, **mouse**, **rat**.
 
 ![RNAflow overview — from counts to interpretable biology](paper/figures/figure1.png)
+
+## Contents
+
+- [Gallery](#gallery)
+- [Why RNAflow?](#why-rnaflow)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Input formats](#input-formats)
+- [Demo datasets](#demo-datasets)
+- [Roadmap](#roadmap)
+- [Limitations](#limitations)
+- [Development](#development)
+- [License](#license)
 
 ## Gallery
 
@@ -28,6 +40,18 @@ co-expression (soft-threshold selection, module–trait correlation, module
 enrichment), on the 8-cancer-type TCGA demo.
 
 ![GSVA, PCA and WGCNA](paper/figures/figure3.png)
+
+**Multi-contrast comparison** — a pairwise volcano grid, significant-gene
+overlap (UpSet + Venn), a cross-contrast log2 fold-change heatmap and the
+direction of change per contrast, on the 8-cancer-type TCGA demo.
+
+![Multi-contrast comparison](paper/figures/figure4.png)
+
+**Validation** — RNAflow reproduces its own results exactly (round-trip through
+the exported R script), all-pairwise contrasts match a single shared fit, and
+fold changes concord with limma-voom on the *airway* demo.
+
+![Validation](paper/figures/figure5.png)
 
 ## Why RNAflow?
 
