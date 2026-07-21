@@ -1,9 +1,11 @@
-# Durable panel exporter for the Python montage system (paper/plate/).
-# Writes each RNAflow figure panel (Fig 2-4) as a BARE, high-DPI PNG (no title,
-# no letter, tight-cropped) into paper/panels/<figure>/. Python (compose.py)
-# owns all lettering/titles/layout so the plates are homogeneous. Panels are the
-# tool's own outputs (fig_volcano, fig_heatmap, ...), never reconstructions.
-# Self-contained: builds paper/.panel_cache.rds on first run, then exports.
+# Panel exporter + analysis-cache builder for the figure pipeline.
+# Builds paper/.panel_cache.rds (DESeq2 / GSVA / WGCNA on the demo data) and
+# writes each RNAflow figure panel as a BARE, high-DPI PNG (no title, no letter,
+# tight-cropped) into paper/panels/<figure>/. The Figure 4 panels here are reused
+# directly by paper/figure4_rebuild/; the other figures are rebuilt from the
+# cache by their own paper/figureN_rebuild/ pipeline, which owns all lettering,
+# titles and layout. Panels are the tool's own outputs (fig_volcano,
+# fig_heatmap, ...), never reconstructions.
 # Run:  Rscript paper/export_panels.R
 suppressPackageStartupMessages({
   if (!suppressWarnings(require(RNAflow, quietly = TRUE))) devtools::load_all(".", quiet = TRUE)

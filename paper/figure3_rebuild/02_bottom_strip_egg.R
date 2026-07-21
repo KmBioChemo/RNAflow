@@ -1,5 +1,5 @@
 suppressWarnings(suppressMessages({ library(ggplot2); library(egg); library(grid) }))
-OUT <- "/tmp/claude-0/-home-user-qPCR-Analyst/d6318127-0541-5899-b8ef-8af0599e09a0/scratchpad/plate_exp"
+OUT <- "paper/figure3_rebuild/panels"; dir.create(OUT, showWarnings = FALSE, recursive = TRUE)
 FONT <- "Liberation Sans"
 `%||%` <- function(a,b) if(is.null(a)) b else a
 clean_term <- function(x){ x<-sub("^HALLMARK_","",x); gsub("_"," ",x) }

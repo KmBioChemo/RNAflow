@@ -88,8 +88,8 @@ jac <- length(intersect(sd, sl)) / length(union(sd, sl))
 cat(sprintf("[CONCORDANCE] n=%d  Pearson=%.3f  Spearman=%.3f  Jaccard(sig)=%.3f (DE:%d limma:%d shared:%d)\n",
             nrow(mc), co_r, co_rs, jac, length(sd), length(sl), length(intersect(sd, sl))))
 
-## ===== Figure 5 bare panels for the Python plate system (paper/plate/) ======
-# The composed Figure 5 is assembled by paper/plate/compose.py from these bare
+## ===== Figure 5 bare panels for the figure pipeline =========================
+# The composed Figure 5 is assembled by paper/figure5_rebuild/ from these bare
 # panels; this script only computes the validation and exports the panels.
 comma <- function(n) formatC(n, big.mark = ",", format = "d")
 # Rebuild the three scatters with no titles (Python owns lettering/titles),

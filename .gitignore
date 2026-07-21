@@ -21,5 +21,7 @@ paper/.panel_cache.rds
 paper/.activity_cache.rds
 paper/figures/plate*.pdf
 Rplots.pdf
+__pycache__/
+*.pyc
 # example outputs from README / generated-code snippets
 /volcano.pdf

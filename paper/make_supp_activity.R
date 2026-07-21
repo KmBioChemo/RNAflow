@@ -55,9 +55,10 @@ if (file.exists(cache)) {
                   nrow(D$act), D$net_rows))
 }
 
-## ---- bare panel for the Python plate system (paper/plate/) -----------------
-# The composed supplementary figure (figureS1) is assembled by compose.py from
-# this bare panel; no standalone plate is written here.
+## ---- activity cache + bare panel for the figure pipeline -------------------
+# The composed supplementary figure (figureS1) is rebuilt by
+# paper/figureS1_rebuild/ from the cached activity scores (paper/.activity_cache.rds);
+# the bare panel written here is a convenience preview, no standalone plate.
 suppressPackageStartupMessages({ library(ragg); library(png) })
 FONT <- { pref <- c("Helvetica","Arial","Liberation Sans","DejaVu Sans")
   fams <- tryCatch(systemfonts::system_fonts()$family, error=function(e) character(0))
