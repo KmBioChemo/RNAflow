@@ -3,7 +3,7 @@
   "@type": "SoftwareSourceCode",
   "identifier": "RNAflow",
   "name": "RNAflow: An Interactive Shiny Platform for End-to-End RNA-seq Analysis",
-  "version": "0.14.2",
+  "version": "0.16.3",
   "description": "A modular Shiny application packaged as an R package for end-to-end bulk RNA-seq analysis: differential expression (DESeq2), QC diagnostics, PCA/UMAP/3D PCA, a linked volcano-table explorer, multi-contrast comparison, functional enrichment (GSEA/ORA), co-expression networks (WGCNA), transcription-factor and pathway activity (decoupleR), per-sample gene-set signatures (GSVA/ssGSEA), optional AI-assisted interpretation, and reproducible R-script and HTML report generation.",
   "applicationCategory": "Bioinformatics",
   "programmingLanguage": {
