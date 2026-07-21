@@ -20,5 +20,8 @@ vignettes/*_files/
 Rplots.pdf
 __pycache__/
 *.pyc
+# local analysis caches (never committed)
+paper/.panel_cache.rds
+paper/.activity_cache.rds
 # example outputs from README / generated-code snippets
 /volcano.pdf
