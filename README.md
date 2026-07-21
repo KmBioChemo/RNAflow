@@ -12,8 +12,6 @@
 
 Supported organisms: **human**, **mouse**, **rat**.
 
-![RNAflow overview — from counts to interpretable biology](paper/figures/figure1.png)
-
 ## Contents
 
 - [Gallery](#gallery)

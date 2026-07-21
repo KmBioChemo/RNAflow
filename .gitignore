@@ -16,10 +16,7 @@ vignettes/*.html
 vignettes/*_files/
 *_cache/
 
-# heavy caches + transient render outputs (regenerable from the paper/ scripts)
-paper/.panel_cache.rds
-paper/.activity_cache.rds
-paper/figures/plate*.pdf
+# transient render outputs
 Rplots.pdf
 __pycache__/
 *.pyc
