@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use RNAflow, please cite it using this metadata."
-title: "RNAflow: An Interactive Shiny Platform for End-to-End RNA-seq Analysis"
+title: "RNAflow: An Interactive and Reproducible Platform for Downstream Bulk RNA-seq Analysis"
 type: software
 authors:
   - family-names: Matmat

@@ -237,7 +237,13 @@ run_deseq2_all_pairs <- function(counts, meta, design, design_var = NULL,
     if (isTRUE(shrink)) {
       shr <- tryCatch(
         DESeq2::lfcShrink(dds, contrast = ct, type = shrink_type, quiet = TRUE),
-        error = function(e) NULL)
+        error = function(e) {
+          warning(sprintf("LFC shrinkage failed for contrast %s vs %s (%s); ",
+                          trt, ref, conditionMessage(e)),
+                  "reporting unshrunken log2 fold changes for this contrast.",
+                  call. = FALSE)
+          NULL
+        })
       if (!is.null(shr)) {
         ii <- match(rownames(res), rownames(shr))
         res$log2FoldChange <- shr$log2FoldChange[ii]
