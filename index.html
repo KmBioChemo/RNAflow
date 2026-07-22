@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,12 +60,48 @@
 <blockquote>
 <p>End-to-end bulk RNA-seq analysis platform — interactive Shiny app, packaged as an R package.</p>
 </blockquote>
-<p><strong>RNAflow</strong> is a modular Shiny application built as a proper R package for end-to-end bulk RNA-seq analysis. It takes raw count matrices and sample metadata as input and provides differential expression (DESeq2), QC diagnostics, multi-contrast comparisons, functional enrichment (GSEA / ORA), co-expression network analysis (WGCNA), publication-ready figures, and reproducible R-script / HTML report / Methods-paragraph export.</p>
+<p><strong>RNAflow</strong> is a modular Shiny application built as a proper R package for end-to-end bulk RNA-seq analysis. It takes raw count matrices and sample metadata as input and provides differential expression (DESeq2), QC diagnostics, sample overviews (PCA / UMAP / 3D PCA), a linked volcano-table explorer, multi-contrast comparisons, functional enrichment (GSEA / ORA, with an interactive enrichment network), co-expression network analysis (WGCNA), transcription-factor and pathway activity inference (decoupleR), per-sample gene-set signatures (GSVA / ssGSEA), optional AI-assisted interpretation, publication-ready figures, and reproducible R-script / HTML report / Methods-paragraph export.</p>
 <p>Supported organisms: <strong>human</strong>, <strong>mouse</strong>, <strong>rat</strong>.</p>
+<div class="section level2">
+<h2 id="contents">Contents<a class="anchor" aria-label="anchor" href="#contents"></a>
+</h2>
+<ul>
+<li><a href="#gallery">Gallery</a></li>
+<li><a href="#why-rnaflow">Why RNAflow?</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#input-formats">Input formats</a></li>
+<li><a href="#demo-datasets">Demo datasets</a></li>
+<li><a href="#roadmap">Roadmap</a></li>
+<li><a href="#limitations">Limitations</a></li>
+<li><a href="#development">Development</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="gallery">Gallery<a class="anchor" aria-label="anchor" href="#gallery"></a>
+</h2>
+<p><strong>Differential expression</strong> — volcano, MA plot, p-value diagnostics, top-gene heatmap and functional enrichment (GSEA + GO), from the bundled <em>airway</em> demo (dexamethasone vs control).</p>
+<div class="float">
+<img src="paper/figures/figure2.png" alt="Differential expression and enrichment"><div class="figcaption">Differential expression and enrichment</div>
+</div>
+<p><strong>Sample overview &amp; networks</strong> — per-sample GSVA signatures, PCA, and WGCNA co-expression (soft-threshold selection, module–trait correlation, module enrichment), on the 8-cancer-type TCGA demo.</p>
+<div class="float">
+<img src="paper/figures/figure3.png" alt="GSVA, PCA and WGCNA"><div class="figcaption">GSVA, PCA and WGCNA</div>
+</div>
+<p><strong>Multi-contrast comparison</strong> — a pairwise volcano grid, significant-gene overlap (UpSet + Venn), a cross-contrast log2 fold-change heatmap and the direction of change per contrast, on the 8-cancer-type TCGA demo.</p>
+<div class="float">
+<img src="paper/figures/figure4.png" alt="Multi-contrast comparison"><div class="figcaption">Multi-contrast comparison</div>
+</div>
+<p><strong>Validation</strong> — RNAflow reproduces its own results exactly (round-trip through the exported R script), all-pairwise contrasts match a single shared fit, and fold changes concord with limma-voom on the <em>airway</em> demo.</p>
+<div class="float">
+<img src="paper/figures/figure5.png" alt="Validation"><div class="figcaption">Validation</div>
+</div>
+</div>
 <div class="section level2">
 <h2 id="why-rnaflow">Why RNAflow?<a class="anchor" aria-label="anchor" href="#why-rnaflow"></a>
 </h2>
-<p>Most exploratory RNA-seq tools are either notebook-stuck (great for one project, awful to reuse) or Shiny one-shots (everything in <code>app.R</code>, no tests, no reuse). RNAflow is structured as a proper R package with:</p>
+<p>Downstream RNA-seq analysis is often done either with bespoke scripts — flexible, but written for a single project and harder to reuse and audit — or with interactive applications that prioritise ease of use. RNAflow aims to combine both: an interactive interface backed by a tested, reusable R package, with:</p>
 <ul>
 <li>Clean module separation (UI + server per feature)</li>
 <li>Pure function layer (figures and analyses testable without Shiny)</li>
@@ -110,10 +146,19 @@
 <span><span class="fu"><a href="reference/run_app.html">run_app</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
+<h3 id="run-with-docker-reproducible">Run with Docker (reproducible)<a class="anchor" aria-label="anchor" href="#run-with-docker-reproducible"></a>
+</h3>
+<p>The bundled <code>Dockerfile</code> fixes the R / Bioconductor release (R 4.5 / Bioconductor 3.22) and system environment RNAflow is built against, so the heavy Bioconductor dependency stack resolves reliably — the recommended way to share, deploy, or reproduce an environment.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> rnaflow .</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">-p</span> 8080:8080 rnaflow</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co"># open http://localhost:8080</span></span></code></pre></div>
+<p>For byte-for-byte package pinning on top of the container, generate an optional <code>renv.lock</code> with <code>Rscript dev/make_renv_lock.R</code> (see that file for details).</p>
+</div>
+<div class="section level3">
 <h3 id="programmatic-api">Programmatic API<a class="anchor" aria-label="anchor" href="#programmatic-api"></a>
 </h3>
 <p>You can also use RNAflow’s core functions outside the app, for scripted pipelines:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/KmBioChemo/RNAflow" class="external-link">RNAflow</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 1. Read and validate inputs</span></span>
@@ -160,14 +205,12 @@ sample3,Treatment,B
 <div class="section level2">
 <h2 id="demo-datasets">Demo datasets<a class="anchor" aria-label="anchor" href="#demo-datasets"></a>
 </h2>
-<p>Bundled in <code>inst/extdata/</code> (see <code>dev/make_demo_*.R</code> for how they are built):</p>
+<p>Two real, published human datasets are bundled in <code>inst/extdata/</code> (see the matching <code>dev/make_demo_*.R</code> scripts for exactly how they are built from their Bioconductor sources):</p>
 <ul>
 <li>
-<strong><code>demo_airway_*.csv</code></strong> — a real, published human dataset (<a href="https://bioconductor.org/packages/airway/" class="external-link">airway</a>, Himes et al. 2014): airway smooth muscle cells treated with <strong>dexamethasone</strong> vs. control across <strong>4 cell lines</strong>. Organism = human; use <code>condition</code> as the design variable and adjust for <code>cell</code>. Good for demonstrating DE, covariate adjustment, and enrichment on genuine biology.</li>
+<strong><code>demo_airway_*.csv</code></strong> — <a href="https://bioconductor.org/packages/airway/" class="external-link">airway</a> (Himes et al. 2014): airway smooth muscle cells treated with <strong>dexamethasone</strong> vs. control across <strong>4 cell lines</strong> (8 samples). Organism = human; design variable <code>condition</code>, adjust for <code>cell</code>. Gene <strong>symbols</strong>. Good for DE, covariate adjustment, and enrichment on genuine biology.</li>
 <li>
-<strong><code>demo_multi_*.csv</code></strong> — a <strong>simulated</strong> mouse factorial set (genotype × treatment, 6 groups) with a planted signal, for multi-contrast comparison and WGCNA. Organism = mouse; design variable <code>group</code>.</li>
-<li>
-<strong><code>demo_counts.csv</code> / <code>demo_metadata.csv</code></strong> — a minimal simulated 2-group set.</li>
+<strong><code>demo_tcga_*.csv</code></strong> — <a href="https://doi.org/10.1038/nn.4038" class="external-link">TCGA pan-cancer</a> via <a href="https://bioconductor.org/packages/GSE62944/" class="external-link">GSE62944</a> (Rahman <em>et al.</em> 2015): <strong>8 molecularly distinct cancer types × 15 tumors = 120 samples</strong> (BRCA, LUAD, KIRC, LGG, THCA, PRAD, COAD, SKCM). Organism = human; design variable <code>cancer_type</code>. Gene symbols. A <strong>complex, many-group</strong> dataset that shows the tool’s power — cancer types separate sharply in PCA / UMAP, WGCNA finds type-specific co-expression modules, and the 8-level factor drives rich multi-contrast comparisons.</li>
 </ul>
 </div>
 <div class="section level2">
@@ -184,6 +227,8 @@ sample3,Treatment,B
 <strong>Phase 4</strong> ✅ — WGCNA co-expression networks (soft-threshold picking, module detection, module-trait correlation, hub genes, per-module enrichment)</li>
 <li>
 <strong>Phase 5</strong> ✅ — Self-contained HTML report + reproducible R script export for Methods</li>
+<li>
+<strong>Phase 6</strong> ✅ (2026) — Linked volcano-table explorer, activity inference (decoupleR TF / pathway), AI-assisted interpretation, per-sample signatures (GSVA / ssGSEA), UMAP + interactive 3D PCA, interactive enrichment network (visNetwork), distribution figures (raincloud / beeswarm / alluvial), professional UI design system, and a reproducible Docker image</li>
 </ul>
 <p>All roadmap phases are complete.</p>
 </div>
@@ -207,7 +252,7 @@ sample3,Treatment,B
 <div class="section level2">
 <h2 id="development">Development<a class="anchor" aria-label="anchor" href="#development"></a>
 </h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -234,6 +279,13 @@ sample3,Treatment,B
 </ul>
 </div>
 
+<div class="community">
+<h2 data-toc-skip>Community</h2>
+<ul class="list-unstyled">
+<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
+<li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
+</ul>
+</div>
 
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>
@@ -252,9 +304,8 @@ sample3,Treatment,B
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/KmBioChemo/RNAflow/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/KmBioChemo/RNAflow/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://github.com/KmBioChemo/RNAflow/actions/workflows/pkgdown.yaml" class="external-link"><img src="https://github.com/KmBioChemo/RNAflow/actions/workflows/pkgdown.yaml/badge.svg" alt="pkgdown"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 <li><a href="https://opensource.org/licenses/MIT" class="external-link"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a></li>
 </ul>
 </div>
@@ -268,7 +319,7 @@ sample3,Treatment,B
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

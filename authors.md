@@ -7,16 +7,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/KmBioChemo/RNAflow/blob/main/DESCRIPTION)
+[`inst/CITATION`](https://github.com/KmBioChemo/RNAflow/blob/v0.16.3/inst/CITATION)
 
 Matmat K (2026). *RNAflow: An Interactive Shiny Platform for End-to-End
-RNA-seq Analysis*. R package version 0.11.1,
+RNA-seq Analysis*. R package version 0.16.3,
 <https://github.com/KmBioChemo/RNAflow>.
 
-    @Manual{,
+    @Manual{RNAflow,
       title = {RNAflow: An Interactive Shiny Platform for End-to-End RNA-seq Analysis},
       author = {Karim Matmat},
       year = {2026},
-      note = {R package version 0.11.1},
+      note = {R package version 0.16.3},
       url = {https://github.com/KmBioChemo/RNAflow},
     }

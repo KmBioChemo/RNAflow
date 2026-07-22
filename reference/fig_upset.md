@@ -6,7 +6,12 @@ many contrasts where a Venn diagram cannot.
 ## Usage
 
 ``` r
-fig_upset(sets, min_size = 1, sort_by = c("size", "degree"))
+fig_upset(
+  sets,
+  min_size = 1,
+  sort_by = c("size", "degree"),
+  set_size_width = NULL
+)
 ```
 
 ## Arguments
@@ -23,6 +28,12 @@ fig_upset(sets, min_size = 1, sort_by = c("size", "degree"))
 - sort_by:
 
   order intersections by "size" (default) or "degree"
+
+- set_size_width:
+
+  width (cm) of the set-size bar annotation; `NULL` (default) uses
+  ComplexHeatmap's default. Increase it when the set-size bars look
+  compressed next to a wide intersection matrix.
 
 ## Value
 

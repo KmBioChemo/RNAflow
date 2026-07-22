@@ -13,7 +13,7 @@ a results table."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,7 @@ a results table."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Activity inference module</h1>
-      <small class="dont-index">Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/main/R/mod_decoupler.R" class="external-link"><code>R/mod_decoupler.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/v0.16.3/R/mod_decoupler.R" class="external-link"><code>R/mod_decoupler.R</code></a></small>
       <div class="d-none name"><code>mod_activity.Rd</code></div>
     </div>
 
@@ -54,7 +54,7 @@ a results table.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mod_activity_ui</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">mod_activity_server</span><span class="op">(</span><span class="va">id</span>, <span class="va">de_reactive</span>, <span class="va">organism_reactive</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">mod_activity_server</span><span class="op">(</span><span class="va">id</span>, <span class="va">de_reactive</span>, <span class="va">organism_reactive</span>, settings_store <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -72,6 +72,12 @@ a results table.</p>
 <dt id="arg-organism-reactive">organism_reactive<a class="anchor" aria-label="anchor" href="#arg-organism-reactive"></a></dt>
 <dd><p>reactive returning the organism keyword</p></dd>
 
+
+<dt id="arg-settings-store">settings_store<a class="anchor" aria-label="anchor" href="#arg-settings-store"></a></dt>
+<dd><p>optional <code>reactiveVal</code> holding a settings list; the
+last activity run is recorded under <code>$activity</code> (type, method, ranking,
+organism, and the result table) so a saved project keeps it</p></dd>
+
 </dl></div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -83,7 +89,7 @@ a results table.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

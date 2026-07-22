@@ -11,7 +11,7 @@ bar chart plus a results table.
 ``` r
 mod_activity_ui(id)
 
-mod_activity_server(id, de_reactive, organism_reactive)
+mod_activity_server(id, de_reactive, organism_reactive, settings_store = NULL)
 ```
 
 ## Arguments
@@ -27,3 +27,9 @@ mod_activity_server(id, de_reactive, organism_reactive)
 - organism_reactive:
 
   reactive returning the organism keyword
+
+- settings_store:
+
+  optional `reactiveVal` holding a settings list; the last activity run
+  is recorded under `$activity` (type, method, ranking, organism, and
+  the result table) so a saved project keeps it

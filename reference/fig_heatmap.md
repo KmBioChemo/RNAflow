@@ -28,6 +28,7 @@ fig_heatmap(
   show_dend_cols = TRUE,
   show_legend = TRUE,
   annotation_legend = TRUE,
+  show_annotation_names = TRUE,
   direction_annotation = FALSE,
   col_dir_up = "#C0392B",
   col_dir_down = "#2980B9",
@@ -93,6 +94,11 @@ fig_heatmap(
 - show_legend, annotation_legend:
 
   display legends
+
+- show_annotation_names:
+
+  show the annotation track names (e.g. "condition", "Direction") beside
+  the tracks; when FALSE they appear only in the legend
 
 - direction_annotation:
 

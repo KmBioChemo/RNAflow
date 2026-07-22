@@ -10,7 +10,9 @@ fig_sample_cor(
   counts_norm,
   metadata = NULL,
   method = c("pearson", "spearman"),
-  palette_name = "Blues"
+  palette_name = "Blues",
+  show_names = NULL,
+  title = NULL
 )
 ```
 
@@ -31,6 +33,16 @@ fig_sample_cor(
 - palette_name:
 
   palette for the heatmap
+
+- show_names:
+
+  show per-sample row/column labels; `NULL` (default) shows them only
+  for small cohorts (\<= 30 samples), where long sample identifiers
+  would otherwise be illegible
+
+- title:
+
+  heatmap title; `NULL` uses a default, `NA` suppresses it
 
 ## Value
 

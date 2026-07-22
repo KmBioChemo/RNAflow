@@ -12,7 +12,8 @@ fig_pca(
   metadata = NULL,
   n_top = 500,
   color_by = NULL,
-  title = NULL
+  title = NULL,
+  show_labels = TRUE
 )
 ```
 
@@ -37,6 +38,11 @@ fig_pca(
 - title:
 
   plot title
+
+- show_labels:
+
+  show sample names on the plot (hover tooltips are always available);
+  turn off for large sample counts
 
 ## Value
 

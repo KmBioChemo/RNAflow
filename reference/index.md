@@ -34,6 +34,8 @@ Read and strictly validate counts, metadata, and DE results.
 
 - [`run_deseq2()`](https://KmBioChemo.github.io/RNAflow/reference/run_deseq2.md)
   : Run DESeq2 on a counts matrix
+- [`run_deseq2_all_pairs()`](https://KmBioChemo.github.io/RNAflow/reference/run_deseq2_all_pairs.md)
+  : Run DESeq2 for every pairwise contrast of the design variable
 - [`normalize_counts()`](https://KmBioChemo.github.io/RNAflow/reference/normalize_counts.md)
   : Normalize counts (variance-stabilized transform)
 
@@ -51,6 +53,14 @@ Volcano, heatmap and PCA, with exploration / publication modes.
   : PCA figures
 - [`compute_pca()`](https://KmBioChemo.github.io/RNAflow/reference/compute_pca.md)
   : Compute PCA scores
+- [`fig_pca_3d()`](https://KmBioChemo.github.io/RNAflow/reference/fig_pca_3d.md)
+  : Interactive 3D PCA plot (PC1 / PC2 / PC3)
+- [`fig_umap()`](https://KmBioChemo.github.io/RNAflow/reference/fig_umap.md)
+  : Interactive UMAP plot of samples
+- [`compute_umap()`](https://KmBioChemo.github.io/RNAflow/reference/compute_umap.md)
+  : Compute a 2D UMAP embedding of samples
+- [`fig_gene_expression()`](https://KmBioChemo.github.io/RNAflow/reference/fig_gene_expression.md)
+  : Per-gene expression across groups
 
 ## QC & diagnostics
 
@@ -88,6 +98,8 @@ Compare significant-gene sets and signatures across contrasts.
   : Significant-gene sets across contrasts
 - [`contrast_lfc_matrix()`](https://KmBioChemo.github.io/RNAflow/reference/contrast_lfc_matrix.md)
   : Gene x contrast log2FoldChange matrix
+- [`contrast_direction_table()`](https://KmBioChemo.github.io/RNAflow/reference/contrast_direction_table.md)
+  : Cross-contrast direction table
 - [`fig_venn()`](https://KmBioChemo.github.io/RNAflow/reference/fig_venn.md)
   : Venn diagram of significant-gene sets
 - [`fig_upset()`](https://KmBioChemo.github.io/RNAflow/reference/fig_upset.md)
@@ -96,6 +108,8 @@ Compare significant-gene sets and signatures across contrasts.
   : Side-by-side volcano grid
 - [`fig_lfc_heatmap()`](https://KmBioChemo.github.io/RNAflow/reference/fig_lfc_heatmap.md)
   : Cross-contrast log2FoldChange signature heatmap
+- [`fig_contrast_alluvial()`](https://KmBioChemo.github.io/RNAflow/reference/fig_contrast_alluvial.md)
+  : Cross-contrast direction alluvial
 
 ## Functional enrichment
 
@@ -117,8 +131,19 @@ GSEA (fgsea / MSigDB) and ORA (clusterProfiler; GO / KEGG / Reactome).
   : GSEA running-enrichment curve
 - [`fig_enrich_map()`](https://KmBioChemo.github.io/RNAflow/reference/fig_enrich_map.md)
   : Enrichment map (pathway network)
+- [`fig_enrich_visnet()`](https://KmBioChemo.github.io/RNAflow/reference/fig_enrich_visnet.md)
+  : Interactive enrichment map (visNetwork)
 - [`fig_gsea_ridge()`](https://KmBioChemo.github.io/RNAflow/reference/fig_gsea_ridge.md)
   : GSEA ridgeline plot
+
+## Per-sample signatures (GSVA / ssGSEA)
+
+Score every sample against gene sets and view the signature matrix.
+
+- [`run_gsva()`](https://KmBioChemo.github.io/RNAflow/reference/run_gsva.md)
+  : Compute per-sample gene-set scores
+- [`fig_gsva_heatmap()`](https://KmBioChemo.github.io/RNAflow/reference/fig_gsva_heatmap.md)
+  : Heatmap of per-sample gene-set scores
 
 ## Co-expression networks (WGCNA)
 

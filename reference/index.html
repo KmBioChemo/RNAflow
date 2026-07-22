@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -128,6 +128,13 @@
 
         <dt>
 
+          <code><a href="run_deseq2_all_pairs.html">run_deseq2_all_pairs()</a></code>
+
+        </dt>
+        <dd>Run DESeq2 for every pairwise contrast of the design variable</dd>
+
+        <dt>
+
           <code><a href="normalize_counts.html">normalize_counts()</a></code>
 
         </dt>
@@ -176,6 +183,34 @@
 
         </dt>
         <dd>Compute PCA scores</dd>
+
+        <dt>
+
+          <code><a href="fig_pca_3d.html">fig_pca_3d()</a></code>
+
+        </dt>
+        <dd>Interactive 3D PCA plot (PC1 / PC2 / PC3)</dd>
+
+        <dt>
+
+          <code><a href="fig_umap.html">fig_umap()</a></code>
+
+        </dt>
+        <dd>Interactive UMAP plot of samples</dd>
+
+        <dt>
+
+          <code><a href="compute_umap.html">compute_umap()</a></code>
+
+        </dt>
+        <dd>Compute a 2D UMAP embedding of samples</dd>
+
+        <dt>
+
+          <code><a href="fig_gene_expression.html">fig_gene_expression()</a></code>
+
+        </dt>
+        <dd>Per-gene expression across groups</dd>
       </dl></div><div class="section level2">
       <h2 id="qc-diagnostics">QC &amp; diagnostics<a class="anchor" aria-label="anchor" href="#qc-diagnostics"></a></h2>
 
@@ -297,6 +332,13 @@
 
         <dt>
 
+          <code><a href="contrast_direction_table.html">contrast_direction_table()</a></code>
+
+        </dt>
+        <dd>Cross-contrast direction table</dd>
+
+        <dt>
+
           <code><a href="fig_venn.html">fig_venn()</a></code>
 
         </dt>
@@ -322,6 +364,13 @@
 
         </dt>
         <dd>Cross-contrast log2FoldChange signature heatmap</dd>
+
+        <dt>
+
+          <code><a href="fig_contrast_alluvial.html">fig_contrast_alluvial()</a></code>
+
+        </dt>
+        <dd>Cross-contrast direction alluvial</dd>
       </dl></div><div class="section level2">
       <h2 id="functional-enrichment">Functional enrichment<a class="anchor" aria-label="anchor" href="#functional-enrichment"></a></h2>
 
@@ -390,10 +439,40 @@
 
         <dt>
 
+          <code><a href="fig_enrich_visnet.html">fig_enrich_visnet()</a></code>
+
+        </dt>
+        <dd>Interactive enrichment map (visNetwork)</dd>
+
+        <dt>
+
           <code><a href="fig_gsea_ridge.html">fig_gsea_ridge()</a></code>
 
         </dt>
         <dd>GSEA ridgeline plot</dd>
+      </dl></div><div class="section level2">
+      <h2 id="per-sample-signatures-gsva-ssgsea-">Per-sample signatures (GSVA / ssGSEA)<a class="anchor" aria-label="anchor" href="#per-sample-signatures-gsva-ssgsea-"></a></h2>
+
+      <div class="section-desc"><p>Score every sample against gene sets and view the signature matrix.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="run_gsva.html">run_gsva()</a></code>
+
+        </dt>
+        <dd>Compute per-sample gene-set scores</dd>
+
+        <dt>
+
+          <code><a href="fig_gsva_heatmap.html">fig_gsva_heatmap()</a></code>
+
+        </dt>
+        <dd>Heatmap of per-sample gene-set scores</dd>
       </dl></div><div class="section level2">
       <h2 id="co-expression-networks-wgcna-">Co-expression networks (WGCNA)<a class="anchor" aria-label="anchor" href="#co-expression-networks-wgcna-"></a></h2>
 
@@ -782,7 +861,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

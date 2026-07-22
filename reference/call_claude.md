@@ -30,7 +30,7 @@ call_claude(
 
 - model:
 
-  API model id (see AI_MODELS)
+  API model id (see the AI_MODELS object)
 
 - system:
 

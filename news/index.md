@@ -1,5 +1,413 @@
 # Changelog
 
+## RNAflow 0.16.3 (2026-07-03)
+
+### Change
+
+- [`fig_gsva_heatmap()`](https://KmBioChemo.github.io/RNAflow/reference/fig_gsva_heatmap.md)
+  gains a `show_samples` argument. Per-sample (column) labels are now
+  hidden by default for large cohorts (\> 40 samples), where long sample
+  identifiers were illegible and the group annotation already identifies
+  the columns; small cohorts still show labels.
+
+## RNAflow 0.16.2 (2026-07-03)
+
+### Fix
+
+- **QC gene selector.** Force-hide the native `<select>` that selectize
+  replaces (`.selectized { display:none }`), so the gene field no longer
+  shows a second empty box stacked under the widget.
+
+## RNAflow 0.16.1 (2026-07-03)
+
+### Fixes
+
+- **PCA label toggle now actually hides labels.** Setting
+  `show_labels = FALSE` omits the on-plot text data entirely (not just
+  the plotly mode), so unchecking *Show sample labels* reliably clears
+  the names in PCA / UMAP / 3D.
+- **Stylesheet cache-busting.** The `rnaflow.css` link now carries a
+  `?v=` version query so browsers fetch the current stylesheet instead
+  of a stale cached copy (the selectize dropdown fix from 0.16.0 was
+  being masked by the browser cache).
+
+## RNAflow 0.16.0 (2026-07-03)
+
+### UI feedback: PCA labels, all-pairwise DE, cleaner dropdowns
+
+- **PCA sample labels toggle.** The PCA tab gains a *Show sample labels*
+  checkbox;
+  [`fig_pca()`](https://KmBioChemo.github.io/RNAflow/reference/fig_pca.md)
+  /
+  [`fig_umap()`](https://KmBioChemo.github.io/RNAflow/reference/fig_umap.md)
+  /
+  [`fig_pca_3d()`](https://KmBioChemo.github.io/RNAflow/reference/fig_pca_3d.md)
+  gain a `show_labels` argument (hover tooltips are always available).
+  Declutters large sample sets such as the 120-sample TCGA demo.
+- **All pairwise DESeq2 comparisons.** New
+  [`run_deseq2_all_pairs()`](https://KmBioChemo.github.io/RNAflow/reference/run_deseq2_all_pairs.md)
+  fits the model once and extracts every pairwise contrast of the design
+  variable, adding each to the multi-contrast store – far faster than
+  one fit per pair. A *Run all pairwise comparisons* checkbox in the DE
+  panel exposes it, alongside the existing specific-contrast choice.
+- **Dropdown fix.** The selectize dropdown menu was transparent and bled
+  onto the controls below; it is now opaque, elevated (z-index +
+  shadow), with an accent hover state.
+
+## RNAflow 0.15.2 (2026-07-03)
+
+### Fix
+
+- Raise the Shiny file-upload cap from the 5 MB default to 200 MB in
+  [`app_server()`](https://KmBioChemo.github.io/RNAflow/reference/app_server.md).
+  Real RNA-seq count matrices – and the bundled TCGA demo (~9 MB) –
+  exceeded the default, so uploads failed with “Maximum upload size
+  exceeded”. The previous option value is restored on app stop.
+
+## RNAflow 0.15.1 (2026-07-03)
+
+### Complex demo dataset
+
+- Replaced the interim Pickrell subset with a **complex, many-group**
+  second demo: a **TCGA pan-cancer** subset (GSE62944; Rahman *et
+  al.* 2015) of **8 molecularly distinct cancer types × 15 tumors = 120
+  samples** (BRCA, LUAD, KIRC, LGG, THCA, PRAD, COAD, SKCM; gene
+  symbols). Alongside the simple airway set, this shows the tool’s power
+  – cancer types separate sharply in PCA / UMAP, WGCNA recovers
+  type-specific modules, and the 8-level `cancer_type` factor drives
+  rich multi-contrast comparison and per-sample signatures. Built by
+  `dev/make_demo_tcga.R` from ExperimentHub.
+- Tests, README, and the Data-tab guidance updated accordingly.
+- The TCGA counts file is ~9 MB, so `R CMD check` reports an
+  installed-size NOTE – acceptable for a GitHub-hosted demo (the package
+  is not bound for CRAN).
+
+## RNAflow 0.15.0 (2026-07-03)
+
+### Publication readiness & repository hygiene (no new features)
+
+- **Bundled data is now two real, published human datasets**, and
+  nothing else: **airway** (Himes *et al.* 2014; gene symbols) and a
+  balanced female-vs-male subset of **Pickrell *et al.* 2010**
+  (`tweeDEseqCountData`; Ensembl IDs, which also exercises the ID →
+  symbol mapping). Removed the simulated sets (`demo_counts`,
+  `demo_multi`) and project-specific files (`mrl_lpr_*`, `Book*.xlsx`).
+  Each dataset has a `dev/make_demo_*.R` build script.
+- **Tests rewired to the real data**: DE/shrinkage on airway, demo-data
+  validation on both sets. The module-enrichment test is now a
+  *deterministic* real-gene-set example (two Hallmark sets → two modules
+  → GO enrichment), removing the dependency on a bundled simulated
+  dataset.
+- **Reproducible reference analysis**: the *Getting started* vignette
+  now **executes** its core (load → validate → DESeq2 → volcano) on the
+  bundled airway data, so a reader can reproduce a real result end to
+  end.
+- **Community & citation files** for open-source practice:
+  `CITATION.cff`, `inst/CITATION`, `codemeta.json`, `CONTRIBUTING.md`,
+  `CODE_OF_CONDUCT.md`, and GitHub issue templates.
+- **Docs**: DESCRIPTION and README describe the full current scope and
+  cite both demo datasets with their sources.
+
+## RNAflow 0.14.2 (2026-07-03)
+
+### Stabilization pass (no new features)
+
+- **Signatures project state.**
+  [`empty_project()`](https://KmBioChemo.github.io/RNAflow/reference/empty_project.md)
+  /
+  [`assemble_project()`](https://KmBioChemo.github.io/RNAflow/reference/assemble_project.md)
+  gained a canonical `signatures` slot; a Signatures run now records
+  collection, method, organism, group-by, top-sets / set & sample
+  counts, size filters, timestamp, and the (small) score matrix under
+  `settings$signatures` (was the ad-hoc `settings$gsva`, which is still
+  read as a fallback).
+  [`load_project()`](https://KmBioChemo.github.io/RNAflow/reference/load_project.md)
+  backfills the slot for older `.rnaflow.rds` files. Previously GSVA
+  runs were not persisted into saved projects at all.
+- **Report & reproducible script.** When a Signatures run is recorded,
+  the HTML report adds a concise Signatures section (settings + the
+  saved score heatmap, or a note to recompute if the matrix wasn’t
+  stored), and
+  [`generate_r_script()`](https://KmBioChemo.github.io/RNAflow/reference/generate_r_script.md)
+  emits runnable
+  [`get_gene_sets()`](https://KmBioChemo.github.io/RNAflow/reference/get_gene_sets.md)
+  /
+  [`run_gsva()`](https://KmBioChemo.github.io/RNAflow/reference/run_gsva.md)
+  /
+  [`fig_gsva_heatmap()`](https://KmBioChemo.github.io/RNAflow/reference/fig_gsva_heatmap.md)
+  code.
+- **Session manifest.**
+  [`session_manifest()`](https://KmBioChemo.github.io/RNAflow/reference/session_manifest.md)
+  now lists the v0.14 dependencies (GSVA, uwot, visNetwork, ggalluvial,
+  ggbeeswarm, ggdist) alongside the rest.
+- **Integration test.** `test-shiny-app.R` asserts all 14 tabs,
+  including Signatures (still guarded; skips without Chrome/chromote).
+- **Docs & hygiene.** DESCRIPTION and README describe the full current
+  scope (Explore, QC, Compare, Activity, Signatures, AI, UMAP / 3D PCA).
+  The project-specific `mrl_lpr_*` source CSVs are build-ignored (not
+  bundled demo data). No runtime logs or temp files are tracked.
+
+## RNAflow 0.14.1 (2026-07-03)
+
+### Visual refinements & per-tab explanations
+
+- **Navbar tab icons.** Every tab gains a distinct, recessive Font
+  Awesome icon (bright on the active/hovered tab) for faster orientation
+  and a more product-like navbar.
+- **Unified interactive-plot typography.** New internal
+  [`rnaflow_plotly()`](https://KmBioChemo.github.io/RNAflow/reference/rnaflow_plotly.md)
+  helper applies the app’s font (Inter) and ink colour plus a clean
+  hover label to all interactive figures (volcano, PCA, UMAP, 3D PCA,
+  linked Explore), so they read as one system instead of plotly
+  defaults.
+- **“Why this analysis?” panels.**
+  [`ui_page_header()`](https://KmBioChemo.github.io/RNAflow/reference/ui_page_header.md)
+  gained an `about` argument rendered as a collapsible native
+  `<details>` panel. All 11 analysis tabs (Volcano, Explore, Heatmap,
+  PCA, QC, Compare, Enrichment, Network, Activity, Signatures, AI) now
+  carry a short explanation of *why* the analysis matters and how to
+  read it – present but collapsed by default, so no clutter.
+
+## RNAflow 0.14.0 (2026-07-02)
+
+### New analyses & visualizations (backlog features)
+
+Four backlog items, each following the pure/impure rule (tested pure
+functions + thin module wiring). All new dependencies are Suggests and
+guarded.
+
+- **UMAP + 3D PCA.** New
+  [`compute_umap()`](https://KmBioChemo.github.io/RNAflow/reference/compute_umap.md)
+  /
+  [`fig_umap()`](https://KmBioChemo.github.io/RNAflow/reference/fig_umap.md)
+  (via ) and
+  [`fig_pca_3d()`](https://KmBioChemo.github.io/RNAflow/reference/fig_pca_3d.md)
+  (interactive PC1/PC2/PC3). The PCA tab gains an *Embedding* selector
+  (PCA 2D / PCA 3D / UMAP) with UMAP neighbour/min-distance controls.
+  UMAP is deterministic (seeded, RNG restored).
+- **Interactive enrichment network.**
+  [`fig_enrich_visnet()`](https://KmBioChemo.github.io/RNAflow/reference/fig_enrich_visnet.md)
+  renders the enrichment map as a draggable widget (hover tooltips,
+  neighbour highlighting), reusing the same shared-gene Jaccard graph as
+  the static map. Added as an *Interactive map* view on the Enrichment
+  tab (guarded so the tab degrades gracefully without visNetwork).
+- **Distribution figures.**
+  [`fig_gene_expression()`](https://KmBioChemo.github.io/RNAflow/reference/fig_gene_expression.md)
+  plots a gene’s normalized expression across groups as a raincloud /
+  beeswarm / box (via / ) – wired into the QC tab with a gene selector.
+  [`contrast_direction_table()`](https://KmBioChemo.github.io/RNAflow/reference/contrast_direction_table.md) +
+  [`fig_contrast_alluvial()`](https://KmBioChemo.github.io/RNAflow/reference/fig_contrast_alluvial.md)
+  show Up/NS/Down gene flow across contrasts (via ) – added to the
+  Compare tab.
+- **Per-sample signatures (GSVA / ssGSEA).** New
+  [`run_gsva()`](https://KmBioChemo.github.io/RNAflow/reference/run_gsva.md)
+  (via ) turns counts into a sets x samples score matrix;
+  [`fig_gsva_heatmap()`](https://KmBioChemo.github.io/RNAflow/reference/fig_gsva_heatmap.md)
+  draws the annotated signature heatmap. A new **Signatures** tab scores
+  samples against an MSigDB collection; counts are mapped to gene
+  symbols first
+  ([`gsva_symbol_counts()`](https://KmBioChemo.github.io/RNAflow/reference/gsva_symbol_counts.md)),
+  matching the enrichment path so Ensembl/ENTREZ projects score
+  correctly.
+- **Tests.** +44 tests (embeddings, visNetwork map, gene/alluvial,
+  GSVA): 422 pass / 0 fail / 1 skip (shinytest2).
+  [`pkgdown::check_pkgdown()`](https://pkgdown.r-lib.org/reference/check_pkgdown.html)
+  clean.
+
+## RNAflow 0.13.0 (2026-07-02)
+
+### Reproducibility, distribution, UI finish, integration tests
+
+- **Docker.** New `Dockerfile` (+ `.dockerignore`) pinning R 4.5 /
+  Bioconductor 3.22, layer-caching the heavy dependency stack and
+  serving the app on `0.0.0.0:8080` – the primary reproducibility
+  guarantee for this Bioconductor-heavy app. `dev/make_renv_lock.R` adds
+  an optional CRAN/Bioc version pin on top. README documents the Docker
+  workflow.
+- **Distribution.** Confirmed the existing CI already ships the app:
+  pkgdown deploys to GitHub Pages on release, R-CMD-check runs on push.
+  (Making the repository public and a hosted live demo are left to the
+  maintainer – a static shinylive demo is not feasible because the app
+  depends on compiled Bioconductor packages.)
+- **UI finish.** Standardised the remaining ad-hoc inline-styled warning
+  banners to the shared `ui_banner(type = "warning")` helper (PCA,
+  Heatmap, Explore); added
+  [`ui_page_header()`](https://KmBioChemo.github.io/RNAflow/reference/ui_page_header.md)
+  with one-line microcopy to the tabs whose one-word label
+  under-describes them (Explore, Compare, QC, Network, Activity).
+- **Integration tests.** New `test-shiny-app.R`: a guarded `shinytest2`
+  smoke test that launches the real app headlessly and asserts the
+  brand, all 13 tabs, and the fresh-launch getting-started guidance
+  render. Skips cleanly where Chrome/chromote is unavailable;
+  `shinytest2` added to Suggests.
+- **Tests.** 378 pass / 0 fail / 1 skip (the shinytest2 test, without a
+  browser). `R CMD check` clean;
+  [`pkgdown::check_pkgdown()`](https://pkgdown.r-lib.org/reference/check_pkgdown.html)
+  clean.
+
+## RNAflow 0.12.0 (2026-07-02)
+
+### Professional UI / visual overhaul (no new analyses)
+
+A design-system pass to make RNAflow look and feel like a polished
+scientific platform. No biological analyses, tabs, or statistics
+changed.
+
+- **Assets now actually load.** `inst/app/www` was never registered as a
+  Shiny resource path, so the stylesheet 404’d and *none* of the app
+  styling applied. Added `R/zzz.R` (`.onLoad` -\>
+  `addResourcePath("rnaflow", ...)`) and the UI now links
+  `rnaflow/rnaflow.css`.
+- **Design system.** New token-based stylesheet
+  (`inst/app/www/rnaflow.css`): calm teal accent, white/light surfaces,
+  soft cards with hairline borders and subtle shadows, consistent
+  typography, spacing, focus rings, and status colours. Restyled navbar
+  (active-tab highlight), sidebar, form controls, sliders, buttons
+  (clear primary vs secondary), accordions, banners, empty states, stat
+  tiles, DataTables, and interactive-plot containers.
+- **Navbar.** The active-contrast selector is now a clean pill with a
+  labelled caption; brand wordmark refreshed.
+- **Reusable components.** New `R/ui_components.R`:
+  [`ui_banner()`](https://KmBioChemo.github.io/RNAflow/reference/ui_banner.md),
+  [`ui_empty_state()`](https://KmBioChemo.github.io/RNAflow/reference/ui_empty_state.md),
+  [`ui_page_header()`](https://KmBioChemo.github.io/RNAflow/reference/ui_page_header.md),
+  [`ui_stat_tile()`](https://KmBioChemo.github.io/RNAflow/reference/ui_stat_tile.md)
+  – consistent presentational primitives (pure view helpers, no server
+  logic).
+- **Figure theme.**
+  [`theme_exploration()`](https://KmBioChemo.github.io/RNAflow/reference/theme_exploration.md)
+  refined for a publication-grade, consistent look (subtle horizontal
+  guides, softer axes, muted captions, faceted-strip styling);
+  [`theme_publication()`](https://KmBioChemo.github.io/RNAflow/reference/theme_publication.md)
+  gained caption/strip styling. Plotted data and thresholds are
+  unchanged; PNG/PDF/TIFF export is unaffected.
+- **HTML report.** Redesigned self-contained report: gradient header
+  block, overview stat cards, striped tables, dark code blocks, figure
+  captions, and tightened section spacing. Still htmltools-only (no
+  pandoc/Quarto), reproducible script + session info + AI
+  caveats/provenance preserved.
+- **Tests.** New `test-ui-components.R`; 378 pass / 0 fail / 0 skip. App
+  boots headless with the stylesheet served (verified),
+  [`pkgdown::check_pkgdown()`](https://pkgdown.r-lib.org/reference/check_pkgdown.html)
+  clean.
+
+## RNAflow 0.11.4 (2026-07-02)
+
+### Bug-fix pass (multi-agent code review, no new features)
+
+- **AI tab (Haiku 4.5).**
+  [`call_claude()`](https://KmBioChemo.github.io/RNAflow/reference/call_claude.md)
+  sent `thinking = {type: "adaptive"}` for every model, but adaptive
+  thinking is a Claude 4.6+ feature – Haiku 4.5 (offered as the
+  “cheapest” option) rejected it with HTTP 400, so that model was
+  unusable. The thinking config is now model-aware (adaptive for 4.6+;
+  `{type: "enabled", budget_tokens}` for older models).
+- **DESeq2.**
+  [`run_deseq2()`](https://KmBioChemo.github.io/RNAflow/reference/run_deseq2.md)
+  now fails fast with a clear message when a counts sample has no
+  metadata row, instead of a cryptic base-R “missing values in
+  ‘row.names’” crash (validation previously only warned).
+- **WGCNA module-trait.**
+  [`build_traits()`](https://KmBioChemo.github.io/RNAflow/reference/build_traits.md)
+  no longer crashes on metadata with `NA` annotation values – indicator
+  columns are built manually so every column keeps one row per sample
+  (NA traits stay NA, which `cor(use = "p")` tolerates).
+- **WGCNA module enrichment.**
+  [`enrich_modules()`](https://KmBioChemo.github.io/RNAflow/reference/enrich_modules.md)
+  now converts Ensembl/ENTREZ IDs to symbols (new
+  [`ids_to_symbols()`](https://KmBioChemo.github.io/RNAflow/reference/ids_to_symbols.md)
+  helper) before ORA, matching the DE tab; previously module enrichment
+  silently returned nothing for non-symbol projects.
+- **Enrichment dotplot.** Guarded `-log10(padj)` with `+ 1e-300` so a
+  term with an underflowed `padj == 0` is no longer silently dropped
+  from the dotplot (the bar and module plots already did this).
+- **PCA.**
+  [`compute_pca()`](https://KmBioChemo.github.io/RNAflow/reference/compute_pca.md)
+  now centers only (`scale. = FALSE`), matching
+  [`DESeq2::plotPCA`](https://rdrr.io/pkg/BiocGenerics/man/plotPCA.html)
+  and the bulk RNA-seq convention, so the selected high-variance genes
+  drive the projection.
+- **Project load.**
+  [`load_project()`](https://KmBioChemo.github.io/RNAflow/reference/load_project.md)
+  backfills any slots added in newer versions from
+  [`empty_project()`](https://KmBioChemo.github.io/RNAflow/reference/empty_project.md),
+  so projects saved by older releases load with the canonical structure.
+- **Interactive volcano.** Legend position “None” now actually hides the
+  legend (was only parked off-canvas).
+- **KEGG ORA.** `enrichKEGG` results now get `setReadable()` so the
+  `geneID` column is gene symbols, consistent with GO / Reactome (which
+  use `readable = TRUE`).
+- **read_counts.** Duplicate / empty gene IDs now raise the friendly
+  validator message instead of a cryptic base-R “duplicate ‘row.names’”
+  error (the rownames were assigned before validation).
+- **Recent-projects cache.**
+  [`cache_recent_project()`](https://KmBioChemo.github.io/RNAflow/reference/cache_recent_project.md)
+  appends a stable name hash to the filename so two display names that
+  sanitise identically no longer overwrite each other’s cache entry.
+- **Activity errors.** The CollecTRI / PROGENy fetch errors now name the
+  organism and acknowledge that a failure can be an unsupported organism
+  in the installed decoupleR / OmnipathR, not only an OmniPath outage.
+- **Tests.** 364 pass / 0 fail / 0 skip on R 4.5.2 / Bioconductor 3.22
+  (Activity tests run for real – decoupleR + OmnipathR available).
+
+## RNAflow 0.11.3 (2026-07-02)
+
+### Consolidation pass (stabilization, no new features)
+
+- **Project state.** Added an `activity` slot to
+  [`empty_project()`](https://KmBioChemo.github.io/RNAflow/reference/empty_project.md)
+  /
+  [`assemble_project()`](https://KmBioChemo.github.io/RNAflow/reference/assemble_project.md);
+  the Activity tab now records its run (type, method, ranking, organism,
+  result table) into the shared settings, alongside the AI
+  interpretation, so a saved project keeps them. Older `.rnaflow.rds`
+  files without the new slots still load and render (tested).
+- **AI provenance.** A saved interpretation now records model,
+  timestamp, `top_n`, `n_terms`, `use_enrich`, token usage and estimated
+  cost (never the API key). The report’s AI section shows this
+  provenance and keeps the “hypothesis-generating, may be wrong” caveat.
+- **Report/script consistency.**
+  [`session_manifest()`](https://KmBioChemo.github.io/RNAflow/reference/session_manifest.md)
+  now lists plotly, crosstalk, httr2, decoupleR and OmnipathR. Corrected
+  the report’s outdated wording that claimed downstream steps always use
+  default parameters – it now states that recorded settings are used
+  when available.
+- **Dependency messages.** Filled in missing “install with …” hints for
+  the plotly, fgsea (curve) and WGCNA guards so every
+  optional-dependency error says exactly what to install.
+- **Tests.** Added an OmniPath-free
+  [`run_activity()`](https://KmBioChemo.github.io/RNAflow/reference/run_activity.md)
+  multivariate (mlm) test on a synthetic pathway network, plus
+  project-state tests for the new slots and backward compatibility (351
+  tests pass; full `R CMD check` clean).
+
+## RNAflow 0.11.2 (2026-07-02)
+
+### Activity inference: honest errors + declared OmnipathR dependency
+
+- **Real root cause of the “broken Activity tab” surfaced.** `decoupleR`
+  delegates its CollecTRI / PROGENy network downloads to **OmnipathR**,
+  but only *Suggests* it – so a `decoupleR`-only install (as produced by
+  the old `install_deps.R`) left both TF and pathway activity failing.
+  The failure was further masked: the `tryCatch` in
+  [`get_tf_network()`](https://KmBioChemo.github.io/RNAflow/reference/get_tf_network.md)
+  /
+  [`get_pathway_network()`](https://KmBioChemo.github.io/RNAflow/reference/get_pathway_network.md)
+  rewrote *every* error as “OmniPath temporarily unavailable”, hiding a
+  missing package or a client-side version clash (old OmnipathR
+  vs. modern strict-join dplyr).
+- **[`get_tf_network()`](https://KmBioChemo.github.io/RNAflow/reference/get_tf_network.md)
+  /
+  [`get_pathway_network()`](https://KmBioChemo.github.io/RNAflow/reference/get_pathway_network.md)
+  now check for OmnipathR explicitly** (with an install hint) and
+  **append the underlying error** to their message instead of blaming a
+  server outage unconditionally.
+- **`OmnipathR` added to `Suggests`** so the dependency is declared and
+  installed by `dev/install_deps.R`.
+- **`dev/install_deps.R` raises the download timeout to 3600 s** so
+  large Bioconductor annotation packages (e.g. `reactome.db`, ~455 MB)
+  fetch reliably on a fresh machine.
+
 ## RNAflow 0.11.1 (2026-07-01)
 
 ### Robust activity-network fetching

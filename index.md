@@ -6,18 +6,72 @@
 **RNAflow** is a modular Shiny application built as a proper R package
 for end-to-end bulk RNA-seq analysis. It takes raw count matrices and
 sample metadata as input and provides differential expression (DESeq2),
-QC diagnostics, multi-contrast comparisons, functional enrichment (GSEA
-/ ORA), co-expression network analysis (WGCNA), publication-ready
-figures, and reproducible R-script / HTML report / Methods-paragraph
-export.
+QC diagnostics, sample overviews (PCA / UMAP / 3D PCA), a linked
+volcano-table explorer, multi-contrast comparisons, functional
+enrichment (GSEA / ORA, with an interactive enrichment network),
+co-expression network analysis (WGCNA), transcription-factor and pathway
+activity inference (decoupleR), per-sample gene-set signatures (GSVA /
+ssGSEA), optional AI-assisted interpretation, publication-ready figures,
+and reproducible R-script / HTML report / Methods-paragraph export.
 
 Supported organisms: **human**, **mouse**, **rat**.
 
+## Contents
+
+- [Gallery](#gallery)
+- [Why RNAflow?](#why-rnaflow)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Input formats](#input-formats)
+- [Demo datasets](#demo-datasets)
+- [Roadmap](#roadmap)
+- [Limitations](#limitations)
+- [Development](#development)
+- [License](#license)
+
+## Gallery
+
+**Differential expression** — volcano, MA plot, p-value diagnostics,
+top-gene heatmap and functional enrichment (GSEA + GO), from the bundled
+*airway* demo (dexamethasone vs control).
+
+![Differential expression and enrichment](paper/figures/figure2.png)
+
+Differential expression and enrichment
+
+**Sample overview & networks** — per-sample GSVA signatures, PCA, and
+WGCNA co-expression (soft-threshold selection, module–trait correlation,
+module enrichment), on the 8-cancer-type TCGA demo.
+
+![GSVA, PCA and WGCNA](paper/figures/figure3.png)
+
+GSVA, PCA and WGCNA
+
+**Multi-contrast comparison** — a pairwise volcano grid,
+significant-gene overlap (UpSet + Venn), a cross-contrast log2
+fold-change heatmap and the direction of change per contrast, on the
+8-cancer-type TCGA demo.
+
+![Multi-contrast comparison](paper/figures/figure4.png)
+
+Multi-contrast comparison
+
+**Validation** — RNAflow reproduces its own results exactly (round-trip
+through the exported R script), all-pairwise contrasts match a single
+shared fit, and fold changes concord with limma-voom on the *airway*
+demo.
+
+![Validation](paper/figures/figure5.png)
+
+Validation
+
 ## Why RNAflow?
 
-Most exploratory RNA-seq tools are either notebook-stuck (great for one
-project, awful to reuse) or Shiny one-shots (everything in `app.R`, no
-tests, no reuse). RNAflow is structured as a proper R package with:
+Downstream RNA-seq analysis is often done either with bespoke scripts —
+flexible, but written for a single project and harder to reuse and audit
+— or with interactive applications that prioritise ease of use. RNAflow
+aims to combine both: an interactive interface backed by a tested,
+reusable R package, with:
 
 - Clean module separation (UI + server per feature)
 - Pure function layer (figures and analyses testable without Shiny)
@@ -66,6 +120,23 @@ BiocManager::install(c(
 library(RNAflow)
 run_app()
 ```
+
+### Run with Docker (reproducible)
+
+The bundled `Dockerfile` fixes the R / Bioconductor release (R 4.5 /
+Bioconductor 3.22) and system environment RNAflow is built against, so
+the heavy Bioconductor dependency stack resolves reliably — the
+recommended way to share, deploy, or reproduce an environment.
+
+``` bash
+docker build -t rnaflow .
+docker run --rm -p 8080:8080 rnaflow
+# open http://localhost:8080
+```
+
+For byte-for-byte package pinning on top of the container, generate an
+optional `renv.lock` with `Rscript dev/make_renv_lock.R` (see that file
+for details).
 
 ### Programmatic API
 
@@ -119,20 +190,26 @@ columns = annotations.
 
 ## Demo datasets
 
-Bundled in `inst/extdata/` (see `dev/make_demo_*.R` for how they are
-built):
+Two real, published human datasets are bundled in `inst/extdata/` (see
+the matching `dev/make_demo_*.R` scripts for exactly how they are built
+from their Bioconductor sources):
 
-- **`demo_airway_*.csv`** — a real, published human dataset
-  ([airway](https://bioconductor.org/packages/airway/), Himes et
+- **`demo_airway_*.csv`** —
+  [airway](https://bioconductor.org/packages/airway/) (Himes et
   al. 2014): airway smooth muscle cells treated with **dexamethasone**
-  vs. control across **4 cell lines**. Organism = human; use `condition`
-  as the design variable and adjust for `cell`. Good for demonstrating
-  DE, covariate adjustment, and enrichment on genuine biology.
-- **`demo_multi_*.csv`** — a **simulated** mouse factorial set (genotype
-  × treatment, 6 groups) with a planted signal, for multi-contrast
-  comparison and WGCNA. Organism = mouse; design variable `group`.
-- **`demo_counts.csv` / `demo_metadata.csv`** — a minimal simulated
-  2-group set.
+  vs. control across **4 cell lines** (8 samples). Organism = human;
+  design variable `condition`, adjust for `cell`. Gene **symbols**. Good
+  for DE, covariate adjustment, and enrichment on genuine biology.
+- **`demo_tcga_*.csv`** — [TCGA
+  pan-cancer](https://doi.org/10.1038/nn.4038) via
+  [GSE62944](https://bioconductor.org/packages/GSE62944/) (Rahman *et
+  al.* 2015): **8 molecularly distinct cancer types × 15 tumors = 120
+  samples** (BRCA, LUAD, KIRC, LGG, THCA, PRAD, COAD, SKCM). Organism =
+  human; design variable `cancer_type`. Gene symbols. A **complex,
+  many-group** dataset that shows the tool’s power — cancer types
+  separate sharply in PCA / UMAP, WGCNA finds type-specific
+  co-expression modules, and the 8-level factor drives rich
+  multi-contrast comparisons.
 
 ## Roadmap
 
@@ -148,6 +225,12 @@ built):
   enrichment)
 - **Phase 5** ✅ — Self-contained HTML report + reproducible R script
   export for Methods
+- **Phase 6** ✅ (2026) — Linked volcano-table explorer, activity
+  inference (decoupleR TF / pathway), AI-assisted interpretation,
+  per-sample signatures (GSVA / ssGSEA), UMAP + interactive 3D PCA,
+  interactive enrichment network (visNetwork), distribution figures
+  (raincloud / beeswarm / alluvial), professional UI design system, and
+  a reproducible Docker image
 
 All roadmap phases are complete.
 
