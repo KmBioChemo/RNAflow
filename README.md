@@ -8,9 +8,9 @@
 [![DOI](https://zenodo.org/badge/1285061998.svg)](https://doi.org/10.5281/zenodo.21493110)
 <!-- badges: end -->
 
-> End-to-end bulk RNA-seq analysis platform — interactive Shiny app, packaged as an R package.
+> Downstream bulk RNA-seq analysis platform — interactive Shiny app, packaged as an R package.
 
-**RNAflow** is a modular Shiny application built as a proper R package for end-to-end bulk RNA-seq analysis. It takes raw count matrices and sample metadata as input and provides differential expression (DESeq2), QC diagnostics, sample overviews (PCA / UMAP / 3D PCA), a linked volcano-table explorer, multi-contrast comparisons, functional enrichment (GSEA / ORA, with an interactive enrichment network), co-expression network analysis (WGCNA), transcription-factor and pathway activity inference (decoupleR), per-sample gene-set signatures (GSVA / ssGSEA), optional AI-assisted interpretation, publication-ready figures, and reproducible R-script / HTML report / Methods-paragraph export.
+**RNAflow** is a modular Shiny application built as a proper R package for downstream bulk RNA-seq analysis. It takes raw count matrices and sample metadata as input and provides differential expression (DESeq2), QC diagnostics, sample overviews (PCA / UMAP / 3D PCA), a linked volcano-table explorer, multi-contrast comparisons, functional enrichment (GSEA / ORA, with an interactive enrichment network), co-expression network analysis (WGCNA), transcription-factor and pathway activity inference (decoupleR), per-sample gene-set signatures (GSVA / ssGSEA), optional AI-assisted interpretation, publication-ready figures, and reproducible R-script / HTML report / Methods-paragraph export.
 
 Supported organisms: **human**, **mouse**, **rat**.
 
