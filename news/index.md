@@ -1,5 +1,18 @@
 # Changelog
 
+## RNAflow 0.16.4 (2026-07-22)
+
+### Feature
+
+- **One-click demo datasets.** The *Data input* panel gains **Airway**
+  and **TCGA pan-cancer** buttons that load the bundled demo counts and
+  metadata through the same validated readers as an upload. The files
+  are resolved with
+  [`system.file()`](https://rdrr.io/r/base/system.file.html), so they
+  work from an installed package — previously the landing text pointed
+  at an `inst/extdata/` folder that does not exist after
+  `install_github()`.
+
 ## RNAflow 0.16.3 (2026-07-03)
 
 ### Change
