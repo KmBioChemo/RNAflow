@@ -1,11 +1,11 @@
 # RNAflow — reproducible container
 #
-# Pins the exact platform that RNAflow is developed against (R 4.5 /
-# Bioconductor 3.22) so the heavy Bioconductor dependency stack resolves
-# identically on any machine. This is the primary reproducibility guarantee
-# for the project — it fixes the R/Bioc release and system libraries, which a
-# renv lockfile alone cannot (see dev/make_renv_lock.R for the optional
-# CRAN/Bioc version pin on top of this).
+# Fixes the R / Bioconductor release that RNAflow is developed against (R 4.5 /
+# Bioconductor 3.22) and the system libraries, so the heavy Bioconductor
+# dependency stack resolves reliably. This is the main reproducibility layer —
+# it fixes the R/Bioc release and system environment, which a renv lockfile
+# alone cannot; for byte-for-byte package pinning on top of it, generate an
+# renv.lock (see dev/make_renv_lock.R).
 #
 # Build:  docker build -t rnaflow .
 # Run:    docker run --rm -p 8080:8080 rnaflow

@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 [![pkgdown](https://github.com/KmBioChemo/RNAflow/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/KmBioChemo/RNAflow/actions/workflows/pkgdown.yaml)
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
@@ -53,7 +53,7 @@ fold changes concord with limma-voom on the *airway* demo.
 
 ## Why RNAflow?
 
-Most exploratory RNA-seq tools are either notebook-stuck (great for one project, awful to reuse) or Shiny one-shots (everything in `app.R`, no tests, no reuse). RNAflow is structured as a proper R package with:
+Downstream RNA-seq analysis is often done either with bespoke scripts — flexible, but written for a single project and harder to reuse and audit — or with interactive applications that prioritise ease of use. RNAflow aims to combine both: an interactive interface backed by a tested, reusable R package, with:
 
 - Clean module separation (UI + server per feature)
 - Pure function layer (figures and analyses testable without Shiny)
@@ -101,10 +101,10 @@ run_app()
 
 ### Run with Docker (reproducible)
 
-The bundled `Dockerfile` pins the exact platform RNAflow is built against
-(R 4.5 / Bioconductor 3.22), so the heavy Bioconductor dependency stack
-resolves identically on any machine — the recommended way to share, deploy, or
-reproduce an environment.
+The bundled `Dockerfile` fixes the R / Bioconductor release (R 4.5 /
+Bioconductor 3.22) and system environment RNAflow is built against, so the heavy
+Bioconductor dependency stack resolves reliably — the recommended way to share,
+deploy, or reproduce an environment.
 
 ```bash
 docker build -t rnaflow .

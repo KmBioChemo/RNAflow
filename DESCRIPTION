@@ -1,10 +1,10 @@
 Package: RNAflow
-Title: An Interactive Shiny Platform for End-to-End RNA-seq Analysis
+Title: An Interactive and Reproducible Platform for Downstream Bulk RNA-seq Analysis
 Version: 0.16.3
 Authors@R: person("Karim", "Matmat", role = c("aut", "cre"),
                   email = "karimatmat@gmail.com")
 Description: RNAflow is a modular Shiny application packaged as an R package
-    for end-to-end bulk RNA-seq analysis. It takes raw count matrices and
+    for downstream bulk RNA-seq analysis. It takes raw count matrices and
     sample metadata as input and provides differential expression analysis
     (DESeq2), visualization (volcano, heatmap, PCA / UMAP / 3D PCA, a linked
     volcano-table explorer), quality-control diagnostics, multi-contrast
@@ -19,7 +19,7 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 Depends:
-    R (>= 4.2.0)
+    R (>= 4.4.0)
 Imports:
     shiny (>= 1.8.0),
     bslib,
