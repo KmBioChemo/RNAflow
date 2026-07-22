@@ -10,7 +10,7 @@ repository-code: "https://github.com/KmBioChemo/RNAflow"
 url: "https://KmBioChemo.github.io/RNAflow/"
 abstract: >-
   RNAflow is a modular Shiny application packaged as an R package for
-  end-to-end bulk RNA-seq analysis. From a raw count matrix and sample
+  downstream bulk RNA-seq analysis. From a raw count matrix and sample
   metadata it provides differential expression (DESeq2), quality-control
   diagnostics, sample overviews (PCA / UMAP / 3D PCA), a linked
   volcano-table explorer, multi-contrast comparison, functional enrichment
