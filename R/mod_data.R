@@ -17,6 +17,24 @@ mod_data_ui <- function(id) {
   bslib::card(
     bslib::card_header("Data input"),
     bslib::card_body(
+      ui_section_title("Try a demo dataset"),
+      shiny::div(
+        style = "display:flex; flex-direction:column; gap:6px;",
+        shiny::actionButton(
+          ns("demo_airway"), "Airway (8 samples)",
+          icon = shiny::icon("flask"),
+          class = "btn btn-outline-primary btn-sm",
+          width = "100%"),
+        shiny::actionButton(
+          ns("demo_tcga"), "TCGA pan-cancer (120 samples)",
+          icon = shiny::icon("dna"),
+          class = "btn btn-outline-primary btn-sm",
+          width = "100%")
+      ),
+      shiny::p(class = "rf-microcopy",
+               "Real published data bundled with the package — loads counts ",
+               "and metadata in one click, no download needed."),
+      shiny::tags$hr(style = "margin:8px 0;"),
       shiny::selectInput(ns("organism"), "Organism",
                          choices = c("Human" = "human",
                                      "Mouse" = "mouse",
@@ -52,6 +70,44 @@ mod_data_server <- function(id) {
     counts_r <- shiny::reactiveVal(NULL)
     meta_r   <- shiny::reactiveVal(NULL)
     de_r     <- shiny::reactiveVal(NULL)
+
+    # Bundled demo datasets: load the packaged counts + metadata CSVs through
+    # the same validated readers as an upload. Files live in inst/extdata/ and
+    # are resolved with system.file() so they work from an installed package
+    # (there is no browsable inst/extdata/ folder after install).
+    load_demo <- function(base, organism) {
+      cf <- system.file("extdata", paste0(base, "_counts.csv"),
+                        package = "RNAflow")
+      mf <- system.file("extdata", paste0(base, "_metadata.csv"),
+                        package = "RNAflow")
+      if (!nzchar(cf) || !nzchar(mf)) {
+        shiny::showNotification(
+          "Demo files were not found in the installed package.",
+          type = "error", duration = 8)
+        return(invisible(NULL))
+      }
+      tryCatch({
+        m <- read_counts(cf, ext = "csv",
+                         validate = TRUE, strict_integer = TRUE)
+        d <- read_metadata(mf, ext = "csv", validate = TRUE,
+                           counts_samples = colnames(m))
+        counts_r(m)
+        meta_r(d)
+        de_r(NULL)
+        shiny::updateSelectInput(session, "organism", selected = organism)
+        shiny::showNotification(
+          sprintf("Demo loaded: %d genes × %d samples.",
+                  nrow(m), ncol(m)),
+          type = "message", duration = 5)
+      }, error = function(e) {
+        shiny::showNotification(
+          paste("Demo load failed:", conditionMessage(e)),
+          type = "error", duration = 10)
+      })
+    }
+
+    shiny::observeEvent(input$demo_airway, load_demo("demo_airway", "human"))
+    shiny::observeEvent(input$demo_tcga,   load_demo("demo_tcga", "human"))
 
     # Counts upload
     shiny::observeEvent(input$counts_file, {
