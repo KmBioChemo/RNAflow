@@ -5,7 +5,6 @@
 [![pkgdown](https://github.com/KmBioChemo/RNAflow/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/KmBioChemo/RNAflow/actions/workflows/pkgdown.yaml)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![DOI](https://zenodo.org/badge/1285061998.svg)](https://doi.org/10.5281/zenodo.21493110)
 <!-- badges: end -->
 
 > Downstream bulk RNA-seq analysis platform — interactive Shiny app, packaged as an R package.
