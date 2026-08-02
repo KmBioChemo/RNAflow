@@ -27,9 +27,8 @@ NULL
 #' @param show_legend,annotation_legend display legends
 #' @param show_annotation_names show the annotation track names (e.g. "condition",
 #'   "Direction") beside the tracks; when FALSE they appear only in the legend
-#' @param direction_annotation add up/down row annotation. Its colours are
-#'   taken from the two extremes of the heatmap palette (Up = high end,
-#'   Down = low end), so the annotation matches the figure's colour scheme.
+#' @param direction_annotation add up/down row annotation
+#' @param col_dir_up,col_dir_down colors for direction annotation
 #' @param ann_title custom column annotation header (e.g. "Group")
 #' @return a pheatmap object (gtable)
 #' @export
@@ -45,6 +44,7 @@ fig_heatmap <- function(counts_mat, res, metadata,
                         show_legend = TRUE, annotation_legend = TRUE,
                         show_annotation_names = TRUE,
                         direction_annotation = FALSE,
+                        col_dir_up = "#C0392B", col_dir_down = "#2980B9",
                         ann_title = "") {
 
   if (is.null(counts_mat)) {
@@ -97,11 +97,7 @@ fig_heatmap <- function(counts_mat, res, metadata,
     dir_df <- dir_df[!duplicated(dir_df$gene), ]
     rownames(dir_df) <- dir_df$gene
     ann_row <- dir_df[top, "Direction", drop = FALSE]
-    # Direction colours are taken from the extremes of the chosen heatmap
-    # palette so the annotation matches the figure: Up = high end, Down = low
-    # end (pheatmap maps low expression to color[1], high to color[length]).
-    hm_pal <- make_palette(palette_name, 100)
-    ann_clr[["Direction"]] <- c("Up" = hm_pal[length(hm_pal)], "Down" = hm_pal[1])
+    ann_clr[["Direction"]] <- c("Up" = col_dir_up, "Down" = col_dir_down)
   }
 
   main_arg <- if (isTRUE(show_title)) {

@@ -26,6 +26,8 @@ fig_heatmap(
   annotation_legend = TRUE,
   show_annotation_names = TRUE,
   direction_annotation = FALSE,
+  col_dir_up = "#C0392B",
+  col_dir_down = "#2980B9",
   ann_title = ""
 )
 }
@@ -62,9 +64,9 @@ fig_heatmap(
 \item{show_annotation_names}{show the annotation track names (e.g. "condition",
 "Direction") beside the tracks; when FALSE they appear only in the legend}
 
-\item{direction_annotation}{add up/down row annotation. Its colours are
-taken from the two extremes of the heatmap palette (Up = high end,
-Down = low end), so the annotation matches the figure's colour scheme.}
+\item{direction_annotation}{add up/down row annotation}
+
+\item{col_dir_up, col_dir_down}{colors for direction annotation}
 
 \item{ann_title}{custom column annotation header (e.g. "Group")}
 }
