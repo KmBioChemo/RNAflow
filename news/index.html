@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +33,22 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/v0.16.4/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/v0.16.5/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.16.5" id="rnaflow-0165-2026-08-02">RNAflow 0.16.5 (2026-08-02)<a class="anchor" aria-label="anchor" href="#rnaflow-0165-2026-08-02"></a></h2>
+<div class="section level3">
+<h3 id="fix-0-16-5">Fix<a class="anchor" aria-label="anchor" href="#fix-0-16-5"></a></h3>
+<ul><li>
+<strong>Activity inference works offline.</strong> Human CollecTRI (transcription-factor regulons) and PROGENy (pathway footprints) networks are now bundled with the package (<code>inst/extdata/*.rds</code>). <code><a href="../reference/get_tf_network.html">get_tf_network()</a></code> / <code><a href="../reference/get_pathway_network.html">get_pathway_network()</a></code> still try a live OmniPath download first, but fall back to these copies when the fetch fails — so TF / pathway activity no longer breaks when the OmniPath web service (or its broken offline fallback) is unreachable. Only human is bundled; mouse / rat still require the live fetch. <code>data-raw/make_networks.R</code> documents how the snapshots are generated.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-0-16-5">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-16-5"></a></h3>
+<ul><li>
+<strong>README from-scratch install.</strong> Added a step-by-step “Installation from scratch (never used R)” section covering installing R, RStudio, the required system libraries, Bioconductor dependencies, and launching the app, for users starting with nothing installed.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.16.4" id="rnaflow-0164-2026-07-22">RNAflow 0.16.4 (2026-07-22)<a class="anchor" aria-label="anchor" href="#rnaflow-0164-2026-07-22"></a></h2>
 <div class="section level3">

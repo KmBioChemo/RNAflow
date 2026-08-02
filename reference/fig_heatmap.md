@@ -97,8 +97,10 @@ fig_heatmap(
 
 - show_annotation_names:
 
-  show the annotation track names (e.g. "condition", "Direction") beside
-  the tracks; when FALSE they appear only in the legend
+  show the row annotation track name (e.g. "Direction") beside the
+  track; when FALSE it appears only in the legend. The column annotation
+  name is never drawn on the plot (it duplicates the annotation legend
+  title and can overflow onto the legends).
 
 - direction_annotation:
 

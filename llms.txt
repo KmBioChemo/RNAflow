@@ -1,10 +1,10 @@
 # RNAflow
 
-> End-to-end bulk RNA-seq analysis platform — interactive Shiny app,
+> Downstream bulk RNA-seq analysis platform — interactive Shiny app,
 > packaged as an R package.
 
 **RNAflow** is a modular Shiny application built as a proper R package
-for end-to-end bulk RNA-seq analysis. It takes raw count matrices and
+for downstream bulk RNA-seq analysis. It takes raw count matrices and
 sample metadata as input and provides differential expression (DESeq2),
 QC diagnostics, sample overviews (PCA / UMAP / 3D PCA), a linked
 volcano-table explorer, multi-contrast comparisons, functional
@@ -82,9 +82,18 @@ reusable R package, with:
 
 ## Installation
 
+> **Never used R before?** Jump to [Installation from
+> scratch](#installation-from-scratch-never-used-r) for a full
+> step-by-step that assumes nothing is installed. The steps just below
+> assume you already have a working R.
+
 ``` r
 
-# install.packages("devtools")
+# Install the two installer packages first if you don't already have them:
+if (!require("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+if (!require("devtools",    quietly = TRUE)) install.packages("devtools")
+
+# Then install RNAflow (see "Bioconductor dependencies" below for the heavy deps):
 devtools::install_github("KmBioChemo/RNAflow")
 ```
 
@@ -110,6 +119,100 @@ BiocManager::install(c(
   "WGCNA", "ComplexHeatmap"
 ))
 ```
+
+### Installation from scratch (never used R)
+
+If you have **nothing** installed yet, follow these steps in order. You
+only do steps 1–3 once per computer.
+
+#### 1. Install R
+
+R is the language RNAflow runs on. Download the latest R (4.4 or newer)
+for your operating system from **<https://cran.r-project.org/>** and run
+the installer with the default options.
+
+- **Windows** — download “R for Windows” → “base” → *Download R-x.x.x
+  for Windows*, run the `.exe`.
+- **macOS** — download the `.pkg` matching your chip (Apple Silicon =
+  “arm64”, older Intel Macs = the plain one) and run it.
+- **Linux** — install from your distribution, e.g. Ubuntu/Debian
+  `sudo apt install r-base`, Fedora `sudo dnf install R`.
+
+#### 2. Install RStudio (recommended)
+
+RStudio is a friendly window for running R. Download **RStudio Desktop
+(Free)** from **<https://posit.co/download/rstudio-desktop/>** and
+install it. Open RStudio — everything below is typed into its
+**Console** (the pane with the `>` prompt).
+
+> You can skip RStudio and use the plain R console instead, but RStudio
+> makes the whole process easier.
+
+#### 3. Install the system libraries some packages need
+
+A few Bioconductor packages compile against system libraries. Install
+those **outside** R, once:
+
+- **Windows** — install **Rtools** (matching your R version) from
+  <https://cran.r-project.org/bin/windows/Rtools/>. Nothing else needed.
+
+- **macOS** — install the Xcode command-line tools by running this in
+  the **Terminal** app (not R): `xcode-select --install`.
+
+- **Linux (Ubuntu/Debian)** — run in a terminal:
+
+  ``` bash
+  sudo apt update && sudo apt install -y build-essential libcurl4-openssl-dev \
+    libssl-dev libxml2-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev \
+    libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
+  ```
+
+#### 4. Install the R packages (in the R / RStudio Console)
+
+Copy–paste each block into the Console and press Enter. The Bioconductor
+step downloads a lot and can take 20–40 minutes the first time — let it
+finish.
+
+``` r
+
+# a) tools to install other packages
+install.packages(c("BiocManager", "devtools"))
+
+# b) Bioconductor dependencies
+BiocManager::install(c(
+  "DESeq2", "SummarizedExperiment",
+  "fgsea", "clusterProfiler", "ReactomePA",
+  "org.Hs.eg.db", "org.Mm.eg.db", "org.Rn.eg.db",
+  "WGCNA", "ComplexHeatmap",
+  # optional, only for TF / pathway activity inference:
+  "decoupleR", "OmnipathR"
+))
+
+# c) RNAflow itself (pulls in the remaining CRAN packages automatically)
+devtools::install_github("KmBioChemo/RNAflow")
+```
+
+> If you are asked *“Do you want to install from sources the packages
+> which need compilation?”*, answering **No** is fine and faster.
+
+#### 5. Launch the app
+
+``` r
+
+library(RNAflow)
+run_app()
+```
+
+Your web browser opens with RNAflow running locally. Load the bundled
+demo data (see [Demo datasets](#demo-datasets)) to try it immediately.
+
+> **Note on activity inference (TF / pathway):** RNAflow ships offline
+> copies of the human CollecTRI and PROGENy networks, so
+> transcription-factor and pathway activity work for human even when the
+> OmniPath web service is down — no `OmnipathR` needed. The `decoupleR`
+> package is still required to do the scoring, and `OmnipathR` is only
+> needed to fetch live networks or to analyse **mouse / rat** activity,
+> so keep both in step (b) if you want activity inference.
 
 ## Usage
 
