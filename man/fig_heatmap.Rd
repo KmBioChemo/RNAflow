@@ -61,8 +61,10 @@ fig_heatmap(
 
 \item{show_legend, annotation_legend}{display legends}
 
-\item{show_annotation_names}{show the annotation track names (e.g. "condition",
-"Direction") beside the tracks; when FALSE they appear only in the legend}
+\item{show_annotation_names}{show the row annotation track name (e.g.
+"Direction") beside the track; when FALSE it appears only in the legend.
+The column annotation name is never drawn on the plot (it duplicates the
+annotation legend title and can overflow onto the legends).}
 
 \item{direction_annotation}{add up/down row annotation}
 
