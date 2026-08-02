@@ -48,6 +48,8 @@ mod_heatmap_ui <- function(id) {
         shiny::checkboxInput(ns("lg"), "Show color legend", TRUE),
         shiny::checkboxInput(ns("al"), "Show annotation legend", TRUE),
         shiny::checkboxInput(ns("dir"), "Show direction annotation", FALSE),
+        ui_color_picker(ns("hu"), "Dir Up",   "#C0392B"),
+        ui_color_picker(ns("hd"), "Dir Down", "#2980B9"),
         shiny::textInput(ns("ann_title"), "Column annotation header", "")
       ),
       ui_export_bar(ns("hm"), 8, 8)
@@ -97,6 +99,8 @@ mod_heatmap_server <- function(id, de_reactive, counts_reactive, metadata_reacti
           show_dend_rows = input$dr, show_dend_cols = input$dc,
           show_legend = input$lg, annotation_legend = input$al,
           direction_annotation = input$dir,
+          col_dir_up = safe_col(input$hu, "#C0392B"),
+          col_dir_down = safe_col(input$hd, "#2980B9"),
           ann_title = input$ann_title %||% ""
         )
       }, error = function(e) {

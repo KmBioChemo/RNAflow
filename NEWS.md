@@ -11,14 +11,6 @@
   bundled; mouse / rat still require the live fetch. `data-raw/make_networks.R`
   documents how the snapshots are generated.
 
-## Change
-
-- **Heatmap direction annotation follows the palette.** The up/down direction
-  strip now takes its two colours from the extremes of the chosen heatmap
-  palette (Up = high end, Down = low end) instead of two separate colour
-  pickers, so it always matches the figure. The redundant "Dir Up" / "Dir Down"
-  pickers are removed from the Heatmap panel.
-
 ## Documentation
 
 - **README from-scratch install.** Added a step-by-step "Installation from
