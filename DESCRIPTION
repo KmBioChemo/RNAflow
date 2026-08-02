@@ -1,6 +1,6 @@
 Package: RNAflow
 Title: An Interactive and Reproducible Platform for Downstream Bulk RNA-seq Analysis
-Version: 0.16.4
+Version: 0.16.5
 Authors@R: person("Karim", "Matmat", role = c("aut", "cre"),
                   email = "karimatmat@gmail.com")
 Description: RNAflow is a modular Shiny application packaged as an R package
