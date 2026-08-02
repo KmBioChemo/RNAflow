@@ -25,8 +25,10 @@ NULL
 #' @param show_rownames,show_colnames display row / column labels
 #' @param show_dend_rows,show_dend_cols display dendrograms
 #' @param show_legend,annotation_legend display legends
-#' @param show_annotation_names show the annotation track names (e.g. "condition",
-#'   "Direction") beside the tracks; when FALSE they appear only in the legend
+#' @param show_annotation_names show the row annotation track name (e.g.
+#'   "Direction") beside the track; when FALSE it appears only in the legend.
+#'   The column annotation name is never drawn on the plot (it duplicates the
+#'   annotation legend title and can overflow onto the legends).
 #' @param direction_annotation add up/down row annotation
 #' @param col_dir_up,col_dir_down colors for direction annotation
 #' @param ann_title custom column annotation header (e.g. "Group")
@@ -118,7 +120,10 @@ fig_heatmap <- function(counts_mat, res, metadata,
     annotation_row = ann_row,
     annotation_colors = if (length(ann_clr) > 0) ann_clr else NULL,
     annotation_legend = isTRUE(annotation_legend),
-    annotation_names_col = isTRUE(show_annotation_names),
+    # The column annotation track name duplicates the annotation legend title
+    # (both show, e.g., "Group") and can overflow onto the legends, so it is
+    # never drawn on the plot -- the legend already labels the track.
+    annotation_names_col = FALSE,
     annotation_names_row = isTRUE(show_annotation_names),
     fontsize_row = max(5, 8 - floor(length(top) / 20)),
     fontsize_col = 9, fontsize = 9,
