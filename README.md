@@ -71,7 +71,11 @@ Downstream RNA-seq analysis is often done either with bespoke scripts — flexib
 > assume you already have a working R.
 
 ```r
-# install.packages("devtools")
+# Install the two installer packages first if you don't already have them:
+if (!require("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+if (!require("devtools",    quietly = TRUE)) install.packages("devtools")
+
+# Then install RNAflow (see "Bioconductor dependencies" below for the heavy deps):
 devtools::install_github("KmBioChemo/RNAflow")
 ```
 
