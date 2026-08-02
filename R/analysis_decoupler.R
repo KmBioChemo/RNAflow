@@ -39,68 +39,118 @@ activity_input <- function(de, by = "stat") {
   matrix(v, ncol = 1, dimnames = list(names(v), "t"))
 }
 
+# Load a network shipped inside the package (inst/extdata/*.rds).
+# These offline copies are the reason activity inference works even when the
+# OmniPath web service (or its broken static-table fallback) is unreachable.
+# Only human networks are bundled; see data-raw/make_networks.R for how they
+# were generated. Returns NULL when the file is missing or unreadable so the
+# caller can decide how to report the failure.
+load_bundled_network <- function(name) {
+  f <- system.file("extdata", name, package = "RNAflow")
+  if (!nzchar(f) || !file.exists(f)) {
+    return(NULL)
+  }
+  tryCatch({
+    net <- readRDS(f)
+    if (is.data.frame(net) && nrow(net) > 0) as.data.frame(net) else NULL
+  }, error = function(e) NULL)
+}
+
 #' Fetch a transcription-factor regulon network (CollecTRI)
+#'
+#' Tries the live OmniPath download via \pkg{decoupleR} first; if that is
+#' unavailable or fails (a frequent problem -- the web service can be down and
+#' its offline static-table fallback is broken upstream), it falls back to the
+#' human CollecTRI network bundled with the package, so activity inference
+#' keeps working fully offline.
 #'
 #' @param organism one of "human", "mouse", "rat"
 #' @return a network data.frame (`source`, `target`, `mor`)
 #' @export
 get_tf_network <- function(organism) {
-  if (!requireNamespace("decoupleR", quietly = TRUE)) {
-    stop("Package 'decoupleR' is required for activity inference. ",
-         "Install with: BiocManager::install('decoupleR')", call. = FALSE)
+  org <- decoupler_organism(organism)
+
+  # 1. Try a live fetch when decoupleR + OmnipathR are both installed.
+  if (requireNamespace("decoupleR", quietly = TRUE) &&
+      requireNamespace("OmnipathR", quietly = TRUE)) {
+    net <- tryCatch(
+      as.data.frame(decoupleR::get_collectri(
+        organism = org, split_complexes = FALSE)),
+      error = function(e) NULL)
+    if (is.data.frame(net) && nrow(net) > 0) {
+      return(net)
+    }
   }
-  if (!requireNamespace("OmnipathR", quietly = TRUE)) {
-    stop("Package 'OmnipathR' is required to fetch the CollecTRI network ",
-         "(decoupleR delegates the download to it). ",
-         "Install with: BiocManager::install('OmnipathR')", call. = FALSE)
+
+  # 2. Fall back to the bundled offline network (human only).
+  if (org == "human") {
+    net <- load_bundled_network("collectri_human.rds")
+    if (!is.null(net)) {
+      return(net)
+    }
   }
-  net <- tryCatch(
-    as.data.frame(decoupleR::get_collectri(
-      organism = decoupler_organism(organism), split_complexes = FALSE)),
-    error = function(e) stop(
-      "Could not fetch the CollecTRI transcription-factor network for organism '",
-      decoupler_organism(organism), "'. This is often a temporary OmniPath ",
-      "server issue (its offline static-table fallback is broken upstream), but ",
-      "can also mean this organism is unavailable in the installed ",
-      "decoupleR / OmnipathR. Pathway activity (PROGENy) is unaffected. ",
-      "Underlying error: ", conditionMessage(e), call. = FALSE))
-  if (!is.data.frame(net) || nrow(net) == 0) {
-    stop("The CollecTRI network came back empty (OmniPath may be down). ",
-         "Try again later, or use pathway activity.", call. = FALSE)
-  }
-  net
+
+  stop(
+    "Could not obtain the CollecTRI transcription-factor network for organism '",
+    org, "'. The live OmniPath fetch failed (server down, or decoupleR / ",
+    "OmnipathR not installed) and ",
+    if (org == "human")
+      "the bundled offline copy could not be read."
+    else
+      "no offline copy is bundled for this organism (only human is).",
+    " Pathway activity (PROGENy) may still work.", call. = FALSE)
 }
 
 #' Fetch a pathway-responsive-gene network (PROGENy)
+#'
+#' Tries the live OmniPath download via \pkg{decoupleR} first; if that is
+#' unavailable or fails, it falls back to the human PROGENy network bundled
+#' with the package (top 500 responsive genes per pathway), so pathway
+#' activity inference keeps working fully offline.
 #'
 #' @param organism one of "human", "mouse", "rat"
 #' @param top number of most responsive genes per pathway
 #' @return a network data.frame (`source`, `target`, `weight`, ...)
 #' @export
 get_pathway_network <- function(organism, top = 500) {
-  if (!requireNamespace("decoupleR", quietly = TRUE)) {
-    stop("Package 'decoupleR' is required for activity inference. ",
-         "Install with: BiocManager::install('decoupleR')", call. = FALSE)
+  org <- decoupler_organism(organism)
+
+  # 1. Try a live fetch when decoupleR + OmnipathR are both installed.
+  if (requireNamespace("decoupleR", quietly = TRUE) &&
+      requireNamespace("OmnipathR", quietly = TRUE)) {
+    net <- tryCatch(
+      as.data.frame(decoupleR::get_progeny(organism = org, top = top)),
+      error = function(e) NULL)
+    if (is.data.frame(net) && nrow(net) > 0) {
+      return(net)
+    }
   }
-  if (!requireNamespace("OmnipathR", quietly = TRUE)) {
-    stop("Package 'OmnipathR' is required to fetch the PROGENy network ",
-         "(decoupleR delegates the download to it). ",
-         "Install with: BiocManager::install('OmnipathR')", call. = FALSE)
+
+  # 2. Fall back to the bundled offline network (human only). The bundle holds
+  #    the top 500 genes per pathway; honour a smaller `top` request.
+  if (org == "human") {
+    net <- load_bundled_network("progeny_human.rds")
+    if (!is.null(net)) {
+      if (is.numeric(top) && "p_value" %in% colnames(net)) {
+        net <- do.call(rbind, lapply(split(net, net$source), function(d) {
+          d <- d[order(d$p_value), , drop = FALSE]
+          utils::head(d, top)
+        }))
+        rownames(net) <- NULL
+      }
+      return(net)
+    }
   }
-  net <- tryCatch(
-    as.data.frame(decoupleR::get_progeny(
-      organism = decoupler_organism(organism), top = top)),
-    error = function(e) stop(
-      "Could not fetch the PROGENy pathway network for organism '",
-      decoupler_organism(organism), "'. The OmniPath web service may be ",
-      "temporarily unavailable, or this organism may not be available in the ",
-      "installed decoupleR / OmnipathR. Underlying error: ",
-      conditionMessage(e), call. = FALSE))
-  if (!is.data.frame(net) || nrow(net) == 0) {
-    stop("The PROGENy network came back empty (OmniPath may be down). ",
-         "Try again later.", call. = FALSE)
-  }
-  net
+
+  stop(
+    "Could not obtain the PROGENy pathway network for organism '", org,
+    "'. The live OmniPath fetch failed (server down, or decoupleR / OmnipathR ",
+    "not installed) and ",
+    if (org == "human")
+      "the bundled offline copy could not be read."
+    else
+      "no offline copy is bundled for this organism (only human is).",
+    call. = FALSE)
 }
 
 #' Infer regulator / pathway activity from a DE contrast
