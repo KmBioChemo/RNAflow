@@ -1,3 +1,31 @@
+# RNAflow 0.16.5 (2026-08-02)
+
+## Fix
+
+- **Activity inference works offline.** Human CollecTRI (transcription-factor
+  regulons) and PROGENy (pathway footprints) networks are now bundled with the
+  package (`inst/extdata/*.rds`). `get_tf_network()` / `get_pathway_network()`
+  still try a live OmniPath download first, but fall back to these copies when
+  the fetch fails — so TF / pathway activity no longer breaks when the OmniPath
+  web service (or its broken offline fallback) is unreachable. Only human is
+  bundled; mouse / rat still require the live fetch. `data-raw/make_networks.R`
+  documents how the snapshots are generated.
+
+## Change
+
+- **Heatmap direction annotation follows the palette.** The up/down direction
+  strip now takes its two colours from the extremes of the chosen heatmap
+  palette (Up = high end, Down = low end) instead of two separate colour
+  pickers, so it always matches the figure. The redundant "Dir Up" / "Dir Down"
+  pickers are removed from the Heatmap panel.
+
+## Documentation
+
+- **README from-scratch install.** Added a step-by-step "Installation from
+  scratch (never used R)" section covering installing R, RStudio, the required
+  system libraries, Bioconductor dependencies, and launching the app, for users
+  starting with nothing installed.
+
 # RNAflow 0.16.4 (2026-07-22)
 
 ## Feature
