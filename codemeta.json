@@ -29,9 +29,40 @@
   "author": [
     {
       "@type": "Person",
+      "givenName": "Tamara",
+      "familyName": "Pfanner",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Department of Biomedicine, University of Basel, Mattenstrasse 28, CH-4058 Basel, Switzerland"
+      }
+    },
+    {
+      "@type": "Person",
+      "givenName": "Rafael P.",
+      "familyName": "Silveira",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Department of Biomedicine, University of Basel, Mattenstrasse 28, CH-4058 Basel, Switzerland"
+      }
+    },
+    {
+      "@type": "Person",
+      "givenName": "Matthias P.",
+      "familyName": "Wymann",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Department of Biomedicine, University of Basel, Mattenstrasse 28, CH-4058 Basel, Switzerland"
+      }
+    },
+    {
+      "@type": "Person",
       "givenName": "Karim",
       "familyName": "Matmat",
-      "email": "karimatmat@gmail.com"
+      "email": "karim.matmat@unibas.ch",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Department of Biomedicine, University of Basel, Mattenstrasse 28, CH-4058 Basel, Switzerland"
+      }
     }
   ],
   "maintainer": [
@@ -39,7 +70,11 @@
       "@type": "Person",
       "givenName": "Karim",
       "familyName": "Matmat",
-      "email": "karimatmat@gmail.com"
+      "email": "karim.matmat@unibas.ch",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Department of Biomedicine, University of Basel, Mattenstrasse 28, CH-4058 Basel, Switzerland"
+      }
     }
   ]
 }

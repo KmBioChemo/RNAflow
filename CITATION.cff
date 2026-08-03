@@ -3,9 +3,19 @@ message: "If you use RNAflow, please cite it using this metadata."
 title: "RNAflow: An Interactive and Reproducible Platform for Downstream Bulk RNA-seq Analysis"
 type: software
 authors:
+  - family-names: Pfanner
+    given-names: Tamara
+    affiliation: "Department of Biomedicine, University of Basel, Mattenstrasse 28, CH-4058 Basel, Switzerland"
+  - family-names: Silveira
+    given-names: "Rafael P."
+    affiliation: "Department of Biomedicine, University of Basel, Mattenstrasse 28, CH-4058 Basel, Switzerland"
+  - family-names: Wymann
+    given-names: "Matthias P."
+    affiliation: "Department of Biomedicine, University of Basel, Mattenstrasse 28, CH-4058 Basel, Switzerland"
   - family-names: Matmat
     given-names: Karim
-    email: karimatmat@gmail.com
+    email: karim.matmat@unibas.ch
+    affiliation: "Department of Biomedicine, University of Basel, Mattenstrasse 28, CH-4058 Basel, Switzerland"
 repository-code: "https://github.com/KmBioChemo/RNAflow"
 url: "https://KmBioChemo.github.io/RNAflow/"
 abstract: >-
