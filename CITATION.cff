@@ -39,4 +39,9 @@ keywords:
   - reproducibility
 license: MIT
 version: 0.16.5
+doi: 10.5281/zenodo.21776513
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.21776513
+    description: "Archived software (this version) on Zenodo"
 date-released: "2026-08-02"

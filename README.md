@@ -1,6 +1,7 @@
 # RNAflow
 
 <!-- badges: start -->
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21776513.svg)](https://doi.org/10.5281/zenodo.21776513)
 [![R-CMD-check](https://github.com/KmBioChemo/RNAflow/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/KmBioChemo/RNAflow/actions/workflows/R-CMD-check.yaml)
 [![pkgdown](https://github.com/KmBioChemo/RNAflow/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/KmBioChemo/RNAflow/actions/workflows/pkgdown.yaml)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
