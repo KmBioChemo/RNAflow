@@ -1,12 +1,16 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 #
-# Runs R CMD check INSIDE the Bioconductor container so the heavy Bioc
-# dependency stack (DESeq2, WGCNA, GSVA, decoupleR, OmnipathR,
-# clusterProfiler, ComplexHeatmap, ...) resolves reliably — the same platform
-# the project is developed and Docker-shipped against (R 4.5 / Bioc 3.22).
+# Runs R CMD check on the standard GitHub runner (NOT inside the Bioconductor
+# container). The container image was ~5 GB and left too little disk to compile
+# the full Bioconductor dependency stack from source, so the job kept failing
+# with "No space left on device" while installing deps -- before the check even
+# started. The pkgdown workflow installs the same deps on the plain runner and
+# succeeds, so we mirror that setup here and free extra disk up front. The
+# pinned Bioconductor container is still used for the shipped Docker image
+# (see Dockerfile); only the CI check platform changes.
 #
-# Triggers on demand (workflow_dispatch) and on pull requests only — NOT on
-# every push — so it does not burn GitHub Actions minutes on routine commits.
+# Triggers on demand (workflow_dispatch) and on pull requests only -- NOT on
+# every push -- so it does not burn GitHub Actions minutes on routine commits.
 on:
   workflow_dispatch:
   pull_request:
@@ -23,22 +27,31 @@ concurrency:
 jobs:
   R-CMD-check:
     runs-on: ubuntu-latest
-    container: bioconductor/bioconductor_docker:RELEASE_3_22
-
-    name: bioc-container (R 4.5 / Bioc 3.22)
+    name: ubuntu-latest (R release / Bioconductor)
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      R_KEEP_PKG_SOURCE: yes
       # Optional Suggests packages should not fail the check if unavailable.
       _R_CHECK_FORCE_SUGGESTS_: "false"
 
     steps:
+      # The heavy Bioconductor stack compiles from source; remove the runner's
+      # large pre-installed toolchains (unused by R) so it does not run out of
+      # disk while installing dependencies.
+      - name: Free up disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/lib/android \
+                      /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force || true
+          df -h /
+
       - uses: actions/checkout@v4
 
-      # The container runs as root; mark the checkout dir safe for git.
-      - name: Mark workspace safe for git
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
