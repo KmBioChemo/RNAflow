@@ -89,5 +89,4 @@ Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://github.com/KmBioChemo/RNAflow, https://KmBioChemo.github.io/RNAflow/
 BugReports: https://github.com/KmBioChemo/RNAflow/issues
-Config/roxygen2/version: 8.0.0
 RoxygenNote: 7.3.3

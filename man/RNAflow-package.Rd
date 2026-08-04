@@ -4,10 +4,10 @@
 \name{RNAflow-package}
 \alias{RNAflow-package}
 \alias{RNAflow}
-\title{RNAflow: end-to-end bulk RNA-seq analysis platform}
+\title{RNAflow: downstream bulk RNA-seq analysis platform}
 \description{
 RNAflow is a modular Shiny application packaged as an R package for
-end-to-end bulk RNA-seq analysis. It takes raw count matrices and
+downstream bulk RNA-seq analysis. It takes raw count matrices and
 sample metadata as input and provides:
 }
 \details{

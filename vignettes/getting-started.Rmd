@@ -13,7 +13,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 6,
 have_deseq2 <- requireNamespace("DESeq2", quietly = TRUE)
 ```
 
-RNAflow is an end-to-end bulk RNA-seq analysis platform, usable either as an
+RNAflow is a downstream bulk RNA-seq analysis platform, usable either as an
 interactive Shiny app (`run_app()`) or as a set of pure, scriptable functions.
 This vignette is a **reproducible reference analysis**: the core steps below run
 on a bundled, published dataset so you can reproduce a real result end to end.

@@ -7,7 +7,7 @@ template:
 
 home:
   title: RNAflow
-  description: End-to-end bulk RNA-seq analysis platform.
+  description: Downstream bulk RNA-seq analysis platform.
 
 reference:
 - title: Application

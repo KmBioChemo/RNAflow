@@ -13,7 +13,7 @@
 FROM bioconductor/bioconductor_docker:RELEASE_3_22
 
 LABEL org.opencontainers.image.title="RNAflow" \
-      org.opencontainers.image.description="Interactive Shiny platform for end-to-end bulk RNA-seq analysis" \
+      org.opencontainers.image.description="Interactive Shiny platform for downstream bulk RNA-seq analysis" \
       org.opencontainers.image.source="https://github.com/KmBioChemo/RNAflow" \
       org.opencontainers.image.licenses="MIT"
 

@@ -2,10 +2,14 @@ citHeader("To cite RNAflow in publications use:")
 
 bibentry(
   bibtype = "Manual",
-  title   = "RNAflow: An Interactive Shiny Platform for End-to-End RNA-seq Analysis",
-  author  = person("Karim", "Matmat"),
+  title   = "RNAflow: An Interactive and Reproducible Platform for Downstream Bulk RNA-seq Analysis",
+  author  = c(person("Tamara", "Pfanner"),
+              person("Rafael P.", "Silveira"),
+              person("Matthias P.", "Wymann"),
+              person("Karim", "Matmat")),
   year    = "2026",
   note    = paste("R package version", meta$Version),
+  doi     = "10.5281/zenodo.21493110",
   url     = "https://github.com/KmBioChemo/RNAflow",
   key     = "RNAflow"
 )

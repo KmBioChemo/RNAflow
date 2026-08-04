@@ -1,7 +1,7 @@
-#' RNAflow: end-to-end bulk RNA-seq analysis platform
+#' RNAflow: downstream bulk RNA-seq analysis platform
 #'
 #' RNAflow is a modular Shiny application packaged as an R package for
-#' end-to-end bulk RNA-seq analysis. It takes raw count matrices and
+#' downstream bulk RNA-seq analysis. It takes raw count matrices and
 #' sample metadata as input and provides:
 #'
 #' - **Differential expression** analysis with DESeq2 (LFC shrinkage,
