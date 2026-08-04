@@ -35,7 +35,8 @@ Supported organisms: **human**, **mouse**, **rat**.
 top-gene heatmap and functional enrichment (GSEA + GO), from the bundled
 *airway* demo (dexamethasone vs control).
 
-![Differential expression and enrichment](paper/figures/figure2.png)
+![Differential expression and
+enrichment](reference/figures/gallery-differential-expression.png)
 
 Differential expression and enrichment
 
@@ -43,7 +44,8 @@ Differential expression and enrichment
 WGCNA co-expression (soft-threshold selection, module–trait correlation,
 module enrichment), on the 8-cancer-type TCGA demo.
 
-![GSVA, PCA and WGCNA](paper/figures/figure3.png)
+![GSVA, PCA and
+WGCNA](reference/figures/gallery-sample-overview-networks.png)
 
 GSVA, PCA and WGCNA
 
@@ -52,18 +54,21 @@ significant-gene overlap (UpSet + Venn), a cross-contrast log2
 fold-change heatmap and the direction of change per contrast, on the
 8-cancer-type TCGA demo.
 
-![Multi-contrast comparison](paper/figures/figure4.png)
+![Multi-contrast
+comparison](reference/figures/gallery-multi-contrast.png)
 
 Multi-contrast comparison
 
-**Validation** — RNAflow reproduces its own results exactly (round-trip
-through the exported R script), all-pairwise contrasts match a single
-shared fit, and fold changes concord with limma-voom on the *airway*
-demo.
+**Consistency & regression checks** — RNAflow reproduces its own results
+exactly (round-trip through the exported R script), all-pairwise
+contrasts match a single shared fit, and fold changes concord with
+limma-voom on the *airway* demo. These are internal consistency and
+regression checks, not a general validation of the underlying
+statistical methods.
 
-![Validation](paper/figures/figure5.png)
+![Consistency checks](reference/figures/gallery-validation.png)
 
-Validation
+Consistency checks
 
 ## Why RNAflow?
 
@@ -304,7 +309,7 @@ from their Bioconductor sources):
   design variable `condition`, adjust for `cell`. Gene **symbols**. Good
   for DE, covariate adjustment, and enrichment on genuine biology.
 - **`demo_tcga_*.csv`** — [TCGA
-  pan-cancer](https://doi.org/10.1038/nn.4038) via
+  pan-cancer](https://doi.org/10.1093/bioinformatics/btv377) via
   [GSE62944](https://bioconductor.org/packages/GSE62944/) (Rahman *et
   al.* 2015): **8 molecularly distinct cancer types × 15 tumors = 120
   samples** (BRCA, LUAD, KIRC, LGG, THCA, PRAD, COAD, SKCM). Organism =
@@ -335,7 +340,16 @@ from their Bioconductor sources):
   (raincloud / beeswarm / alluvial), professional UI design system, and
   a reproducible Docker image
 
-All roadmap phases are complete.
+Phases 1–6 are delivered, so RNAflow is feature-complete for its
+intended scope (downstream analysis of a bulk RNA-seq count matrix).
+Active development now focuses on maintenance, reproducibility, and
+reviewer feedback rather than new major features.
+
+**API stability.** The exported functions documented on the [package
+website](https://KmBioChemo.github.io/RNAflow/) are the supported
+programmatic interface; we aim to avoid breaking changes to them within
+a minor-version series. Unexported internal helpers may change at any
+time.
 
 ## Limitations
 

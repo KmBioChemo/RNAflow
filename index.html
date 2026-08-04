@@ -11,8 +11,8 @@
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="RNAflow">
-<meta name="description" content="End-to-end bulk RNA-seq analysis platform.">
-<meta property="og:description" content="End-to-end bulk RNA-seq analysis platform.">
+<meta name="description" content="Downstream bulk RNA-seq analysis platform.">
+<meta property="og:description" content="Downstream bulk RNA-seq analysis platform.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -83,19 +83,19 @@
 </h2>
 <p><strong>Differential expression</strong> — volcano, MA plot, p-value diagnostics, top-gene heatmap and functional enrichment (GSEA + GO), from the bundled <em>airway</em> demo (dexamethasone vs control).</p>
 <div class="float">
-<img src="paper/figures/figure2.png" alt="Differential expression and enrichment"><div class="figcaption">Differential expression and enrichment</div>
+<img src="reference/figures/gallery-differential-expression.png" alt="Differential expression and enrichment"><div class="figcaption">Differential expression and enrichment</div>
 </div>
 <p><strong>Sample overview &amp; networks</strong> — per-sample GSVA signatures, PCA, and WGCNA co-expression (soft-threshold selection, module–trait correlation, module enrichment), on the 8-cancer-type TCGA demo.</p>
 <div class="float">
-<img src="paper/figures/figure3.png" alt="GSVA, PCA and WGCNA"><div class="figcaption">GSVA, PCA and WGCNA</div>
+<img src="reference/figures/gallery-sample-overview-networks.png" alt="GSVA, PCA and WGCNA"><div class="figcaption">GSVA, PCA and WGCNA</div>
 </div>
 <p><strong>Multi-contrast comparison</strong> — a pairwise volcano grid, significant-gene overlap (UpSet + Venn), a cross-contrast log2 fold-change heatmap and the direction of change per contrast, on the 8-cancer-type TCGA demo.</p>
 <div class="float">
-<img src="paper/figures/figure4.png" alt="Multi-contrast comparison"><div class="figcaption">Multi-contrast comparison</div>
+<img src="reference/figures/gallery-multi-contrast.png" alt="Multi-contrast comparison"><div class="figcaption">Multi-contrast comparison</div>
 </div>
-<p><strong>Validation</strong> — RNAflow reproduces its own results exactly (round-trip through the exported R script), all-pairwise contrasts match a single shared fit, and fold changes concord with limma-voom on the <em>airway</em> demo.</p>
+<p><strong>Consistency &amp; regression checks</strong> — RNAflow reproduces its own results exactly (round-trip through the exported R script), all-pairwise contrasts match a single shared fit, and fold changes concord with limma-voom on the <em>airway</em> demo. These are internal consistency and regression checks, not a general validation of the underlying statistical methods.</p>
 <div class="float">
-<img src="paper/figures/figure5.png" alt="Validation"><div class="figcaption">Validation</div>
+<img src="reference/figures/gallery-validation.png" alt="Consistency checks"><div class="figcaption">Consistency checks</div>
 </div>
 </div>
 <div class="section level2">
@@ -293,7 +293,7 @@ sample3,Treatment,B
 <li>
 <strong><code>demo_airway_*.csv</code></strong> — <a href="https://bioconductor.org/packages/airway/" class="external-link">airway</a> (Himes et al. 2014): airway smooth muscle cells treated with <strong>dexamethasone</strong> vs. control across <strong>4 cell lines</strong> (8 samples). Organism = human; design variable <code>condition</code>, adjust for <code>cell</code>. Gene <strong>symbols</strong>. Good for DE, covariate adjustment, and enrichment on genuine biology.</li>
 <li>
-<strong><code>demo_tcga_*.csv</code></strong> — <a href="https://doi.org/10.1038/nn.4038" class="external-link">TCGA pan-cancer</a> via <a href="https://bioconductor.org/packages/GSE62944/" class="external-link">GSE62944</a> (Rahman <em>et al.</em> 2015): <strong>8 molecularly distinct cancer types × 15 tumors = 120 samples</strong> (BRCA, LUAD, KIRC, LGG, THCA, PRAD, COAD, SKCM). Organism = human; design variable <code>cancer_type</code>. Gene symbols. A <strong>complex, many-group</strong> dataset that shows the tool’s power — cancer types separate sharply in PCA / UMAP, WGCNA finds type-specific co-expression modules, and the 8-level factor drives rich multi-contrast comparisons.</li>
+<strong><code>demo_tcga_*.csv</code></strong> — <a href="https://doi.org/10.1093/bioinformatics/btv377" class="external-link">TCGA pan-cancer</a> via <a href="https://bioconductor.org/packages/GSE62944/" class="external-link">GSE62944</a> (Rahman <em>et al.</em> 2015): <strong>8 molecularly distinct cancer types × 15 tumors = 120 samples</strong> (BRCA, LUAD, KIRC, LGG, THCA, PRAD, COAD, SKCM). Organism = human; design variable <code>cancer_type</code>. Gene symbols. A <strong>complex, many-group</strong> dataset that shows the tool’s power — cancer types separate sharply in PCA / UMAP, WGCNA finds type-specific co-expression modules, and the 8-level factor drives rich multi-contrast comparisons.</li>
 </ul>
 </div>
 <div class="section level2">
@@ -313,7 +313,8 @@ sample3,Treatment,B
 <li>
 <strong>Phase 6</strong> ✅ (2026) — Linked volcano-table explorer, activity inference (decoupleR TF / pathway), AI-assisted interpretation, per-sample signatures (GSVA / ssGSEA), UMAP + interactive 3D PCA, interactive enrichment network (visNetwork), distribution figures (raincloud / beeswarm / alluvial), professional UI design system, and a reproducible Docker image</li>
 </ul>
-<p>All roadmap phases are complete.</p>
+<p>Phases 1–6 are delivered, so RNAflow is feature-complete for its intended scope (downstream analysis of a bulk RNA-seq count matrix). Active development now focuses on maintenance, reproducibility, and reviewer feedback rather than new major features.</p>
+<p><strong>API stability.</strong> The exported functions documented on the <a href="https://KmBioChemo.github.io/RNAflow/">package website</a> are the supported programmatic interface; we aim to avoid breaking changes to them within a minor-version series. Unexported internal helpers may change at any time.</p>
 </div>
 <div class="section level2">
 <h2 id="limitations">Limitations<a class="anchor" aria-label="anchor" href="#limitations"></a>
@@ -383,7 +384,7 @@ sample3,Treatment,B
 <li>Tamara Pfanner <br><small class="roles"> Author </small>   </li>
 <li>Rafael P. Silveira <br><small class="roles"> Author </small>   </li>
 <li>Matthias P. Wymann <br><small class="roles"> Author </small>   </li>
-<li>Karim Matmat <br><small class="roles"> Author, maintainer </small>   </li>
+<li>Karim Matmat <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0009-0009-8226-4846" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -391,7 +392,7 @@ sample3,Treatment,B
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://doi.org/10.5281/zenodo.21776513" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.21776513.svg" alt="DOI"></a></li>
+<li><a href="https://doi.org/10.5281/zenodo.21493110" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.21493110.svg" alt="DOI"></a></li>
 <li><a href="https://github.com/KmBioChemo/RNAflow/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/KmBioChemo/RNAflow/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://github.com/KmBioChemo/RNAflow/actions/workflows/pkgdown.yaml" class="external-link"><img src="https://github.com/KmBioChemo/RNAflow/actions/workflows/pkgdown.yaml/badge.svg" alt="pkgdown"></a></li>
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>

@@ -59,15 +59,15 @@
       <h1>Getting started with RNAflow</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/v0.16.6/vignettes/getting-started.Rmd" class="external-link"><code>vignettes/getting-started.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/main/vignettes/getting-started.Rmd" class="external-link"><code>vignettes/getting-started.Rmd</code></a></small>
       <div class="d-none name"><code>getting-started.Rmd</code></div>
     </div>
 
     
     
-<p>RNAflow is an end-to-end bulk RNA-seq analysis platform, usable
-either as an interactive Shiny app (<code><a href="../reference/run_app.html">run_app()</a></code>) or as a set
-of pure, scriptable functions. This vignette is a <strong>reproducible
+<p>RNAflow is a downstream bulk RNA-seq analysis platform, usable either
+as an interactive Shiny app (<code><a href="../reference/run_app.html">run_app()</a></code>) or as a set of
+pure, scriptable functions. This vignette is a <strong>reproducible
 reference analysis</strong>: the core steps below run on a bundled,
 published dataset so you can reproduce a real result end to end.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -116,19 +116,19 @@ dexamethasone (<code>Dex</code>) against <code>Control</code>.</p>
 <span><span class="co">#&gt; converting counts to integer mode</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">padj</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         gene   baseMean log2FoldChange     lfcSE     stat        pvalue</span></span>
-<span><span class="co">#&gt; 6538  CACNB2   495.3581       3.275664 0.1326449 24.80377 8.163664e-136</span></span>
+<span><span class="co">#&gt; 6538  CACNB2   495.3581       3.275664 0.1326449 24.80377 8.163663e-136</span></span>
 <span><span class="co">#&gt; 3979 SPARCL1   997.6038       4.550562 0.1865863 24.70052 1.055901e-134</span></span>
-<span><span class="co">#&gt; 1056   DUSP1  3410.8040       2.933081 0.1219507 24.24829 6.893204e-130</span></span>
+<span><span class="co">#&gt; 1056   DUSP1  3410.8040       2.933081 0.1219507 24.24829 6.893203e-130</span></span>
 <span><span class="co">#&gt; 234   SAMHD1 12705.8482       3.753364 0.1576715 24.08727 3.398689e-128</span></span>
-<span><span class="co">#&gt; 1618    MAOA  2343.3913       3.336101 0.1430166 23.58574 5.398709e-123</span></span>
+<span><span class="co">#&gt; 1618    MAOA  2343.3913       3.336101 0.1430166 23.58574 5.398708e-123</span></span>
 <span><span class="co">#&gt; 253     GPX3 12292.3589       3.711423 0.1692351 22.30297 3.457747e-110</span></span>
 <span><span class="co">#&gt;               padj</span></span>
-<span><span class="co">#&gt; 6538 1.240061e-131</span></span>
-<span><span class="co">#&gt; 3979 8.019567e-131</span></span>
-<span><span class="co">#&gt; 1056 3.490259e-126</span></span>
+<span><span class="co">#&gt; 6538 1.240060e-131</span></span>
+<span><span class="co">#&gt; 3979 8.019566e-131</span></span>
+<span><span class="co">#&gt; 1056 3.490258e-126</span></span>
 <span><span class="co">#&gt; 234  1.290652e-124</span></span>
 <span><span class="co">#&gt; 1618 1.640128e-119</span></span>
-<span><span class="co">#&gt; 253  8.753863e-107</span></span>
+<span><span class="co">#&gt; 253  8.753862e-107</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">padj</span> <span class="op">&lt;</span> <span class="fl">0.05</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">log2FoldChange</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  <span class="co"># sig genes</span></span>
 <span><span class="co">#&gt; [1] 770</span></span></code></pre></div>
 </div>
@@ -189,11 +189,10 @@ from the same <code>res</code> / <code>vst</code> objects and take an
 <code>.rnaflow.rds</code> file, and export a reproducible R script and a
 self-contained HTML report (no pandoc/Quarto required):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/empty_project.html">empty_project</a></span><span class="op">(</span><span class="st">"airway_study"</span><span class="op">)</span></span>
-<span><span class="va">p</span><span class="op">$</span><span class="va">counts</span>     <span class="op">&lt;-</span> <span class="va">counts</span></span>
-<span><span class="va">p</span><span class="op">$</span><span class="va">metadata</span>   <span class="op">&lt;-</span> <span class="va">meta</span></span>
-<span><span class="va">p</span><span class="op">$</span><span class="va">organism</span>   <span class="op">&lt;-</span> <span class="st">"human"</span></span>
-<span><span class="va">p</span><span class="op">$</span><span class="va">contrasts</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/contrast_store_upsert.html">contrast_store_upsert</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Dex vs Control"</span>, <span class="va">res</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/assemble_project.html">assemble_project</a></span><span class="op">(</span></span>
+<span>  <span class="st">"airway_study"</span>, organism <span class="op">=</span> <span class="st">"human"</span>,</span>
+<span>  counts <span class="op">=</span> <span class="va">counts</span>, metadata <span class="op">=</span> <span class="va">meta</span>,</span>
+<span>  contrasts <span class="op">=</span> <span class="fu"><a href="../reference/contrast_store_upsert.html">contrast_store_upsert</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Dex vs Control"</span>, <span class="va">res</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/save_project.html">save_project</a></span><span class="op">(</span><span class="va">p</span>, <span class="st">"airway_study.rnaflow.rds"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="../reference/generate_r_script.html">generate_r_script</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>, file <span class="op">=</span> <span class="st">"analysis.R"</span><span class="op">)</span>   <span class="co"># runnable Methods script</span></span>

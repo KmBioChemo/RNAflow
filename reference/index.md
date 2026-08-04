@@ -217,10 +217,14 @@ Build a prompt from a contrast and ask the Claude API to interpret it.
 
 Save/load sessions, export a Methods script and an HTML report.
 
+- [`assemble_project()`](https://KmBioChemo.github.io/RNAflow/reference/assemble_project.md)
+  : Assemble a project from the current session state
 - [`save_project()`](https://KmBioChemo.github.io/RNAflow/reference/save_project.md)
   : Save a project to disk
 - [`load_project()`](https://KmBioChemo.github.io/RNAflow/reference/load_project.md)
   : Load a project from disk
+- [`contrast_store_upsert()`](https://KmBioChemo.github.io/RNAflow/reference/contrast_store_upsert.md)
+  : Insert or update a contrast in a contrast store
 - [`generate_r_script()`](https://KmBioChemo.github.io/RNAflow/reference/generate_r_script.md)
   : Generate a reproducible R script for an analysis
 - [`generate_methods_text()`](https://KmBioChemo.github.io/RNAflow/reference/generate_methods_text.md)
@@ -279,6 +283,6 @@ UI + server pairs, one per feature.
 
 - [`RNAflow-package`](https://KmBioChemo.github.io/RNAflow/reference/RNAflow-package.md)
   [`RNAflow`](https://KmBioChemo.github.io/RNAflow/reference/RNAflow-package.md)
-  : RNAflow: end-to-end bulk RNA-seq analysis platform
+  : RNAflow: downstream bulk RNA-seq analysis platform
 - [`%>%`](https://KmBioChemo.github.io/RNAflow/reference/pipe.md) : Pipe
   operator
