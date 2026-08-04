@@ -56,6 +56,7 @@
     },
     {
       "@type": "Person",
+      "@id": "https://orcid.org/0009-0009-8226-4846",
       "givenName": "Karim",
       "familyName": "Matmat",
       "email": "karim.matmat@unibas.ch",
@@ -68,6 +69,7 @@
   "maintainer": [
     {
       "@type": "Person",
+      "@id": "https://orcid.org/0009-0009-8226-4846",
       "givenName": "Karim",
       "familyName": "Matmat",
       "email": "karim.matmat@unibas.ch",

@@ -15,6 +15,7 @@ authors:
   - family-names: Matmat
     given-names: Karim
     email: karim.matmat@unibas.ch
+    orcid: "https://orcid.org/0009-0009-8226-4846"
     affiliation: "Department of Biomedicine, University of Basel, Mattenstrasse 28, CH-4058 Basel, Switzerland"
 repository-code: "https://github.com/KmBioChemo/RNAflow"
 url: "https://KmBioChemo.github.io/RNAflow/"

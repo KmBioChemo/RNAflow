@@ -8,7 +8,8 @@ Authors@R: c(
            comment = "Equal contribution"),
     person("Matthias P.", "Wymann", role = "aut"),
     person("Karim", "Matmat", role = c("aut", "cre"),
-           email = "karim.matmat@unibas.ch"))
+           email = "karim.matmat@unibas.ch",
+           comment = c(ORCID = "0009-0009-8226-4846")))
 Description: RNAflow is a modular Shiny application packaged as an R package
     for downstream bulk RNA-seq analysis. It takes raw count matrices and
     sample metadata as input and provides differential expression analysis
