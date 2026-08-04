@@ -1,6 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^\.claude$
 ^dev$
 ^data-raw$
 ^LICENSE\.md$

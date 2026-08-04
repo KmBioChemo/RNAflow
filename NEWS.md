@@ -596,7 +596,7 @@ NOTE is an environment "unable to verify current time" artifact).
   removed 8 unused Imports (golem, config, purrr, tibble, tidyr, readr,
   shinyjs, S4Vectors); pruned unused Suggests.
 - **Fixes**: `importFrom(utils, head, tail)`; corrected a broken Rd
-  cross-reference; `.Rbuildignore` for `dev/`, `.claude/`, `LICENSE.md`;
+  cross-reference; `.Rbuildignore` for `dev/`, `LICENSE.md`;
   fixed the GitHub owner in URLs (`KmBioChemo/RNAflow`); cleaned the
   author record.
 
