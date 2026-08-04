@@ -136,8 +136,10 @@ reference:
 - title: Projects & reproducibility
   desc: Save/load sessions, export a Methods script and an HTML report.
   contents:
+  - assemble_project
   - save_project
   - load_project
+  - contrast_store_upsert
   - generate_r_script
   - generate_methods_text
   - build_report_html
