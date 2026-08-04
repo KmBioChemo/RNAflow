@@ -89,6 +89,10 @@ rank_genes <- function(res, by = c("stat", "signed_p", "log2fc")) {
 #' @param eps fgsea boundary for p-value estimation (0 = most accurate)
 #' @return a tidy data.frame sorted by padj with columns: pathway, pval,
 #'   padj, NES, ES, size, leadingEdge (list-column) and leading_edge (string)
+#' @note `res` and `gene_sets` must share the **same gene-identifier space**
+#'   (typically gene symbols). The Shiny app maps IDs to symbols before calling
+#'   this; a script that passes Ensembl/Entrez IDs against symbol-keyed sets
+#'   will match nothing. Use [ids_to_symbols()] / [map_de_to_symbols()] first.
 #' @export
 run_gsea <- function(res, gene_sets, rank_by = "stat",
                      min_size = 15, max_size = 500, eps = 0) {

@@ -33,4 +33,3 @@ timestamp. Re-adding an existing label updates that entry in place
 (keeping its position), so re-running the same contrast refreshes it
 rather than duplicating it.
 }
-\keyword{internal}

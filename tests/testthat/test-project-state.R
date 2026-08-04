@@ -132,3 +132,17 @@ test_that("load_project backfills the signatures slot for old files", {
   expect_true("signatures" %in% names(loaded))
   expect_equal(loaded$signatures, list())
 })
+
+test_that("the normalization method is recorded and round-trips", {
+  expect_equal(empty_project("x")$normalization_method, "vst")   # default
+  p <- assemble_project(
+    "demo",
+    settings = list(normalization_method = "log2(counts+1) [VST fallback]"))
+  expect_equal(p$normalization_method, "log2(counts+1) [VST fallback]")
+  expect_equal(assemble_project("d")$normalization_method, "vst")
+
+  # backfilled for projects saved before the slot existed
+  old <- empty_project("old"); old$normalization_method <- NULL
+  f <- tempfile(fileext = ".rnaflow.rds"); saveRDS(old, f)
+  expect_equal(load_project(f)$normalization_method, "vst")
+})

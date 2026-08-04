@@ -34,4 +34,3 @@ a project list
 Bundles the live analysis objects into the canonical project structure
 (see \code{\link[=empty_project]{empty_project()}}). Shared by the project-manager and report modules.
 }
-\keyword{internal}

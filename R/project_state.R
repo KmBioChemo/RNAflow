@@ -24,6 +24,7 @@ empty_project <- function(name = "untitled") {
     metadata    = NULL,                 # data.frame
     de_results  = NULL,                 # data.frame from DESeq2 (active contrast)
     de_params   = list(),               # design formula, contrast, etc.
+    normalization_method = "vst",       # "vst" or "log2(counts+1) [VST fallback]"
     contrasts   = list(),               # named contrast store (multi-contrast)
     figures     = list(),               # cached plot params, not the plots themselves
     enrichment  = list(),               # GSEA/ORA results
@@ -86,7 +87,7 @@ load_project <- function(path) {
 #' @param settings optional list with `enrichment` / `wgcna` parameter records
 #'   (captured by the Enrichment / Network tabs) for exact reproducibility
 #' @return a project list
-#' @keywords internal
+#' @export
 assemble_project <- function(name, organism = NA_character_,
                              counts = NULL, metadata = NULL,
                              contrasts = list(), settings = list()) {
@@ -102,6 +103,7 @@ assemble_project <- function(name, organism = NA_character_,
   # legacy `gsva` key for sessions/records created before 0.14.1.
   p$signatures <- settings$signatures %||% settings$gsva %||% list()
   p$ai_interpretation <- settings$ai_interpretation
+  p$normalization_method <- settings$normalization_method %||% "vst"
   active <- contrast_store_results(p$contrasts)
   p$de_results <- if (length(active)) active[[1]] else NULL
   p
@@ -121,7 +123,7 @@ assemble_project <- function(name, organism = NA_character_,
 #' @param params named list of parameters used to compute the contrast
 #' @param created optional timestamp (defaults to now)
 #' @return the updated store
-#' @keywords internal
+#' @export
 contrast_store_upsert <- function(store, label, results, params = list(),
                                   created = Sys.time()) {
   if (is.null(store)) store <- list()

@@ -221,17 +221,28 @@ app_server <- function(input, output, session) {
     counts <- data_mod$counts()
     if (is.null(counts)) return(NULL)
     tryCatch(
-      normalize_counts(counts, data_mod$metadata(), method = "vst"),
+      structure(normalize_counts(counts, data_mod$metadata(), method = "vst"),
+                norm_method = "vst"),
       error = function(e) {
         shiny::showNotification(
           paste("Normalization failed:", conditionMessage(e),
-                "-- using log2(counts+1) instead."),
-          type = "warning", duration = 6
+                "-- falling back to log2(counts+1) for PCA, heatmaps, WGCNA and",
+                "signatures. This fallback is recorded in the saved project."),
+          type = "warning", duration = NULL
         )
-        log2(counts + 1)
+        structure(log2(counts + 1),
+                  norm_method = "log2(counts+1) [VST fallback]")
       }
     )
   })
+
+  # Record which normalization actually produced counts_norm, so a saved
+  # project / report reflects the true method (VST, or its log2 fallback when
+  # VST fails) instead of always claiming VST.
+  shiny::observeEvent(counts_norm(), {
+    m <- attr(counts_norm(), "norm_method") %||% "vst"
+    s <- settings_rv(); s$normalization_method <- m; settings_rv(s)
+  }, ignoreNULL = FALSE)
 
   mod_volcano_server("volcano", de_combined)
   mod_linked_server("linked", de_combined)

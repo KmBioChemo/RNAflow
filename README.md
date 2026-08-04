@@ -271,7 +271,7 @@ matching `dev/make_demo_*.R` scripts for exactly how they are built from their
 Bioconductor sources):
 
 - **`demo_airway_*.csv`** — [airway](https://bioconductor.org/packages/airway/) (Himes et al. 2014): airway smooth muscle cells treated with **dexamethasone** vs. control across **4 cell lines** (8 samples). Organism = human; design variable `condition`, adjust for `cell`. Gene **symbols**. Good for DE, covariate adjustment, and enrichment on genuine biology.
-- **`demo_tcga_*.csv`** — [TCGA pan-cancer](https://doi.org/10.1038/nn.4038) via [GSE62944](https://bioconductor.org/packages/GSE62944/) (Rahman *et al.* 2015): **8 molecularly distinct cancer types × 15 tumors = 120 samples** (BRCA, LUAD, KIRC, LGG, THCA, PRAD, COAD, SKCM). Organism = human; design variable `cancer_type`. Gene symbols. A **complex, many-group** dataset that shows the tool's power — cancer types separate sharply in PCA / UMAP, WGCNA finds type-specific co-expression modules, and the 8-level factor drives rich multi-contrast comparisons.
+- **`demo_tcga_*.csv`** — [TCGA pan-cancer](https://doi.org/10.1093/bioinformatics/btv377) via [GSE62944](https://bioconductor.org/packages/GSE62944/) (Rahman *et al.* 2015): **8 molecularly distinct cancer types × 15 tumors = 120 samples** (BRCA, LUAD, KIRC, LGG, THCA, PRAD, COAD, SKCM). Organism = human; design variable `cancer_type`. Gene symbols. A **complex, many-group** dataset that shows the tool's power — cancer types separate sharply in PCA / UMAP, WGCNA finds type-specific co-expression modules, and the 8-level factor drives rich multi-contrast comparisons.
 
 ## Roadmap
 

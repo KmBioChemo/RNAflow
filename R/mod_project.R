@@ -58,17 +58,19 @@ mod_project_server <- function(id, data_mod, contrast_store,
     recent_tick <- shiny::reactiveVal(0)  # bump to refresh the recent list
 
     gather_project <- function(name) {
-      store <- contrast_store()
-      s <- if (is.null(settings_store)) list() else settings_store()
-      p <- empty_project(if (nzchar(name)) name else "untitled")
-      p$enrichment <- if (is.null(s$enrichment)) list() else s$enrichment
-      p$wgcna      <- if (is.null(s$wgcna)) list() else s$wgcna
-      p$organism  <- data_mod$organism()
-      p$counts    <- data_mod$counts()
-      p$metadata  <- data_mod$metadata()
-      p$contrasts <- store
-      active <- contrast_store_results(store)
-      p$de_results <- if (length(active)) active[[1]] else data_mod$de_results()
+      # Delegate to assemble_project() -- the single canonical constructor
+      # (also used by the report module) so a saved project carries the FULL
+      # session: enrichment, WGCNA, activity, signatures, AI interpretation and
+      # the normalization method, not just enrichment + WGCNA.
+      p <- assemble_project(
+        name      = if (nzchar(name)) name else "untitled",
+        organism  = data_mod$organism(),
+        counts    = data_mod$counts(),
+        metadata  = data_mod$metadata(),
+        contrasts = contrast_store(),
+        settings  = if (is.null(settings_store)) list() else settings_store())
+      # Keep an uploaded DE table when no contrast was stored.
+      if (is.null(p$de_results)) p$de_results <- data_mod$de_results()
       p
     }
 
@@ -79,8 +81,15 @@ mod_project_server <- function(id, data_mod, contrast_store,
                          organism = p$organism, de_results = NULL)
       contrast_store(if (is.null(p$contrasts)) list() else p$contrasts)
       if (!is.null(settings_store)) {
-        settings_store(list(enrichment = p$enrichment %||% NULL,
-                            wgcna = p$wgcna %||% NULL))
+        # Restore every settings slot so activity / signatures / AI / the
+        # normalization method survive a save-reload, matching what was saved.
+        settings_store(list(
+          enrichment = p$enrichment %||% NULL,
+          wgcna      = p$wgcna %||% NULL,
+          activity   = p$activity %||% NULL,
+          signatures = p$signatures %||% NULL,
+          ai_interpretation = p$ai_interpretation %||% NULL,
+          normalization_method = p$normalization_method %||% NULL))
       }
     }
 

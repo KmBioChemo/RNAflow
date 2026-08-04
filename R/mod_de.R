@@ -19,7 +19,7 @@ mod_de_ui <- function(id) {
       shiny::uiOutput(ns("contrast_ui")),
       ui_advanced_panel(
         shiny::uiOutput(ns("adjust_ui")),
-        shiny::checkboxInput(ns("shrink"), "Apply LFC shrinkage (apeglm)",
+        shiny::checkboxInput(ns("shrink"), "Apply LFC shrinkage",
                              value = TRUE),
         shiny::numericInput(ns("min_count"), "Minimum row sum to keep gene",
                             value = 10, min = 0, step = 1),
@@ -100,7 +100,8 @@ mod_de_server <- function(id, data_mod, contrast_store = NULL) {
       # Build design: covariates first, variable of interest last (for the contrast)
       covs <- setdiff(input$covariates, input$design_var)
       design_fml <- stats::as.formula(
-        paste0("~", paste(c(covs, input$design_var), collapse = " + ")))
+        paste0("~", paste(sprintf("`%s`", c(covs, input$design_var)),
+                          collapse = " + ")))
 
       # --- All pairwise comparisons: fit once, add every pair to the store ---
       if (isTRUE(input$all_pairs)) {

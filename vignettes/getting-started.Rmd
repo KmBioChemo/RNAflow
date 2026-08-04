@@ -114,11 +114,10 @@ reproducible R script and a self-contained HTML report (no pandoc/Quarto
 required):
 
 ```{r report, eval = FALSE}
-p <- empty_project("airway_study")
-p$counts     <- counts
-p$metadata   <- meta
-p$organism   <- "human"
-p$contrasts  <- contrast_store_upsert(list(), "Dex vs Control", res)
+p <- assemble_project(
+  "airway_study", organism = "human",
+  counts = counts, metadata = meta,
+  contrasts = contrast_store_upsert(list(), "Dex vs Control", res))
 save_project(p, "airway_study.rnaflow.rds")
 
 cat(generate_r_script(p), file = "analysis.R")   # runnable Methods script
