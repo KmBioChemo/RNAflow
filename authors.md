@@ -15,7 +15,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/KmBioChemo/RNAflow/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/KmBioChemo/RNAflow/blob/v0.16.6/inst/CITATION)
 
 Matmat K (2026). *RNAflow: An Interactive Shiny Platform for End-to-End
 RNA-seq Analysis*. R package version 0.16.6,
