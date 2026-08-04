@@ -1,7 +1,7 @@
 # RNAflow
 
 <!-- badges: start -->
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21776513.svg)](https://doi.org/10.5281/zenodo.21776513)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21493110.svg)](https://doi.org/10.5281/zenodo.21493110)
 [![R-CMD-check](https://github.com/KmBioChemo/RNAflow/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/KmBioChemo/RNAflow/actions/workflows/R-CMD-check.yaml)
 [![pkgdown](https://github.com/KmBioChemo/RNAflow/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/KmBioChemo/RNAflow/actions/workflows/pkgdown.yaml)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
@@ -33,25 +33,25 @@ Supported organisms: **human**, **mouse**, **rat**.
 heatmap and functional enrichment (GSEA + GO), from the bundled *airway* demo
 (dexamethasone vs control).
 
-![Differential expression and enrichment](paper/figures/figure2.png)
+![Differential expression and enrichment](man/figures/gallery-differential-expression.png)
 
 **Sample overview & networks** — per-sample GSVA signatures, PCA, and WGCNA
 co-expression (soft-threshold selection, module–trait correlation, module
 enrichment), on the 8-cancer-type TCGA demo.
 
-![GSVA, PCA and WGCNA](paper/figures/figure3.png)
+![GSVA, PCA and WGCNA](man/figures/gallery-sample-overview-networks.png)
 
 **Multi-contrast comparison** — a pairwise volcano grid, significant-gene
 overlap (UpSet + Venn), a cross-contrast log2 fold-change heatmap and the
 direction of change per contrast, on the 8-cancer-type TCGA demo.
 
-![Multi-contrast comparison](paper/figures/figure4.png)
+![Multi-contrast comparison](man/figures/gallery-multi-contrast.png)
 
 **Validation** — RNAflow reproduces its own results exactly (round-trip through
 the exported R script), all-pairwise contrasts match a single shared fit, and
 fold changes concord with limma-voom on the *airway* demo.
 
-![Validation](paper/figures/figure5.png)
+![Validation](man/figures/gallery-validation.png)
 
 ## Why RNAflow?
 
