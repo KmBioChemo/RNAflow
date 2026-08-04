@@ -1,5 +1,19 @@
 # Changelog
 
+## RNAflow 0.16.6 (2026-08-04)
+
+### Feature
+
+- **Duplicate gene IDs are handled automatically.** Real count matrices
+  often contain duplicated gene symbols (several Ensembl IDs mapping to
+  one symbol). Instead of rejecting the upload,
+  [`read_counts()`](https://KmBioChemo.github.io/RNAflow/reference/read_counts.md)
+  now merges duplicated gene IDs — by summing their per-sample counts by
+  default (kept integer and library-size preserving), or keeping the
+  most-expressed row (`duplicate_action = "max"`). Strict rejection is
+  still available with `duplicate_action = "reject"`. The app shows a
+  notification stating how many gene IDs were merged.
+
 ## RNAflow 0.16.5 (2026-08-02)
 
 ### Fix

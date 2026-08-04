@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +33,17 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/v0.16.5/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.16.6" id="rnaflow-0166-2026-08-04">RNAflow 0.16.6 (2026-08-04)<a class="anchor" aria-label="anchor" href="#rnaflow-0166-2026-08-04"></a></h2>
+<div class="section level3">
+<h3 id="feature-0-16-6">Feature<a class="anchor" aria-label="anchor" href="#feature-0-16-6"></a></h3>
+<ul><li>
+<strong>Duplicate gene IDs are handled automatically.</strong> Real count matrices often contain duplicated gene symbols (several Ensembl IDs mapping to one symbol). Instead of rejecting the upload, <code><a href="../reference/read_counts.html">read_counts()</a></code> now merges duplicated gene IDs — by summing their per-sample counts by default (kept integer and library-size preserving), or keeping the most-expressed row (<code>duplicate_action = "max"</code>). Strict rejection is still available with <code>duplicate_action = "reject"</code>. The app shows a notification stating how many gene IDs were merged.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.16.5" id="rnaflow-0165-2026-08-02">RNAflow 0.16.5 (2026-08-02)<a class="anchor" aria-label="anchor" href="#rnaflow-0165-2026-08-02"></a></h2>
 <div class="section level3">
@@ -566,7 +574,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Karim Matmat.</p>
+  <p>Developed by Tamara Pfanner, Rafael P. Silveira, Matthias P. Wymann, Karim Matmat.</p>
 </div>
 
 <div class="pkgdown-footer-right">
