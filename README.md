@@ -47,11 +47,13 @@ direction of change per contrast, on the 8-cancer-type TCGA demo.
 
 ![Multi-contrast comparison](man/figures/gallery-multi-contrast.png)
 
-**Validation** — RNAflow reproduces its own results exactly (round-trip through
-the exported R script), all-pairwise contrasts match a single shared fit, and
-fold changes concord with limma-voom on the *airway* demo.
+**Consistency & regression checks** — RNAflow reproduces its own results
+exactly (round-trip through the exported R script), all-pairwise contrasts
+match a single shared fit, and fold changes concord with limma-voom on the
+*airway* demo. These are internal consistency and regression checks, not a
+general validation of the underlying statistical methods.
 
-![Validation](man/figures/gallery-validation.png)
+![Consistency checks](man/figures/gallery-validation.png)
 
 ## Why RNAflow?
 
@@ -282,7 +284,15 @@ Bioconductor sources):
 - **Phase 5** ✅ — Self-contained HTML report + reproducible R script export for Methods
 - **Phase 6** ✅ (2026) — Linked volcano-table explorer, activity inference (decoupleR TF / pathway), AI-assisted interpretation, per-sample signatures (GSVA / ssGSEA), UMAP + interactive 3D PCA, interactive enrichment network (visNetwork), distribution figures (raincloud / beeswarm / alluvial), professional UI design system, and a reproducible Docker image
 
-All roadmap phases are complete.
+Phases 1–6 are delivered, so RNAflow is feature-complete for its intended
+scope (downstream analysis of a bulk RNA-seq count matrix). Active
+development now focuses on maintenance, reproducibility, and reviewer
+feedback rather than new major features.
+
+**API stability.** The exported functions documented on the
+[package website](https://KmBioChemo.github.io/RNAflow/) are the supported
+programmatic interface; we aim to avoid breaking changes to them within a
+minor-version series. Unexported internal helpers may change at any time.
 
 ## Limitations
 
