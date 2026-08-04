@@ -22,7 +22,6 @@ Description: RNAflow is a modular Shiny application packaged as an R package
     and rat organisms with publication-ready figure exports.
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
 Depends:
     R (>= 4.4.0)
