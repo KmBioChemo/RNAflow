@@ -114,8 +114,17 @@ mod_data_server <- function(id) {
       tryCatch({
         m <- read_counts(input$counts_file$datapath,
                          ext = tolower(tools::file_ext(input$counts_file$name)),
-                         validate = TRUE, strict_integer = TRUE)
+                         validate = TRUE, strict_integer = TRUE,
+                         duplicate_action = "sum")
         counts_r(m)
+        n_dup <- attr(m, "n_collapsed") %||% 0L
+        if (n_dup > 0L) {
+          shiny::showNotification(
+            sprintf("%d duplicated gene ID%s merged by summing counts.",
+                    n_dup, if (n_dup > 1L) "s" else ""),
+            type = "warning", duration = 8
+          )
+        }
         shiny::showNotification(
           sprintf("Counts loaded: %d genes x %d samples",
                   nrow(m), ncol(m)),

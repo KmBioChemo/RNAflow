@@ -3,7 +3,7 @@
   "@type": "SoftwareSourceCode",
   "identifier": "https://doi.org/10.5281/zenodo.21776513",
   "name": "RNAflow: An Interactive and Reproducible Platform for Downstream Bulk RNA-seq Analysis",
-  "version": "0.16.5",
+  "version": "0.16.6",
   "description": "A modular Shiny application packaged as an R package for downstream bulk RNA-seq analysis: differential expression (DESeq2), QC diagnostics, PCA/UMAP/3D PCA, a linked volcano-table explorer, multi-contrast comparison, functional enrichment (GSEA/ORA), co-expression networks (WGCNA), transcription-factor and pathway activity (decoupleR), per-sample gene-set signatures (GSVA/ssGSEA), optional AI-assisted interpretation, and reproducible R-script and HTML report generation.",
   "applicationCategory": "Bioinformatics",
   "programmingLanguage": {
