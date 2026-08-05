@@ -39,3 +39,28 @@ test_that("generate_methods_text handles an ORA run and an empty project", {
   empty <- generate_methods_text(empty_project("x"))
   expect_match(empty, "No analysis has been run", fixed = TRUE)
 })
+
+test_that("generate_methods_text flags contrasts with differing settings", {
+  s <- contrast_store_upsert(
+    list(), "c1", data.frame(gene = "g", log2FoldChange = 1, padj = 0.01),
+    list(design_var = "condition", treated = "A", reference = "C",
+         shrink_used = "apeglm", min_count = 10))
+  s <- contrast_store_upsert(
+    s, "c2", data.frame(gene = "g", log2FoldChange = 1, padj = 0.01),
+    list(design_var = "condition", treated = "B", reference = "C",
+         shrink_used = "none", min_count = 50))
+  txt <- generate_methods_text(assemble_project("t", "human", contrasts = s))
+  expect_match(txt, "varied between contrasts", fixed = TRUE)
+  expect_false(grepl("count below", txt))   # no single shared threshold claimed
+})
+
+test_that("generate_methods_text records normalization and a version caveat", {
+  p <- assemble_project(
+    "t", "human",
+    settings = list(
+      wgcna = list(n_genes = 3000, network_type = "signed", power = 6),
+      normalization_method = "log2(counts+1) [VST fallback]"))
+  txt <- generate_methods_text(p)
+  expect_match(txt, "log2(counts+1) [VST fallback]-normalized", fixed = TRUE)
+  expect_match(txt, "reflect the environment at the time", fixed = TRUE)
+})

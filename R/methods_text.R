@@ -37,11 +37,16 @@ generate_methods_text <- function(project) {
 
   ## ---- Differential expression ----
   if (length(store) > 0) {
-    p1 <- store[[1]]$params %||% list()
-    covs <- p1$covariates
-    min_count <- p1$min_count %||% 10
-    alpha <- p1$alpha %||% 0.05
-    shrink_used <- p1$shrink_used %||% (if (isTRUE(p1$shrink)) "apeglm" else "none")
+    all_params <- lapply(store, function(e) e$params %||% list())
+    shrink_of <- function(pp) pp$shrink_used %||%
+      (if (isTRUE(pp$shrink)) "apeglm" else "none")
+    # Return the shared value across contrasts, or NULL when they differ.
+    uniq_val <- function(vals) {
+      u <- unique(vals); if (length(u) == 1) u[[1]] else NULL
+    }
+    min_count_u <- uniq_val(lapply(all_params, function(pp) pp$min_count %||% 10))
+    covs_u <- uniq_val(lapply(all_params, function(pp) pp$covariates %||% character(0)))
+    shrink_u <- uniq_val(lapply(all_params, shrink_of))
 
     labels <- vapply(names(store), function(nm) {
       pp <- store[[nm]]$params %||% list()
@@ -54,21 +59,30 @@ generate_methods_text <- function(project) {
     else sprintf("The %d contrasts tested were: %s.", length(labels),
                  paste(labels, collapse = "; "))
 
-    adjust <- if (length(covs))
-      sprintf(", adjusting for %s", paste(covs, collapse = " and ")) else ""
-    shrink_sentence <- if (shrink_used == "none")
-      "Effect sizes were reported without shrinkage."
-    else sprintf(paste0("Log2 fold-change estimates were shrunk with the '%s' ",
-                        "estimator for ranking and visualization, while ",
-                        "statistical inference (Wald test, ",
-                        "Benjamini-Hochberg-adjusted) used the unshrunken model."),
-                 shrink_used)
-
-    parts <- c(parts, sprintf(
-      paste0("Differential expression analysis was performed with DESeq2%s. ",
-             "Genes with a total count below %s were removed before model ",
-             "fitting%s. %s %s"),
-      pkg_ver("DESeq2"), min_count, adjust, contrast_sentence, shrink_sentence))
+    if (is.null(min_count_u) || is.null(covs_u) || is.null(shrink_u)) {
+      # Settings differ between contrasts -- do not claim shared values.
+      parts <- c(parts, sprintf(
+        paste0("Differential expression analysis was performed with DESeq2%s. ",
+               "%s Count-filtering, covariate and shrinkage settings varied ",
+               "between contrasts; the exact per-contrast values are given in ",
+               "the exported R script."),
+        pkg_ver("DESeq2"), contrast_sentence))
+    } else {
+      adjust <- if (length(covs_u))
+        sprintf(", adjusting for %s", paste(covs_u, collapse = " and ")) else ""
+      shrink_sentence <- if (shrink_u == "none")
+        "Effect sizes were reported without shrinkage."
+      else sprintf(paste0("Log2 fold-change estimates were shrunk with the '%s' ",
+                          "estimator for ranking and visualization, while ",
+                          "statistical inference (Wald test, ",
+                          "Benjamini-Hochberg-adjusted) used the unshrunken model."),
+                   shrink_u)
+      parts <- c(parts, sprintf(
+        paste0("Differential expression analysis was performed with DESeq2%s. ",
+               "Genes with a total count below %s were removed before model ",
+               "fitting%s. %s %s"),
+        pkg_ver("DESeq2"), min_count_u, adjust, contrast_sentence, shrink_sentence))
+    }
   }
 
   ## ---- GSEA / ORA ----
@@ -92,12 +106,16 @@ generate_methods_text <- function(project) {
 
   ## ---- WGCNA ----
   if (is.list(wg) && length(wg) && !is.null(wg$power)) {
+    norm_lbl <- if (is.null(project$normalization_method) ||
+                    identical(project$normalization_method, "vst"))
+      "VST" else project$normalization_method
     parts <- c(parts, sprintf(
       paste0("Weighted gene co-expression network analysis was performed with ",
-             "WGCNA%s on the %s most variable genes, using a %s network with a ",
-             "soft-thresholding power of %s; modules were detected with a ",
-             "minimum size of %s and merged at a dissimilarity threshold of %s."),
-      pkg_ver("WGCNA"), wg$n_genes %||% 3000, wg$network_type %||% "signed",
+             "WGCNA%s on the %s most variable %s-normalized genes, using a %s ",
+             "network with a soft-thresholding power of %s; modules were ",
+             "detected with a minimum size of %s and merged at a dissimilarity ",
+             "threshold of %s."),
+      pkg_ver("WGCNA"), wg$n_genes %||% 3000, norm_lbl, wg$network_type %||% "signed",
       wg$power, wg$min_module_size %||% 30, wg$merge_cut_height %||% 0.25))
   }
 
@@ -107,8 +125,13 @@ generate_methods_text <- function(project) {
                             "methods used."), organism)
   }
 
+  rnaflow_lbl <- if (!is.null(project$rnaflow_version))
+    sprintf(" (v%s)", project$rnaflow_version) else pkg_ver("RNAflow")
   footer <- sprintf(
-    "Analyses were carried out in R (v%s) with RNAflow%s.",
-    getRversion(), pkg_ver("RNAflow"))
+    paste0("Analyses were carried out in R (v%s) with RNAflow%s; the reported ",
+           "software versions reflect the environment at the time this Methods ",
+           "text was generated, which may differ from the original analysis ",
+           "session."),
+    getRversion(), rnaflow_lbl)
   paste(c(parts, footer), collapse = " ")
 }
