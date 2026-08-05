@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">RNAflow</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.16.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +33,47 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/KmBioChemo/RNAflow/blob/v0.16.7/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.16.7" id="rnaflow-0167-2026-08-05">RNAflow 0.16.7 (2026-08-05)<a class="anchor" aria-label="anchor" href="#rnaflow-0167-2026-08-05"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-0-16-7">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-16-7"></a></h3>
+<ul><li>
+<code><a href="../reference/read_de_results.html">read_de_results()</a></code> now returns the <em>validated</em> table, so character-typed numeric columns are properly coerced (the coerced copy was previously discarded and the raw table returned).</li>
+<li>Saving a project now captures the full session – transcription-factor / pathway activity, GSVA signatures and the AI interpretation – not only enrichment and WGCNA; restoring a project brings every slot back.</li>
+<li>The all-pairwise shrinkage checkbox no longer labels its estimator as <code>apeglm</code> (that path uses <code>normal</code> shrinkage; the estimator actually used is recorded per contrast).</li>
+<li>Differential-expression designs with non-syntactic column names (e.g. <code>batch id</code>) no longer break the model formula, in the app and in the exported R script.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="input-validation-0-16-7">Input validation<a class="anchor" aria-label="anchor" href="#input-validation-0-16-7"></a></h3>
+<ul><li>
+<code><a href="../reference/validate_counts.html">validate_counts()</a></code> rejects empty (all-zero) sample columns, matching its documented behaviour.</li>
+<li>
+<code><a href="../reference/validate_metadata.html">validate_metadata()</a></code> rejects empty or missing sample identifiers.</li>
+<li>
+<code><a href="../reference/validate_de_results.html">validate_de_results()</a></code> errors on non-numeric values in numeric columns instead of silently coercing them to <code>NA</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="reproducibility--reporting-0-16-7">Reproducibility &amp; reporting<a class="anchor" aria-label="anchor" href="#reproducibility--reporting-0-16-7"></a></h3>
+<ul><li>The normalization method actually used (VST, or the <code>log2(counts + 1)</code> fallback when VST fails) is recorded in the saved project and surfaced in the Methods text; the fallback notification is now persistent.</li>
+<li>The Methods paragraph no longer describes every contrast with the first contrast’s parameters, and states that reported software versions reflect the report-generation environment.</li>
+<li>The exported R script uses unique object names, defines uploaded contrasts via a real <code><a href="../reference/read_de_results.html">read_de_results()</a></code> call, escapes interpolated strings, reflects the <code>log2</code> fallback, and notes the steps it does not reproduce.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation--metadata-0-16-7">Documentation &amp; metadata<a class="anchor" aria-label="anchor" href="#documentation--metadata-0-16-7"></a></h3>
+<ul><li>Corrected the TCGA demonstration-dataset citation (Rahman <em>et al.</em> 2015).</li>
+<li>Added <code>THIRD_PARTY_NOTICES.md</code> (airway, TCGA / GSE62944, CollecTRI, PROGENy) and <code>SECURITY.md</code>; added the maintainer ORCID to the package metadata.</li>
+<li>Exported <code><a href="../reference/assemble_project.html">assemble_project()</a></code> and <code><a href="../reference/contrast_store_upsert.html">contrast_store_upsert()</a></code> and fixed the getting-started vignette to use the public API.</li>
+<li>Reframed the project roadmap and softened the “validation” wording to “consistency and regression checks”; standardised on “downstream”.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="infrastructure-0-16-7">Infrastructure<a class="anchor" aria-label="anchor" href="#infrastructure-0-16-7"></a></h3>
+<ul><li>
+<code>R-CMD-check</code> now runs on pushes to <code>main</code> and across an R version matrix (release + oldrel-1, exercising the declared R &gt;= 4.4 minimum).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.16.6" id="rnaflow-0166-2026-08-04">RNAflow 0.16.6 (2026-08-04)<a class="anchor" aria-label="anchor" href="#rnaflow-0166-2026-08-04"></a></h2>
 <div class="section level3">

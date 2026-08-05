@@ -2,8 +2,8 @@
 
 Checks that the input is a non-empty numeric matrix or data.frame with
 gene IDs as rownames and sample IDs as column names. Catches common
-problems early (negative values, all-zero rows/cols, non-integer for
-DESeq2, missing rownames, duplicated genes).
+problems early (negative values, empty all-zero sample columns,
+non-integer for DESeq2, missing rownames, duplicated genes).
 
 ## Usage
 
