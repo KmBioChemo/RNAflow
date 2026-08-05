@@ -18,6 +18,10 @@ r_name <- function(x) {
   x
 }
 
+# Quote a value as a safe R double-quoted string literal (escapes embedded
+# quotes and backslashes) for insertion into the generated script.
+q_str <- function(x) encodeString(as.character(x), quote = "\"")
+
 #' Generate a reproducible R script for an analysis
 #'
 #' @param project a project list (from [empty_project()] / the app session);
@@ -48,48 +52,60 @@ generate_r_script <- function(project,
       "library(RNAflow)",
       "",
       "## 1. Load and validate inputs -------------------------------------------",
-      sprintf('counts   <- read_counts("%s")', counts_path),
-      sprintf('meta     <- read_metadata("%s", counts_samples = colnames(counts))',
-              metadata_path),
-      sprintf('organism <- "%s"', organism),
+      sprintf("counts   <- read_counts(%s)", q_str(counts_path)),
+      sprintf("meta     <- read_metadata(%s, counts_samples = colnames(counts))",
+              q_str(metadata_path)),
+      sprintf("organism <- %s", q_str(organism)),
       "")
 
   # ---- Differential expression, one call per stored contrast ----
   add("## 2. Differential expression (DESeq2) -----------------------------------")
   var_names <- character(0)
+  computed  <- logical(0)
   if (length(store) == 0) {
     add("# No contrasts were saved in this session; template call below:",
         "res_1 <- run_deseq2(counts, meta, design = ~condition,",
         '                    contrast = c("condition", "Treatment", "Control"))')
-    var_names <- "res_1"
+    var_names <- "res_1"; computed <- TRUE
   } else {
+    # Unique object name per contrast: distinct labels can sanitise to the same
+    # suffix, so disambiguate to stop two `res_*` objects from clashing.
+    all_vn <- make.unique(
+      paste0("res_", vapply(names(store), r_name, character(1))), sep = "_")
     for (i in seq_along(store)) {
       lbl <- names(store)[i]
       p <- store[[i]]$params %||% list()
-      vn <- paste0("res_", r_name(lbl))
+      vn <- all_vn[i]
       var_names <- c(var_names, vn)
-      if (!is.null(p$design_var)) {
+      is_computed <- !is.null(p$design_var)
+      computed <- c(computed, is_computed)
+      if (is_computed) {
         design_terms <- c(p$covariates, p$design_var)   # covariates first
         add(sprintf("# %s", lbl),
             sprintf("%s <- run_deseq2(", vn),
             "  counts, meta,",
             sprintf("  design   = ~%s,",
                     paste(sprintf("`%s`", design_terms), collapse = " + ")),
-            sprintf('  contrast = c("%s", "%s", "%s"),',
-                    p$design_var, p$treated, p$reference),
+            sprintf("  contrast = c(%s, %s, %s),",
+                    q_str(p$design_var), q_str(p$treated), q_str(p$reference)),
             sprintf("  shrink = %s, min_count = %s, alpha = %s",
                     isTRUE(p$shrink), p$min_count %||% 10, p$alpha %||% 0.05),
             ")", "")
       } else {
-        add(sprintf('# %s (uploaded / parameters unknown)', lbl),
-            sprintf("# %s <- <your DE results data.frame>", vn), "")
+        # Uploaded DE table: RNAflow cannot recompute it. Define the object via
+        # a real (user-completed) read call so downstream steps stay valid.
+        add(sprintf("# %s (uploaded DE table -- RNAflow cannot recompute it)", lbl),
+            sprintf("%s <- read_de_results(%s)", vn,
+                    q_str("PATH_TO_YOUR_DE_TABLE.csv")), "")
       }
     }
   }
   add("")
 
   # ---- Figures + multi-contrast ----
-  ex <- var_names[1]
+  # Anchor the figure/enrichment examples on a contrast RNAflow actually
+  # computed (falling back to the first if all were uploaded).
+  ex <- if (any(computed)) var_names[which(computed)[1]] else var_names[1]
   add("## 3. Figures & multi-contrast comparison -------------------------------",
       sprintf("p_volcano <- fig_volcano(%s, lfc_thr = 1, padj_thr = 0.05,", ex),
       '                         mode = "publication")',
@@ -132,8 +148,12 @@ generate_r_script <- function(project,
   }
 
   # ---- WGCNA (exact settings when recorded, else a template) ----
+  norm_line <- if (identical(project$normalization_method,
+                             "log2(counts+1) [VST fallback]"))
+    "norm    <- log2(counts + 1)  # VST failed in the original session; log2 fallback"
+  else 'norm    <- normalize_counts(counts, meta, method = "vst")'
   add("## 5. Co-expression network (WGCNA) -------------------------------------",
-      'norm    <- normalize_counts(counts, meta, method = "vst")')
+      norm_line)
   wg <- project$wgcna
   if (is.list(wg) && length(wg) && !is.null(wg$power)) {
     add(sprintf("datExpr <- wgcna_datexpr(norm, n_genes = %s)", wg$n_genes %||% 3000),
@@ -172,7 +192,12 @@ generate_r_script <- function(project,
         "fig_gsva_heatmap(scores, meta)", "")
   }
 
-  add("## 7. Session information -----------------------------------------------",
+  add("## 7. Not reproduced automatically -------------------------------------",
+      "# Regulator / pathway activity (decoupleR) and AI-assisted interpretation",
+      "# are available interactively in the app but are not emitted in this",
+      "# script; re-run them there if you need them.",
+      "",
+      "## 8. Session information -----------------------------------------------",
       "sessionInfo()",
       "")
 

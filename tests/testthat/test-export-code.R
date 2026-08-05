@@ -49,3 +49,43 @@ test_that("generated timestamp is stamped when provided", {
   code <- generate_r_script(make_project(1), generated = "2026-07-01 10:00")
   expect_match(code, "on 2026-07-01 10:00", fixed = TRUE)
 })
+
+test_that("uploaded contrasts define a real object and figures anchor on a computed one", {
+  p <- empty_project("x"); p$organism <- "human"
+  res <- data.frame(gene = "g", log2FoldChange = 1, padj = 0.01)
+  p$contrasts <- contrast_store_upsert(p$contrasts, "uploaded set", res, list())
+  p$contrasts <- contrast_store_upsert(
+    p$contrasts, "cond: X vs C", res,
+    list(design_var = "cond", treated = "X", reference = "C",
+         shrink = TRUE, min_count = 10, alpha = 0.05))
+  code <- generate_r_script(p)
+  expect_silent(parse(text = code))
+  expect_match(code, "read_de_results(", fixed = TRUE)              # object defined
+  expect_match(code, "fig_volcano(res_cond_X_vs_C", fixed = TRUE)   # computed contrast
+  expect_match(code, "not emitted in this", fixed = TRUE)           # activity/AI note
+})
+
+test_that("distinct labels that sanitise alike get unique object names", {
+  p <- empty_project("x"); p$organism <- "human"
+  res <- data.frame(gene = "g", log2FoldChange = 1, padj = 0.01)
+  mk <- list(design_var = "cond", treated = "A", reference = "B",
+             shrink = TRUE, min_count = 10, alpha = 0.05)
+  p$contrasts <- contrast_store_upsert(p$contrasts, "cond: A vs B", res, mk)
+  p$contrasts <- contrast_store_upsert(p$contrasts, "cond  A vs B", res, mk)
+  code <- generate_r_script(p)
+  expect_silent(parse(text = code))
+  expect_match(code, "res_cond_A_vs_B_1", fixed = TRUE)             # disambiguated
+})
+
+test_that("script escapes special characters and reflects the log2 fallback", {
+  p <- empty_project("x"); p$organism <- "human"
+  p$normalization_method <- "log2(counts+1) [VST fallback]"
+  res <- data.frame(gene = "g", log2FoldChange = 1, padj = 0.01)
+  p$contrasts <- contrast_store_upsert(
+    p$contrasts, "weird", res,
+    list(design_var = "group", treated = "A\"x", reference = "C",
+         shrink = TRUE, min_count = 10, alpha = 0.05))
+  code <- generate_r_script(p)
+  expect_silent(parse(text = code))                                 # embedded quote escaped
+  expect_match(code, "norm    <- log2(counts + 1)", fixed = TRUE)
+})
