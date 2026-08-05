@@ -167,6 +167,6 @@ read_de_results <- function(path, ext = NULL) {
     "xls"  = as.data.frame(readxl::read_excel(path)),
     stop("Unsupported file extension: ", ext, call. = FALSE)
   )
-  validate_de_results(df)
+  df <- validate_de_results(df)
   df
 }

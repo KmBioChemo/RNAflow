@@ -11,8 +11,8 @@ NULL
 #'
 #' Checks that the input is a non-empty numeric matrix or data.frame with
 #' gene IDs as rownames and sample IDs as column names. Catches common
-#' problems early (negative values, all-zero rows/cols, non-integer for
-#' DESeq2, missing rownames, duplicated genes).
+#' problems early (negative values, empty all-zero sample columns,
+#' non-integer for DESeq2, missing rownames, duplicated genes).
 #'
 #' @param counts a matrix or data.frame of counts (genes x samples)
 #' @param strict if TRUE, enforce integer counts (required for DESeq2)
@@ -61,6 +61,15 @@ validate_counts <- function(counts, strict = TRUE) {
     stop("Counts matrix contains negative values. ",
          "Raw counts should be non-negative integers.", call. = FALSE)
   }
+  zero_cols <- colSums(m) == 0
+  if (any(zero_cols)) {
+    bad <- colnames(m)[zero_cols]
+    stop("Some samples have zero counts across every gene (empty libraries): ",
+         paste(head(bad, 3), collapse = ", "),
+         if (sum(zero_cols) > 3)
+           paste0(" (and ", sum(zero_cols) - 3, " more)") else "",
+         ". Remove these samples before importing.", call. = FALSE)
+  }
   if (isTRUE(strict)) {
     nonint <- sum(m != round(m))
     if (nonint > 0) {
@@ -100,6 +109,10 @@ validate_metadata <- function(metadata, counts_samples = NULL) {
     stop("Metadata is empty.", call. = FALSE)
   }
   metadata[[1]] <- as.character(metadata[[1]])
+  if (anyNA(metadata[[1]]) || any(!nzchar(trimws(metadata[[1]])))) {
+    stop("Metadata sample IDs (first column) must be non-empty and non-missing.",
+         call. = FALSE)
+  }
   if (anyDuplicated(metadata[[1]])) {
     dups <- metadata[[1]][duplicated(metadata[[1]])]
     stop("Duplicated sample IDs in metadata: ",
@@ -123,6 +136,23 @@ validate_metadata <- function(metadata, counts_samples = NULL) {
   invisible(metadata)
 }
 
+# Coerce a column to numeric, erroring if the coercion silently turns real
+# (non-blank, non-"NA") values into NA -- e.g. a stray text cell in an uploaded
+# DE table. Numeric input is returned unchanged.
+coerce_numeric_col <- function(x, col) {
+  if (is.numeric(x)) return(x)
+  chr <- trimws(as.character(x))
+  num <- suppressWarnings(as.numeric(chr))
+  introduced <- is.na(num) & !is.na(chr) & nzchar(chr) & toupper(chr) != "NA"
+  if (any(introduced)) {
+    bad <- unique(chr[introduced])
+    stop(sprintf("Column '%s' has non-numeric values (e.g. %s).", col,
+                 paste(sprintf("'%s'", utils::head(bad, 3)), collapse = ", ")),
+         call. = FALSE)
+  }
+  num
+}
+
 #' Validate a DE results table
 #'
 #' Required columns: `gene`, `log2FoldChange`, `padj`. Additional columns
@@ -141,7 +171,7 @@ validate_de_results <- function(res) {
          paste(missing_cols, collapse = ", "),
          ". Required: gene, log2FoldChange, padj.", call. = FALSE)
   }
-  res$log2FoldChange <- as.numeric(res$log2FoldChange)
-  res$padj <- as.numeric(res$padj)
+  res$log2FoldChange <- coerce_numeric_col(res$log2FoldChange, "log2FoldChange")
+  res$padj           <- coerce_numeric_col(res$padj, "padj")
   invisible(res)
 }

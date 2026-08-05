@@ -90,4 +90,42 @@ test_that("validate_de_results coerces numeric columns", {
                   padj = c("0.01", "0.001"),
                   stringsAsFactors = FALSE)
   expect_silent(validate_de_results(d))
+  out <- validate_de_results(d)
+  expect_type(out$log2FoldChange, "double")
+  expect_type(out$padj, "double")
+})
+
+test_that("validate_counts rejects empty (all-zero) sample columns", {
+  m <- matrix(as.integer(1:12), nrow = 3,
+              dimnames = list(paste0("g", 1:3), paste0("s", 1:4)))
+  m[, 2] <- 0L
+  expect_error(validate_counts(m), "empty librar")
+})
+
+test_that("validate_metadata rejects empty or NA sample IDs", {
+  expect_error(
+    validate_metadata(data.frame(sample = c("s1", "", "s3"), cond = 1:3)),
+    "non-empty")
+  expect_error(
+    validate_metadata(data.frame(sample = c("s1", NA, "s3"), cond = 1:3)),
+    "non-missing|non-empty")
+})
+
+test_that("validate_de_results rejects non-numeric text (no silent NA)", {
+  d <- data.frame(gene = c("a", "b"),
+                  log2FoldChange = c("1.5", "oops"),
+                  padj = c("0.01", "0.001"),
+                  stringsAsFactors = FALSE)
+  expect_error(validate_de_results(d), "non-numeric")
+})
+
+test_that("read_de_results returns the validated (numeric) table", {
+  tf <- tempfile(fileext = ".csv")
+  utils::write.csv(
+    data.frame(gene = c("A", "B"),
+               log2FoldChange = c(1.5, -2.0), padj = c(0.01, 0.2)),
+    tf, row.names = FALSE)
+  out <- read_de_results(tf)
+  expect_type(out$log2FoldChange, "double")
+  expect_type(out$padj, "double")
 })
