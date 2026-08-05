@@ -1,3 +1,55 @@
+# RNAflow 0.16.7 (2026-08-05)
+
+## Bug fixes
+
+- `read_de_results()` now returns the *validated* table, so character-typed
+  numeric columns are properly coerced (the coerced copy was previously
+  discarded and the raw table returned).
+- Saving a project now captures the full session -- transcription-factor /
+  pathway activity, GSVA signatures and the AI interpretation -- not only
+  enrichment and WGCNA; restoring a project brings every slot back.
+- The all-pairwise shrinkage checkbox no longer labels its estimator as
+  `apeglm` (that path uses `normal` shrinkage; the estimator actually used is
+  recorded per contrast).
+- Differential-expression designs with non-syntactic column names (e.g.
+  `batch id`) no longer break the model formula, in the app and in the
+  exported R script.
+
+## Input validation
+
+- `validate_counts()` rejects empty (all-zero) sample columns, matching its
+  documented behaviour.
+- `validate_metadata()` rejects empty or missing sample identifiers.
+- `validate_de_results()` errors on non-numeric values in numeric columns
+  instead of silently coercing them to `NA`.
+
+## Reproducibility & reporting
+
+- The normalization method actually used (VST, or the `log2(counts + 1)`
+  fallback when VST fails) is recorded in the saved project and surfaced in
+  the Methods text; the fallback notification is now persistent.
+- The Methods paragraph no longer describes every contrast with the first
+  contrast's parameters, and states that reported software versions reflect
+  the report-generation environment.
+- The exported R script uses unique object names, defines uploaded contrasts
+  via a real `read_de_results()` call, escapes interpolated strings, reflects
+  the `log2` fallback, and notes the steps it does not reproduce.
+
+## Documentation & metadata
+
+- Corrected the TCGA demonstration-dataset citation (Rahman *et al.* 2015).
+- Added `THIRD_PARTY_NOTICES.md` (airway, TCGA / GSE62944, CollecTRI, PROGENy)
+  and `SECURITY.md`; added the maintainer ORCID to the package metadata.
+- Exported `assemble_project()` and `contrast_store_upsert()` and fixed the
+  getting-started vignette to use the public API.
+- Reframed the project roadmap and softened the "validation" wording to
+  "consistency and regression checks"; standardised on "downstream".
+
+## Infrastructure
+
+- `R-CMD-check` now runs on pushes to `main` and across an R version matrix
+  (release + oldrel-1, exercising the declared R >= 4.4 minimum).
+
 # RNAflow 0.16.6 (2026-08-04)
 
 ## Feature

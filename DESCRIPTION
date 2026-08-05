@@ -1,6 +1,6 @@
 Package: RNAflow
 Title: An Interactive and Reproducible Platform for Downstream Bulk RNA-seq Analysis
-Version: 0.16.6
+Version: 0.16.7
 Authors@R: c(
     person("Tamara", "Pfanner", role = "aut",
            comment = "Equal contribution"),

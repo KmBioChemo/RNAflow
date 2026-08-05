@@ -39,10 +39,10 @@ keywords:
   - R
   - reproducibility
 license: MIT
-version: 0.16.6
+version: 0.16.7
 doi: 10.5281/zenodo.21493110
 identifiers:
   - type: doi
     value: 10.5281/zenodo.21493110
     description: "Archived software on Zenodo (concept DOI; always resolves to the latest version)"
-date-released: "2026-08-04"
+date-released: "2026-08-05"
